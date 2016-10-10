@@ -4,6 +4,8 @@
 
 name := "alint"
 
+organization := "com.argondesign"
+
 version := "1"
 
 scalaVersion := "2.11.8"
