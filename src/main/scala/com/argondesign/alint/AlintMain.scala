@@ -4,27 +4,23 @@
 
 package com.argondesign.alint
 
-import com.argondesign.alint.antlr4._
-
-import org.antlr.v4.runtime._
-import org.antlr.v4.runtime.tree.ParseTreeWalker
-
 import Warnings.CCREPSYS
-import Warnings.BLKSEQ
 
 class CCREPSYSVisitor extends WarningsVisitor[CCREPSYS] {
   import com.argondesign.alint.antlr4.VParser._
 
-  object WarnAll extends WarningsVisitor[CCREPSYS] {
+  object WarnIn extends WarningsVisitor[CCREPSYS] {
     override def visitConstantSystemFunctionCall(ctx: ConstantSystemFunctionCallContext) = {
-      CCREPSYS(ctx.start.loc, ctx.SYSID.text) :: visitChildren(ctx)
+      CCREPSYS(ctx.loc, ctx.SYSID.text) :: visitChildren(ctx)
     }
   }
 
   override def visitConstantMultipleConcatenation(ctx: ConstantMultipleConcatenationContext) = {
-    WarnAll(ctx.constantExpression) ::: visitChildren(ctx.constantConcatenation)
+    WarnIn(ctx.constantExpression) ::: visitChildren(ctx.constantConcatenation)
   }
 }
+
+import Warnings.BLKSEQ
 
 class BLKSEQVisitor extends WarningsVisitor[BLKSEQ] {
   import com.argondesign.alint.antlr4.VParser._
@@ -39,7 +35,21 @@ class BLKSEQVisitor extends WarningsVisitor[BLKSEQ] {
 
   override def visitAlwaysConstruct(ctx: AlwaysConstructContext) = {
     if (AnyBlockingAssignments(ctx) && AnyNonBlockingAssignments(ctx)) {
-      BLKSEQ(ctx.start.loc) :: visitChildren(ctx)
+      BLKSEQ(ctx.loc) :: visitChildren(ctx)
+    } else {
+      visitChildren(ctx)
+    }
+  }
+}
+
+import Warnings.GENNAME
+
+class GENNAMEVisitor extends WarningsVisitor[GENNAME] {
+  import com.argondesign.alint.antlr4.VParser._
+
+  override def visitGenerateBlock(ctx: GenerateBlockContext) = {
+    if (ctx.IDENTIFIER eq null) {
+      GENNAME(ctx.loc) :: visitChildren(ctx)
     } else {
       visitChildren(ctx)
     }
@@ -47,22 +57,21 @@ class BLKSEQVisitor extends WarningsVisitor[BLKSEQ] {
 }
 
 object AlintMain extends App {
-  import Antlr4Conversions._
+  import org.antlr.v4.runtime._
 
   for (inputFile <- args) {
     val inputStream = new ANTLRFileStream(inputFile)
-    val lexer = new VLexer(inputStream)
+    val lexer = new antlr4.VLexer(inputStream)
     val tokenStream = new CommonTokenStream(lexer)
-    val parser = new VParser(tokenStream)
+    val parser = new antlr4.VParser(tokenStream)
     val tree = parser.start()
 
-    val visitor = new CCREPSYSVisitor
-    for (warning <- visitor.visit(tree)) {
-      println(warning)
-    }
+    val visitors = List(
+      new CCREPSYSVisitor,
+      new BLKSEQVisitor,
+      new GENNAMEVisitor)
 
-    {
-      val visitor = new BLKSEQVisitor
+    for (visitor <- visitors) {
       for (warning <- visitor.visit(tree)) {
         println(warning)
       }

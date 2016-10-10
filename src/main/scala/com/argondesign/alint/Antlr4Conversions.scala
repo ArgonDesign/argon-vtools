@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.tree.TerminalNode
 trait Antlr4Conversions {
   implicit class RichParserRuleContext(val ctx: ParserRuleContext) {
     lazy val tokenStream = {
-      val ts = new CommonTokenStream(new VLexer(new ANTLRFileStream(ctx.start.loc.file)))
+      val ts = new CommonTokenStream(new VLexer(new ANTLRFileStream(loc.file)))
       ts.fill()
       ts
     }
@@ -28,6 +28,8 @@ trait Antlr4Conversions {
       val trailing = filler * trailingLen
       leading + source + trailing
     }
+
+    def loc = ctx.start.loc
   }
 
   implicit class RichToken(val token: Token) {
