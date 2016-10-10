@@ -5,56 +5,56 @@ options {
 }
 
 start
-  : source_text EOF
+  : sourceText EOF
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.1.1 Library source text
 ////////////////////////////////////////////////////////////////////////////////
 
-//library_text
-//  : library_description*
+//libraryText
+//  : libraryDescription*
 //  ;
 //
-//library_description
-//  : library_declaration
-//  | include_statement
-//  | config_declaration
+//libraryDescription
+//  : libraryDeclaration
+//  | includeStatement
+//  | configDeclaration
 //  ;
 //
-//library_declaration
-//  : 'library' IDENTIFIER file_path_spec (',' file_path_spec)*
-//     ('-' 'incdir' file_path_spec (',' file_path_spec)* )? ';'
+//libraryDeclaration
+//  : 'library' IDENTIFIER filePathSpec (',' filePathSpec)*
+//     ('-' 'incdir' filePathSpec (',' filePathSpec)* )? ';'
 //  ;
 //
-//include_statement
-//  : 'include' file_path_spec ';'
+//includeStatement
+//  : 'include' filePathSpec ';'
 //  ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.1.2 Verilog source text
 ////////////////////////////////////////////////////////////////////////////////
 
-source_text
+sourceText
   : directive*
     description*
     directive*
   ;
 
 description
-  : module_declaration
-//| udp_declaration
-  | config_declaration
+  : moduleDeclaration
+//| udpDeclaration
+  | configDeclaration
   ;
 
-module_declaration
-  : attribute_instance*
-    'module' IDENTIFIER module_parameter_port_list? list_of_ports ';'
-      module_item*
+moduleDeclaration
+  : attributeInstance*
+    'module' IDENTIFIER moduleParameterPortList? listOfPorts ';'
+      moduleItem*
     'endmodule'
-  | attribute_instance*
-    'module' IDENTIFIER module_parameter_port_list? list_of_port_declarations? ';'
-      non_port_module_item*
+  | attributeInstance*
+    'module' IDENTIFIER moduleParameterPortList? listOfPortDeclarations? ';'
+      nonPortModuleItem*
     'endmodule'
   ;
 
@@ -62,127 +62,127 @@ module_declaration
 // A.1.3 Module parameters and ports
 ////////////////////////////////////////////////////////////////////////////////
 
-module_parameter_port_list
-  : '#' '(' parameter_declaration (',' parameter_declaration)* ')'
+moduleParameterPortList
+  : '#' '(' parameterDeclaration (',' parameterDeclaration)* ')'
   ;
 
-list_of_ports
+listOfPorts
   : '(' port (',' port)* ')'
   ;
 
-list_of_port_declarations
-  : '(' port_declaration (',' port_declaration)* ')'
+listOfPortDeclarations
+  : '(' portDeclaration (',' portDeclaration)* ')'
   | '(' ')'
   ;
 
 port
-  : port_expression?
-  | '.' IDENTIFIER '(' port_expression? ')'
+  : portExpression?
+  | '.' IDENTIFIER '(' portExpression? ')'
   ;
 
-port_expression
-  : port_reference
-  | '{' port_reference (',' port_reference)* '}'
+portExpression
+  : portReference
+  | '{' portReference (',' portReference)* '}'
   ;
 
-port_reference
-  : IDENTIFIER ('[' constant_range_expression ']')?
+portReference
+  : IDENTIFIER ('[' constantRangeExpression ']')?
   ;
 
-port_declaration
-  : attribute_instance* inout_declaration
-  | attribute_instance* input_declaration
-  | attribute_instance* output_declaration
+portDeclaration
+  : attributeInstance* inoutDeclaration
+  | attributeInstance* inputDeclaration
+  | attributeInstance* outputDeclaration
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.1.4 Module items
 ////////////////////////////////////////////////////////////////////////////////
 
-module_item
-  : port_declaration ';'
-  | non_port_module_item
+moduleItem
+  : portDeclaration ';'
+  | nonPortModuleItem
   ;
 
-module_or_generate_item
-  : attribute_instance* module_or_generate_item_declaration
-  | attribute_instance* local_parameter_declaration ';'
-  | attribute_instance* parameter_override
-  | attribute_instance* continuous_assign
-  | attribute_instance* gate_instantiation
-//| attribute_instance* udp_instantiation
-  | attribute_instance* module_instantiation
-  | attribute_instance* initial_construct
-  | attribute_instance* always_construct
-  | attribute_instance* loop_generate_construct
-  | attribute_instance* conditional_generate_construct
+moduleOrGenerateItem
+  : attributeInstance* moduleOrGenerateItemDeclaration
+  | attributeInstance* localParameterDeclaration ';'
+  | attributeInstance* parameterOverride
+  | attributeInstance* continuousAssign
+  | attributeInstance* gateInstantiation
+//| attributeInstance* udpInstantiation
+  | attributeInstance* moduleInstantiation
+  | attributeInstance* initialConstruct
+  | attributeInstance* alwaysConstruct
+  | attributeInstance* loopGenerateConstruct
+  | attributeInstance* conditionalGenerateConstruct
   ;
 
-module_or_generate_item_declaration
-  : net_declaration
-  | reg_declaration
-  | integer_declaration
-  | real_declaration
-  | time_declaration
-  | realtime_declaration
-  | event_declaration
-  | genvar_declaration
-  | task_declaration
-  | function_declaration
+moduleOrGenerateItemDeclaration
+  : netDeclaration
+  | regDeclaration
+  | integerDeclaration
+  | realDeclaration
+  | timeDeclaration
+  | realtimeDeclaration
+  | eventDeclaration
+  | genvarDeclaration
+  | taskDeclaration
+  | functionDeclaration
   ;
 
-non_port_module_item
-  : module_or_generate_item
-  | generate_region
-  | specify_block
-  | attribute_instance* parameter_declaration ';'
-  | attribute_instance* specparam_declaration
+nonPortModuleItem
+  : moduleOrGenerateItem
+  | generateRegion
+  | specifyBlock
+  | attributeInstance* parameterDeclaration ';'
+  | attributeInstance* specparamDeclaration
   ;
 
-parameter_override
-  : 'defparam' list_of_defparam_assignments ';'
+parameterOverride
+  : 'defparam' listOfDefparamAssignments ';'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.1.5 Configuration source text
 ////////////////////////////////////////////////////////////////////////////////
 
-config_declaration
+configDeclaration
   : 'config' IDENTIFIER ';'
-      design_statement
-      config_rule_statement*
+      designStatement
+      configRuleStatement*
     'endconfig'
   ;
 
-design_statement
+designStatement
   :  'design' ((IDENTIFIER '.')? IDENTIFIER)* ';'
   ;
 
-config_rule_statement
-  : 'default' liblist_clause ';'
-  | inst_clause liblist_clause ';'
-  | inst_clause use_clause ';'
-  | cell_clause liblist_clause ';'
-  | cell_clause use_clause ';'
+configRuleStatement
+  : 'default' liblistClause ';'
+  | instClause liblistClause ';'
+  | instClause useClause ';'
+  | cellClause liblistClause ';'
+  | cellClause useClause ';'
   ;
 
-inst_clause
-  : 'instance' inst_name
+instClause
+  : 'instance' instName
   ;
 
-inst_name
+instName
   : IDENTIFIER ('.' IDENTIFIER)*
   ;
 
-cell_clause
+cellClause
   : 'cell' (IDENTIFIER '.')? IDENTIFIER
   ;
 
-liblist_clause
+liblistClause
   : 'liblist' IDENTIFIER*
   ;
 
-use_clause
+useClause
   : 'use' (IDENTIFIER '.')? IDENTIFIER (':' 'config')?
   ;
 
@@ -190,21 +190,21 @@ use_clause
 // A.2.1.1 Module parameter declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-local_parameter_declaration
-  : 'localparam' 'signed'? vrange? list_of_param_assignments
-  | 'localparam' parameter_type list_of_param_assignments
+localParameterDeclaration
+  : 'localparam' 'signed'? vrange? listOfParamAssignments
+  | 'localparam' parameterType listOfParamAssignments
   ;
 
-parameter_declaration
-  : 'parameter' 'signed'? vrange? list_of_param_assignments
-  | 'parameter' parameter_type list_of_param_assignments
+parameterDeclaration
+  : 'parameter' 'signed'? vrange? listOfParamAssignments
+  | 'parameter' parameterType listOfParamAssignments
   ;
 
-specparam_declaration
-  : 'specparam' vrange? list_of_specparam_assignments ';'
+specparamDeclaration
+  : 'specparam' vrange? listOfSpecparamAssignments ';'
   ;
 
-parameter_type
+parameterType
   : 'integer'
   | 'real'
   | 'realtime'
@@ -215,72 +215,72 @@ parameter_type
 // A.2.1.1 Port declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-inout_declaration
-  : 'inout' net_type? 'signed'? vrange? list_of_identifiers
+inoutDeclaration
+  : 'inout' netType? 'signed'? vrange? listOfIdentifiers
   ;
 
-input_declaration
-  : 'input' net_type? 'signed'? vrange? list_of_identifiers
+inputDeclaration
+  : 'input' netType? 'signed'? vrange? listOfIdentifiers
   ;
 
-output_declaration
-  : 'output' net_type? 'signed'? vrange? list_of_identifiers
-  | 'output' 'reg' 'signed'? vrange? list_of_variable_port_identifiers
-  | 'output' output_variable_type list_of_variable_port_identifiers
+outputDeclaration
+  : 'output' netType? 'signed'? vrange? listOfIdentifiers
+  | 'output' 'reg' 'signed'? vrange? listOfVariablePortIdentifiers
+  | 'output' outputVariableType listOfVariablePortIdentifiers
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.2.1.3 Type declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-event_declaration
-  : 'event' list_of_event_identifiers ';'
+eventDeclaration
+  : 'event' listOfEventIdentifiers ';'
   ;
 
-integer_declaration
-  : 'integer' list_of_variable_identifiers ';'
+integerDeclaration
+  : 'integer' listOfVariableIdentifiers ';'
   ;
 
-net_declaration
-  : net_type
-    'signed'? delay3? list_of_net_identifiers ';'
-  | net_type drive_strength?
-    'signed'? delay3? list_of_net_decl_assignments ';'
-  | net_type ('vectored' | 'scalared')?
-    'signed'? vrange delay3? list_of_net_identifiers ';'
-  | net_type drive_strength? ('vectored' | 'scalared')?
-    'signed'? vrange delay3? list_of_net_decl_assignments ';'
-  | 'trireg' charge_strength?
-    'signed'? delay3? list_of_net_identifiers ';'
-  | 'trireg' drive_strength?
-    'signed'? delay3? list_of_net_decl_assignments ';'
-  | 'trireg' charge_strength? ('vectored' | 'scalared')?
-    'signed'? vrange delay3? list_of_net_identifiers ';'
-  | 'trireg' drive_strength? ('vectored' | 'scalared')?
-    'signed' vrange delay3? list_of_net_decl_assignments ';'
+netDeclaration
+  : netType
+    'signed'? delay3? listOfNetIdentifiers ';'
+  | netType driveStrength?
+    'signed'? delay3? listOfNetDeclAssignments ';'
+  | netType ('vectored' | 'scalared')?
+    'signed'? vrange delay3? listOfNetIdentifiers ';'
+  | netType driveStrength? ('vectored' | 'scalared')?
+    'signed'? vrange delay3? listOfNetDeclAssignments ';'
+  | 'trireg' chargeStrength?
+    'signed'? delay3? listOfNetIdentifiers ';'
+  | 'trireg' driveStrength?
+    'signed'? delay3? listOfNetDeclAssignments ';'
+  | 'trireg' chargeStrength? ('vectored' | 'scalared')?
+    'signed'? vrange delay3? listOfNetIdentifiers ';'
+  | 'trireg' driveStrength? ('vectored' | 'scalared')?
+    'signed' vrange delay3? listOfNetDeclAssignments ';'
   ;
 
-real_declaration
-  : 'real' list_of_real_identifiers ';'
+realDeclaration
+  : 'real' listOfRealIdentifiers ';'
   ;
 
-realtime_declaration
-  : 'realtime' list_of_real_identifiers ';'
+realtimeDeclaration
+  : 'realtime' listOfRealIdentifiers ';'
   ;
 
-reg_declaration
-  : 'reg' 'signed'? vrange? list_of_variable_identifiers ';'
+regDeclaration
+  : 'reg' 'signed'? vrange? listOfVariableIdentifiers ';'
   ;
 
-time_declaration
-  : 'time' list_of_variable_identifiers ';'
+timeDeclaration
+  : 'time' listOfVariableIdentifiers ';'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.2.2.1 Net and variable types
 ////////////////////////////////////////////////////////////////////////////////
 
-net_type
+netType
   : 'wire'
   | 'supply0'
   | 'supply1'
@@ -294,26 +294,26 @@ net_type
   | 'wor'
   ;
 
-output_variable_type
+outputVariableType
   : 'integer'
   | 'time'
   ;
 
-real_type
+realType
   : IDENTIFIER dimension*
-  | IDENTIFIER '=' constant_expression
+  | IDENTIFIER '=' constantExpression
   ;
 
-variable_type
+variableType
   : IDENTIFIER dimension*
-  | IDENTIFIER '=' constant_expression
+  | IDENTIFIER '=' constantExpression
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.2.2.2 Strengths
 ////////////////////////////////////////////////////////////////////////////////
 
-drive_strength
+driveStrength
   : '(' strength0 ',' strength1 ')'
   | '(' strength1 ',' strength0 ')'
   | '(' strength0 ',' 'highz1' ')'
@@ -336,7 +336,7 @@ strength1
   | 'weak1'
   ;
 
-charge_strength
+chargeStrength
   : '(' 'small' ')'
   | '(' 'medium' ')'
   | '(' 'large' ')'
@@ -347,18 +347,18 @@ charge_strength
 ////////////////////////////////////////////////////////////////////////////////
 
 delay3
-  : '#' delay_value
-  | '#' '(' mintypmax_expression (',' mintypmax_expression (',' mintypmax_expression)?)? ')'
+  : '#' delayValue
+  | '#' '(' mintypmaxExpression (',' mintypmaxExpression (',' mintypmaxExpression)?)? ')'
   ;
 
 delay2
-  : '#' delay_value
-  | '#' '(' mintypmax_expression (',' mintypmax_expression)? ')'
+  : '#' delayValue
+  | '#' '(' mintypmaxExpression (',' mintypmaxExpression)? ')'
   ;
 
-delay_value
+delayValue
   : DVALUE
-//| real_number
+//| realNumber
   | IDENTIFIER
   ;
 
@@ -366,67 +366,67 @@ delay_value
 // A.2.3 Declaration lists
 ////////////////////////////////////////////////////////////////////////////////
 
-list_of_defparam_assignments
-  : defparam_assignment (',' defparam_assignment)*
+listOfDefparamAssignments
+  : defparamAssignment (',' defparamAssignment)*
   ;
 
-list_of_event_identifiers
+listOfEventIdentifiers
   : IDENTIFIER dimension* (',' IDENTIFIER dimension*)*
   ;
 
-list_of_net_decl_assignments
-  : net_decl_assignment (',' net_decl_assignment )*
+listOfNetDeclAssignments
+  : netDeclAssignment (',' netDeclAssignment )*
   ;
 
-list_of_net_identifiers
+listOfNetIdentifiers
   : IDENTIFIER dimension* (',' IDENTIFIER dimension*)*
   ;
 
-list_of_param_assignments
-  : param_assignment (',' param_assignment)*
+listOfParamAssignments
+  : paramAssignment (',' paramAssignment)*
   ;
 
-list_of_real_identifiers
-  : real_type (',' real_type)*
+listOfRealIdentifiers
+  : realType (',' realType)*
   ;
 
-list_of_specparam_assignments
-  : specparam_assignment (',' specparam_assignment)*
+listOfSpecparamAssignments
+  : specparamAssignment (',' specparamAssignment)*
   ;
 
-list_of_variable_identifiers
-  : variable_type (',' variable_type)*
+listOfVariableIdentifiers
+  : variableType (',' variableType)*
   ;
 
-list_of_variable_port_identifiers
-  : IDENTIFIER ('=' constant_expression)? (',' IDENTIFIER ('=' constant_expression)?)*
+listOfVariablePortIdentifiers
+  : IDENTIFIER ('=' constantExpression)? (',' IDENTIFIER ('=' constantExpression)?)*
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.2.4 Declaration assignmets
 ////////////////////////////////////////////////////////////////////////////////
 
-defparam_assignment
-  : hierarchical_identifier '=' constant_mintypmax_expression
+defparamAssignment
+  : hierarchicalIdentifier '=' constantMintypmaxExpression
   ;
 
-net_decl_assignment
+netDeclAssignment
   : IDENTIFIER '=' expression
   ;
 
-param_assignment
-  : IDENTIFIER '=' constant_mintypmax_expression
+paramAssignment
+  : IDENTIFIER '=' constantMintypmaxExpression
   ;
 
-specparam_assignment
-  : IDENTIFIER '=' constant_mintypmax_expression
-  | pulse_control_specparam
+specparamAssignment
+  : IDENTIFIER '=' constantMintypmaxExpression
+  | pulseControlSpecparam
   ;
 
-pulse_control_specparam
-  : 'PATHPULSE' '$' '=' '(' constant_mintypmax_expression (',' constant_mintypmax_expression)? ')'
-  | 'PATHPULSE' '$' specify_terminal_descriptor '$'
-    specify_terminal_descriptor '=' '(' constant_mintypmax_expression (',' constant_mintypmax_expression)? ')'
+pulseControlSpecparam
+  : 'PATHPULSE' '$' '=' '(' constantMintypmaxExpression (',' constantMintypmaxExpression)? ')'
+  | 'PATHPULSE' '$' specifyTerminalDescriptor '$'
+    specifyTerminalDescriptor '=' '(' constantMintypmaxExpression (',' constantMintypmaxExpression)? ')'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -434,38 +434,38 @@ pulse_control_specparam
 ////////////////////////////////////////////////////////////////////////////////
 
 dimension
-  : '[' constant_expression ':' constant_expression ']'
+  : '[' constantExpression ':' constantExpression ']'
   ;
 
 vrange
-  : '[' constant_expression ':' constant_expression ']'
+  : '[' constantExpression ':' constantExpression ']'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.2.6 Function declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-function_declaration
-  : 'function' 'automatic'? function_range_or_type? IDENTIFIER ';'
-      function_item_declaration+
+functionDeclaration
+  : 'function' 'automatic'? functionRangeOrType? IDENTIFIER ';'
+      functionItemDeclaration+
       statement
     'endfunction'
-  | 'function' 'automatic'? function_range_or_type? IDENTIFIER '(' function_port_list ')' ';'
-      block_item_declaration*
+  | 'function' 'automatic'? functionRangeOrType? IDENTIFIER '(' functionPortList ')' ';'
+      blockItemDeclaration*
       statement
     'endfunction'
   ;
 
-function_item_declaration
-  : block_item_declaration
-  | attribute_instance* tf_input_declaration ';'
+functionItemDeclaration
+  : blockItemDeclaration
+  | attributeInstance* tfInputDeclaration ';'
   ;
 
-function_port_list
-  : attribute_instance* tf_input_declaration (',' attribute_instance* tf_input_declaration)*
+functionPortList
+  : attributeInstance* tfInputDeclaration (',' attributeInstance* tfInputDeclaration)*
   ;
 
-function_range_or_type
+functionRangeOrType
   : 'signed'
   | vrange
   | 'signed' vrange
@@ -479,83 +479,83 @@ function_range_or_type
 // A.2.7 Task declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-task_declaration
+taskDeclaration
   : 'task' 'automatic'? IDENTIFIER ';'
-      task_item_declaration*
-      statement_or_null
+      taskItemDeclaration*
+      statementOrNull
     'endtask'
-  | 'task' 'automatic'? IDENTIFIER '(' task_port_list? ')' ';'
-      block_item_declaration*
-      statement_or_null
+  | 'task' 'automatic'? IDENTIFIER '(' taskPortList? ')' ';'
+      blockItemDeclaration*
+      statementOrNull
     'endtask'
   ;
-task_item_declaration
-  : block_item_declaration
-  | attribute_instance* tf_input_declaration ';'
-  | attribute_instance* tf_output_declaration ';'
-  | attribute_instance* tf_inout_declaration ';'
+taskItemDeclaration
+  : blockItemDeclaration
+  | attributeInstance* tfInputDeclaration ';'
+  | attributeInstance* tfOutputDeclaration ';'
+  | attributeInstance* tfInoutDeclaration ';'
   ;
 
-task_port_list
-  : task_port_item (',' task_port_item)*
+taskPortList
+  : taskPortItem (',' taskPortItem)*
   ;
 
-task_port_item
-  : attribute_instance* tf_input_declaration
-  | attribute_instance* tf_output_declaration
+taskPortItem
+  : attributeInstance* tfInputDeclaration
+  | attributeInstance* tfOutputDeclaration
   ;
 
-tf_input_declaration
-  : 'input' 'reg'? 'signed'? vrange? list_of_identifiers
-  | 'input' task_port_type list_of_identifiers
+tfInputDeclaration
+  : 'input' 'reg'? 'signed'? vrange? listOfIdentifiers
+  | 'input' taskPortType listOfIdentifiers
   ;
 
-tf_output_declaration
-  : 'output' 'reg'? 'signed'? vrange? list_of_identifiers
-  | 'output' task_port_type list_of_identifiers
+tfOutputDeclaration
+  : 'output' 'reg'? 'signed'? vrange? listOfIdentifiers
+  | 'output' taskPortType listOfIdentifiers
   ;
 
-tf_inout_declaration
-  : 'inout' 'reg'? 'signed'? vrange? list_of_identifiers
-  | 'inout' task_port_type list_of_identifiers
+tfInoutDeclaration
+  : 'inout' 'reg'? 'signed'? vrange? listOfIdentifiers
+  | 'inout' taskPortType listOfIdentifiers
   ;
 
-task_port_type
+taskPortType
   : 'integer'
   | 'real'
   | 'realtime'
   | 'time'
-  | attribute_instance* tf_inout_declaration
+  | attributeInstance* tfInoutDeclaration
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.2.8 Block item declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-block_item_declaration
-  : attribute_instance* 'reg' 'signed'? vrange? list_of_block_variable_identifiers ';'
-  | attribute_instance* 'integer' list_of_block_variable_identifiers ';'
-  | attribute_instance* 'time' list_of_block_variable_identifiers ';'
-  | attribute_instance* 'real' list_of_block_real_identifiers ';'
-  | attribute_instance* 'realtime' list_of_block_real_identifiers ';'
-  | attribute_instance* event_declaration
-  | attribute_instance* local_parameter_declaration ';'
-  | attribute_instance* parameter_declaration ';'
+blockItemDeclaration
+  : attributeInstance* 'reg' 'signed'? vrange? listOfBlockVariableIdentifiers ';'
+  | attributeInstance* 'integer' listOfBlockVariableIdentifiers ';'
+  | attributeInstance* 'time' listOfBlockVariableIdentifiers ';'
+  | attributeInstance* 'real' listOfBlockRealIdentifiers ';'
+  | attributeInstance* 'realtime' listOfBlockRealIdentifiers ';'
+  | attributeInstance* eventDeclaration
+  | attributeInstance* localParameterDeclaration ';'
+  | attributeInstance* parameterDeclaration ';'
   ;
 
-list_of_block_variable_identifiers
-  : block_variable_type (',' block_variable_type)*
+listOfBlockVariableIdentifiers
+  : blockVariableType (',' blockVariableType)*
   ;
 
-list_of_block_real_identifiers
-  : block_real_type (',' block_real_type)*
+listOfBlockRealIdentifiers
+  : blockRealType (',' blockRealType)*
   ;
 
-block_variable_type
+blockVariableType
   : IDENTIFIER dimension*
   ;
 
-block_real_type
+blockRealType
   : IDENTIFIER dimension*
   ;
 
@@ -563,59 +563,59 @@ block_real_type
 // A.3.1 Primitive instantiation and instances
 ////////////////////////////////////////////////////////////////////////////////
 
-gate_instantiation
-  : cmos_switchtype delay3? cmos_switch_instance (',' cmos_switch_instance)* ';'
-  | enable_gatetype drive_strength? delay3? enable_gate_instance (',' enable_gate_instance)* ';'
-  | mos_switchtype delay3? mos_switch_instance (',' mos_switch_instance)* ';'
-  | n_input_gatetype drive_strength? delay2? n_input_gate_instance (',' n_input_gate_instance)* ';'
-  | n_output_gatetype drive_strength? delay2? n_output_gate_instance (',' n_output_gate_instance)* ';'
-  | pass_en_switchtype delay2? pass_enable_switch_instance (',' pass_enable_switch_instance)* ';'
-  | pass_switchtype pass_switch_instance (',' pass_switch_instance)* ';'
-  | 'pulldown' pulldown_strength? pull_gate_instance (',' pull_gate_instance)* ';'
-  | 'pullup' pullup_strength? pull_gate_instance (',' pull_gate_instance)* ';'
+gateInstantiation
+  : cmosSwitchtype delay3? cmosSwitchInstance (',' cmosSwitchInstance)* ';'
+  | enableGatetype driveStrength? delay3? enableGateInstance (',' enableGateInstance)* ';'
+  | mosSwitchtype delay3? mosSwitchInstance (',' mosSwitchInstance)* ';'
+  | nInputGatetype driveStrength? delay2? nInputGateInstance (',' nInputGateInstance)* ';'
+  | nOutputGatetype driveStrength? delay2? nOutputGateInstance (',' nOutputGateInstance)* ';'
+  | passEnSwitchtype delay2? passEnableSwitchInstance (',' passEnableSwitchInstance)* ';'
+  | passSwitchtype passSwitchInstance (',' passSwitchInstance)* ';'
+  | 'pulldown' pulldownStrength? pullGateInstance (',' pullGateInstance)* ';'
+  | 'pullup' pullupStrength? pullGateInstance (',' pullGateInstance)* ';'
   ;
 
-cmos_switch_instance
-  : name_of_gate_instance?
-    '(' net_lvalue ',' expression ',' expression ',' expression ')'
+cmosSwitchInstance
+  : nameOfGateInstance?
+    '(' netLvalue ',' expression ',' expression ',' expression ')'
   ;
 
-enable_gate_instance
-  : name_of_gate_instance?
-    '(' net_lvalue ',' expression ',' expression ')'
+enableGateInstance
+  : nameOfGateInstance?
+    '(' netLvalue ',' expression ',' expression ')'
   ;
 
-mos_switch_instance
-  : name_of_gate_instance?
-    '(' net_lvalue ',' expression ',' expression ')'
+mosSwitchInstance
+  : nameOfGateInstance?
+    '(' netLvalue ',' expression ',' expression ')'
   ;
 
-n_input_gate_instance
-  : name_of_gate_instance?
-    '(' net_lvalue ',' expression (',' expression)* ')'
+nInputGateInstance
+  : nameOfGateInstance?
+    '(' netLvalue ',' expression (',' expression)* ')'
   ;
 
-n_output_gate_instance
-  : name_of_gate_instance?
-    '(' net_lvalue (',' net_lvalue)* ',' expression ')'
+nOutputGateInstance
+  : nameOfGateInstance?
+    '(' netLvalue (',' netLvalue)* ',' expression ')'
   ;
 
-pass_switch_instance
-  : name_of_gate_instance?
-    '(' net_lvalue ',' net_lvalue ')' ';'
+passSwitchInstance
+  : nameOfGateInstance?
+    '(' netLvalue ',' netLvalue ')' ';'
   ;
 
-pass_enable_switch_instance
-  : name_of_gate_instance?
-    '(' net_lvalue ',' net_lvalue ',' expression ')'
+passEnableSwitchInstance
+  : nameOfGateInstance?
+    '(' netLvalue ',' netLvalue ',' expression ')'
   ;
 
-pull_gate_instance
-  : name_of_gate_instance?
-    '(' net_lvalue ')'
+pullGateInstance
+  : nameOfGateInstance?
+    '(' netLvalue ')'
   ;
 
-name_of_gate_instance
+nameOfGateInstance
   : IDENTIFIER vrange?
   ;
 
@@ -623,13 +623,13 @@ name_of_gate_instance
 // A.3.2 Primitive strengths
 ////////////////////////////////////////////////////////////////////////////////
 
-pulldown_strength
+pulldownStrength
   : '(' strength0 ',' strength1 ')'
   | '(' strength1 ',' strength0 ')'
   | '(' strength0 ')'
   ;
 
-pullup_strength
+pullupStrength
   : '(' strength0 ',' strength1 ')'
   | '(' strength1 ',' strength0 ')'
   | '(' strength1 ')'
@@ -645,26 +645,26 @@ pullup_strength
 // A.3.4 Primitive gate and switch types
 ////////////////////////////////////////////////////////////////////////////////
 
-cmos_switchtype
+cmosSwitchtype
   : 'cmos'
   | 'rcmos'
   ;
 
-enable_gatetype
+enableGatetype
   : 'bufif0'
   | 'bufif1'
   | 'notif0'
   | 'notif1'
   ;
 
-mos_switchtype
+mosSwitchtype
   : 'nmos'
   | 'pmos'
   | 'rnmos'
   | 'rpmos'
   ;
 
-n_input_gatetype
+nInputGatetype
   : 'and'
   | 'nand'
   | 'or'
@@ -673,19 +673,19 @@ n_input_gatetype
   | 'xnor'
   ;
 
-n_output_gatetype
+nOutputGatetype
   : 'buf'
   | 'not'
   ;
 
-pass_en_switchtype
+passEnSwitchtype
   : 'tranif0'
   | 'tranif1'
   | 'rtranif1'
   | 'rtranif0'
   ;
 
-pass_switchtype
+passSwitchtype
   : 'tran'
   | 'rtran'
   ;
@@ -694,113 +694,113 @@ pass_switchtype
 // A.4.1 Module instantiation
 ////////////////////////////////////////////////////////////////////////////////
 
-module_instantiation
-  : IDENTIFIER parameter_value_assignment? module_instance (',' module_instance)* ';'
+moduleInstantiation
+  : IDENTIFIER parameterValueAssignment? moduleInstance (',' moduleInstance)* ';'
   ;
 
-parameter_value_assignment
-  : '#' '(' list_of_parameter_assignments ')'
+parameterValueAssignment
+  : '#' '(' listOfParameterAssignments ')'
   ;
 
-list_of_parameter_assignments
-  : ordered_parameter_assignment (',' ordered_parameter_assignment)*
-  | named_parameter_assignment (',' named_parameter_assignment)*
+listOfParameterAssignments
+  : orderedParameterAssignment (',' orderedParameterAssignment)*
+  | namedParameterAssignment (',' namedParameterAssignment)*
   ;
 
-ordered_parameter_assignment
+orderedParameterAssignment
   : expression
   ;
 
-named_parameter_assignment
-  : '.' IDENTIFIER '(' mintypmax_expression? ')'
+namedParameterAssignment
+  : '.' IDENTIFIER '(' mintypmaxExpression? ')'
   ;
 
-module_instance
-  : name_of_module_instance '(' list_of_port_connections ')'
+moduleInstance
+  : nameOfModuleInstance '(' listOfPortConnections ')'
   ;
 
-name_of_module_instance
+nameOfModuleInstance
   : IDENTIFIER vrange?
   ;
 
-list_of_port_connections
-  : ordered_port_connection? (',' ordered_port_connection?)*
-  | named_port_connection (',' named_port_connection)*
+listOfPortConnections
+  : orderedPortConnection? (',' orderedPortConnection?)*
+  | namedPortConnection (',' namedPortConnection)*
   ;
 
-ordered_port_connection
-  : attribute_instance* expression
-  | attribute_instance+
+orderedPortConnection
+  : attributeInstance* expression
+  | attributeInstance+
   ;
 
-named_port_connection
-  : attribute_instance* '.' IDENTIFIER '(' expression? ')'
+namedPortConnection
+  : attributeInstance* '.' IDENTIFIER '(' expression? ')'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.4.2 Generate construct
 ////////////////////////////////////////////////////////////////////////////////
 
-generate_region
-  : 'generate' module_or_generate_item* 'endgenerate'
+generateRegion
+  : 'generate' moduleOrGenerateItem* 'endgenerate'
   ;
 
-genvar_declaration
-  : 'genvar' list_of_identifiers ';'
+genvarDeclaration
+  : 'genvar' listOfIdentifiers ';'
   ;
 
-loop_generate_construct
-  : 'for' '(' genvar_initialization ';' genvar_expression ';' genvar_iteration ')'
-    generate_block
+loopGenerateConstruct
+  : 'for' '(' genvarInitialization ';' genvarExpression ';' genvarIteration ')'
+    generateBlock
   ;
 
-genvar_initialization
-  : IDENTIFIER '=' constant_expression
+genvarInitialization
+  : IDENTIFIER '=' constantExpression
   ;
 
-genvar_expression
-  : genvar_primary
-  | unary_operator attribute_instance* genvar_primary
-  | genvar_expression binary_operator attribute_instance* genvar_expression
-  | genvar_expression '?' attribute_instance* genvar_expression ':' genvar_expression
+genvarExpression
+  : genvarPrimary
+  | unaryOperator attributeInstance* genvarPrimary
+  | genvarExpression binaryOperator attributeInstance* genvarExpression
+  | genvarExpression '?' attributeInstance* genvarExpression ':' genvarExpression
   ;
 
-genvar_iteration
-  : IDENTIFIER '=' genvar_expression
+genvarIteration
+  : IDENTIFIER '=' genvarExpression
   ;
 
-genvar_primary
-  : constant_primary
+genvarPrimary
+  : constantPrimary
   | IDENTIFIER
   ;
 
-conditional_generate_construct
-  : if_generate_construct
-  | case_generate_construct
+conditionalGenerateConstruct
+  : ifGenerateConstruct
+  | caseGenerateConstruct
   ;
 
-if_generate_construct
-  : 'if' '(' constant_expression ')' generate_block_or_null ('else' generate_block_or_null)?
+ifGenerateConstruct
+  : 'if' '(' constantExpression ')' generateBlockOrNull ('else' generateBlockOrNull)?
   ;
 
-case_generate_construct
-  : 'case' '(' constant_expression ')'
-      case_generate_item+
+caseGenerateConstruct
+  : 'case' '(' constantExpression ')'
+      caseGenerateItem+
     'endcase'
   ;
 
-case_generate_item
-  : constant_expression (',' constant_expression)* ':' generate_block_or_null
-  | 'default' ':'? generate_block_or_null
+caseGenerateItem
+  : constantExpression (',' constantExpression)* ':' generateBlockOrNull
+  | 'default' ':'? generateBlockOrNull
   ;
 
-generate_block
-  : module_or_generate_item
-  | 'begin' (':' IDENTIFIER)?  module_or_generate_item* 'end'
+generateBlock
+  : moduleOrGenerateItem
+  | 'begin' (':' IDENTIFIER)?  moduleOrGenerateItem* 'end'
   ;
 
-generate_block_or_null
-  : generate_block
+generateBlockOrNull
+  : generateBlock
   | ';'
   ;
 
@@ -808,15 +808,15 @@ generate_block_or_null
 //// A.5.1 UDP declaration
 //////////////////////////////////////////////////////////////////////////////////
 //
-//udp_declaration
-//  : attribute_instance*
-//    'primitive' IDENTIFIER '(' udp_port_list ')' ';'
-//      udp_port_declaration+
-//      udp_body
+//udpDeclaration
+//  : attributeInstance*
+//    'primitive' IDENTIFIER '(' udpPortList ')' ';'
+//      udpPortDeclaration+
+//      udpBody
 //    'endprimitive'
-//  | attribute_instance*
-//    'primitive' IDENTIFIER '(' udp_declaration_port_list ')' ';'
-//      udp_body
+//  | attributeInstance*
+//    'primitive' IDENTIFIER '(' udpDeclarationPortList ')' ';'
+//      udpBody
 //    'endprimitive '
 //  ;
 //
@@ -824,59 +824,59 @@ generate_block_or_null
 //// A.5.2 UDP ports
 //////////////////////////////////////////////////////////////////////////////////
 //
-//udp_port_list
+//udpPortList
 //  : IDENTIFIER ',' IDENTIFIER (',' IDENTIFIER)*
 //  ;
 //
-//udp_declaration_port_list
-//  : udp_output_declaration ',' udp_input_declaration (',' udp_input_declaration)*
+//udpDeclarationPortList
+//  : udpOutputDeclaration ',' udpInputDeclaration (',' udpInputDeclaration)*
 //  ;
 //
-//udp_port_declaration
-//  : udp_output_declaration ';'
-//  | udp_input_declaration ';'
-//  | udp_reg_declaration ';'
+//udpPortDeclaration
+//  : udpOutputDeclaration ';'
+//  | udpInputDeclaration ';'
+//  | udpRegDeclaration ';'
 //  ;
 //
-//udp_output_declaration
-//  : attribute_instance* output IDENTIFIER
-//  | attribute_instance* output reg IDENTIFIER ('=' constant_expression)?
+//udpOutputDeclaration
+//  : attributeInstance* output IDENTIFIER
+//  | attributeInstance* output reg IDENTIFIER ('=' constantExpression)?
 //  ;
 //
-//udp_input_declaration
-//  : attribute_instance* input list_of_identifiers
+//udpInputDeclaration
+//  : attributeInstance* input listOfIdentifiers
 //  ;
 //
-//udp_reg_declaration
-//  : attribute_instance* reg IDENTIFIER
+//udpRegDeclaration
+//  : attributeInstance* reg IDENTIFIER
 //  ;
 //
 //////////////////////////////////////////////////////////////////////////////////
 //// A.5.3 UDP body
 //////////////////////////////////////////////////////////////////////////////////
 //
-//udp_body
-//  : combinational_body
-//  | sequential_body
+//udpBody
+//  : combinationalBody
+//  | sequentialBody
 //  ;
 //
-//combinational_body
-//  : 'table' combinational_entry+ 'endtable'
+//combinationalBody
+//  : 'table' combinationalEntry+ 'endtable'
 //  ;
 //
-//combinational_entry
-//  : level_input_list ':' output_symbol ';'
+//combinationalEntry
+//  : levelInputList ':' outputSymbol ';'
 //  ;
 //
-//sequential_body
-//  : udp_initial_statement? 'table' sequential_entry+ 'endtable'
+//sequentialBody
+//  : udpInitialStatement? 'table' sequentialEntry+ 'endtable'
 //  ;
 //
-//udp_initial_statement
-//  : 'initial' IDENTIFIER '=' init_val ';'
+//udpInitialStatement
+//  : 'initial' IDENTIFIER '=' initVal ';'
 //  ;
 //
-//init_val
+//initVal
 //  : '1\'b0'
 //  | '1\'b1'
 //  | '1\'bx'
@@ -889,41 +889,41 @@ generate_block_or_null
 //  | '0'
 //  ;
 //
-//sequential_entry
-//  : seq_input_list ':' level_symbol ':' next_state ';'
+//sequentialEntry
+//  : seqInputList ':' levelSymbol ':' nextState ';'
 //  ;
 //
-//seq_input_list
-//  : level_input_list
-//  | edge_input_list
+//seqInputList
+//  : levelInputList
+//  | edgeInputList
 //  ;
 //
-//level_input_list
-//  : level_symbol+
+//levelInputList
+//  : levelSymbol+
 //  ;
 //
-//edge_input_list
-//  : level_symbol* edge_indicator level_symbol*
+//edgeInputList
+//  : levelSymbol* edgeIndicator levelSymbol*
 //  ;
 //
-//edge_indicator
-//  : '(' level_symbol level_symbol ')'
-//  | edge_symbol
+//edgeIndicator
+//  : '(' levelSymbol levelSymbol ')'
+//  | edgeSymbol
 //  ;
 //
-//next_state
-//  : output_symbol
+//nextState
+//  : outputSymbol
 //  | '-'
 //  ;
 //
-//output_symbol
+//outputSymbol
 //  : '0'
 //  | '1'
 //  | 'x'
 //  | 'X'
 //  ;
 //
-//level_symbol
+//levelSymbol
 //  : '0'
 //  | '1'
 //  | 'x'
@@ -933,7 +933,7 @@ generate_block_or_null
 //  | 'B'
 //  ;
 //
-//edge_symbol
+//edgeSymbol
 //  : 'r'
 //  | 'R'
 //  | 'f'
@@ -949,15 +949,15 @@ generate_block_or_null
 //// A.5.4 UDP instantiation
 //////////////////////////////////////////////////////////////////////////////////
 //
-//udp_instantiation
-//  : IDENTIFIER drive_strength? delay2? udp_instance (',' udp_instance)* ';'
+//udpInstantiation
+//  : IDENTIFIER driveStrength? delay2? udpInstance (',' udpInstance)* ';'
 //  ;
 //
-//udp_instance
-//  : name_of_udp_instance? '(' net_lvalue ',' expression (',' expression)* ')'
+//udpInstance
+//  : nameOfUdpInstance? '(' netLvalue ',' expression (',' expression)* ')'
 //  ;
 //
-//name_of_udp_instance
+//nameOfUdpInstance
 //  : IDENTIFIER vrange?
 //  ;
 
@@ -965,63 +965,63 @@ generate_block_or_null
 // A.6.1 Continuous assignment startements
 ////////////////////////////////////////////////////////////////////////////////
 
-continuous_assign
-  : 'assign' drive_strength? delay3? list_of_net_assignments ';'
+continuousAssign
+  : 'assign' driveStrength? delay3? listOfNetAssignments ';'
   ;
 
-list_of_net_assignments
-  : net_assignment (',' net_assignment)*
+listOfNetAssignments
+  : netAssignment (',' netAssignment)*
   ;
 
-net_assignment
-  : net_lvalue '=' expression
+netAssignment
+  : netLvalue '=' expression
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.6.2 Procedural blocks and assignments
 ////////////////////////////////////////////////////////////////////////////////
 
-initial_construct
+initialConstruct
   : 'initial' statement
   ;
 
-always_construct
+alwaysConstruct
   : 'always' statement
   ;
 
-blocking_assignment
-  : variable_lvalue '=' delay_or_event_control? expression
+blockingAssignment
+  : variableLvalue '=' delayOrEventControl? expression
   ;
 
-nonblocking_assignment
-  : variable_lvalue '<=' delay_or_event_control? expression
+nonblockingAssignment
+  : variableLvalue '<=' delayOrEventControl? expression
   ;
 
-procedural_continuous_assignments
-  : 'assign' variable_assignment
-  | 'deassign' variable_lvalue
-  | 'force' variable_assignment
-  | 'force' net_assignment
-  | 'release' variable_lvalue
-  | 'release' net_lvalue
+proceduralContinuousAssignments
+  : 'assign' variableAssignment
+  | 'deassign' variableLvalue
+  | 'force' variableAssignment
+  | 'force' netAssignment
+  | 'release' variableLvalue
+  | 'release' netLvalue
   ;
 
-variable_assignment
-  : variable_lvalue '=' expression
+variableAssignment
+  : variableLvalue '=' expression
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.6.3 Parallel and sequential blocks
 ////////////////////////////////////////////////////////////////////////////////
 
-par_block
-  : 'fork' (':' IDENTIFIER block_item_declaration* )?
+parBlock
+  : 'fork' (':' IDENTIFIER blockItemDeclaration* )?
       statement*
     'join'
   ;
 
-seq_block
-  : 'begin' (':' IDENTIFIER  block_item_declaration*)?
+seqBlock
+  : 'begin' (':' IDENTIFIER  blockItemDeclaration*)?
       statement*
     'end'
   ;
@@ -1031,238 +1031,238 @@ seq_block
 ////////////////////////////////////////////////////////////////////////////////
 
 statement
-  : attribute_instance* blocking_assignment ';'
-  | attribute_instance* case_statement
-  | attribute_instance* conditional_statement
-  | attribute_instance* disable_statement
-  | attribute_instance* event_trigger
-  | attribute_instance* loop_statement
-  | attribute_instance* nonblocking_assignment ';'
-  | attribute_instance* par_block
-  | attribute_instance* procedural_continuous_assignments ';'
-  | attribute_instance* procedural_timing_control_statement
-  | attribute_instance* seq_block
-  | attribute_instance* system_task_enable
-  | attribute_instance* task_enable
-  | attribute_instance* wait_statement
+  : attributeInstance* blockingAssignment ';'
+  | attributeInstance* caseStatement
+  | attributeInstance* conditionalStatement
+  | attributeInstance* disableStatement
+  | attributeInstance* eventTrigger
+  | attributeInstance* loopStatement
+  | attributeInstance* nonblockingAssignment ';'
+  | attributeInstance* parBlock
+  | attributeInstance* proceduralContinuousAssignments ';'
+  | attributeInstance* proceduralTimingControlStatement
+  | attributeInstance* seqBlock
+  | attributeInstance* systemTaskEnable
+  | attributeInstance* taskEnable
+  | attributeInstance* waitStatement
   ;
 
-statement_or_null
+statementOrNull
   : statement
-  | attribute_instance* ';'
+  | attributeInstance* ';'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.6.5 Timing control statemetns
 ////////////////////////////////////////////////////////////////////////////////
 
-delay_control
-  : '#' delay_value
-  | '#' '(' mintypmax_expression ')'
+delayControl
+  : '#' delayValue
+  | '#' '(' mintypmaxExpression ')'
   ;
 
-delay_or_event_control
-  : delay_control
-  | event_control
-  | 'repeat' '(' expression ')' event_control
+delayOrEventControl
+  : delayControl
+  | eventControl
+  | 'repeat' '(' expression ')' eventControl
   ;
 
-disable_statement
-  : 'disable' hierarchical_identifier ';'
+disableStatement
+  : 'disable' hierarchicalIdentifier ';'
   ;
 
-event_control
-  : '@' hierarchical_identifier
-  | '@' '(' event_expression ')'
+eventControl
+  : '@' hierarchicalIdentifier
+  | '@' '(' eventExpression ')'
   | '@' '*'
   | '@' '(' '*' ')'
   ;
 
-event_trigger
-  : '->' hierarchical_identifier ('[' expression ']')* ';'
+eventTrigger
+  : '->' hierarchicalIdentifier ('[' expression ']')* ';'
   ;
 
-event_expression
+eventExpression
   : expression
   | 'posedge' expression
   | 'negedge' expression
-  | event_expression 'or' event_expression
-  | event_expression ',' event_expression
+  | eventExpression 'or' eventExpression
+  | eventExpression ',' eventExpression
   ;
 
-procedural_timing_control
-  : delay_control
-  | event_control
+proceduralTimingControl
+  : delayControl
+  | eventControl
   ;
 
-procedural_timing_control_statement
-  : procedural_timing_control statement_or_null
+proceduralTimingControlStatement
+  : proceduralTimingControl statementOrNull
   ;
 
-wait_statement
-  : 'wait' '(' expression ')' statement_or_null
+waitStatement
+  : 'wait' '(' expression ')' statementOrNull
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.6.6 Conditional statements
 ////////////////////////////////////////////////////////////////////////////////
 
-conditional_statement
-  : 'if' '(' expression ')' statement_or_null ('else' statement_or_null)?
-  | if_else_if_statement
+conditionalStatement
+  : 'if' '(' expression ')' statementOrNull ('else' statementOrNull)?
+  | ifElseIfStatement
   ;
 
-if_else_if_statement
-  : 'if' '(' expression ')' statement_or_null
-    ('else' 'if' '(' expression ')' statement_or_null )*
-    ('else' statement_or_null)?
+ifElseIfStatement
+  : 'if' '(' expression ')' statementOrNull
+    ('else' 'if' '(' expression ')' statementOrNull )*
+    ('else' statementOrNull)?
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.6.7 Case statements
 ////////////////////////////////////////////////////////////////////////////////
 
-case_statement
+caseStatement
   : 'case' '(' expression ')'
-      case_item+
+      caseItem+
     'endcase'
   | 'casez' '(' expression ')'
-      case_item+
+      caseItem+
     'endcase'
   | 'casex' '(' expression ')'
-      case_item+
+      caseItem+
     'endcase'
   ;
 
-case_item
-  : expression (',' expression)* ':' statement_or_null
-  | 'default' ':'? statement_or_null
+caseItem
+  : expression (',' expression)* ':' statementOrNull
+  | 'default' ':'? statementOrNull
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.6.8 looping statements
 ////////////////////////////////////////////////////////////////////////////////
 
-loop_statement
+loopStatement
   : 'forever' statement
   | 'repeat' '(' expression ')' statement
   | 'while' '(' expression ')' statement
-  | 'for' '(' variable_assignment ';' expression ';' variable_assignment ')' statement
+  | 'for' '(' variableAssignment ';' expression ';' variableAssignment ')' statement
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.6.9 Task enable statemetns
 ////////////////////////////////////////////////////////////////////////////////
 
-system_task_enable
+systemTaskEnable
   : SYSID ('(' expression? (',' expression?)* ')')? ';'
   ;
 
-task_enable
-  : hierarchical_identifier ('(' expression (',' expression)* ')')? ';'
+taskEnable
+  : hierarchicalIdentifier ('(' expression (',' expression)* ')')? ';'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.7.1 Specify block declaration
 ////////////////////////////////////////////////////////////////////////////////
 
-specify_block
-  : 'specify' specify_item* 'endspecify'
+specifyBlock
+  : 'specify' specifyItem* 'endspecify'
   ;
 
-specify_item
-  : specparam_declaration
-  | pulsestyle_declaration
-  | showcancelled_declaration
-  | path_declaration
-//| system_timing_check
+specifyItem
+  : specparamDeclaration
+  | pulsestyleDeclaration
+  | showcancelledDeclaration
+  | pathDeclaration
+//| systemTimingCheck
   ;
 
-pulsestyle_declaration
-  : 'pulsestyle_onevent' list_of_paths ';'
-  | 'pulsestyle_ondetect' list_of_paths ';'
+pulsestyleDeclaration
+  : 'pulsestyle_onevent' listOfPaths ';'
+  | 'pulsestyle_ondetect' listOfPaths ';'
   ;
 
-showcancelled_declaration
-  : 'showcancelled' list_of_paths ';'
-  | 'noshowcancelled' list_of_paths ';'
+showcancelledDeclaration
+  : 'showcancelled' listOfPaths ';'
+  | 'noshowcancelled' listOfPaths ';'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.7.2 Specify path declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-path_declaration
-  : simple_path_declaration ';'
-  | edge_sensitive_path_declaration ';'
-  | state_dependent_path_declaration ';'
+pathDeclaration
+  : simplePathDeclaration ';'
+  | edgeSensitivePathDeclaration ';'
+  | stateDependentPathDeclaration ';'
   ;
 
-simple_path_declaration
-  : parallel_path_description '=' path_delay_value
-  | full_path_description '=' path_delay_value
+simplePathDeclaration
+  : parallelPathDescription '=' pathDelayValue
+  | fullPathDescription '=' pathDelayValue
   ;
 
-parallel_path_description
-  : '(' specify_terminal_descriptor polarity_operator? '=>' specify_terminal_descriptor ')'
+parallelPathDescription
+  : '(' specifyTerminalDescriptor polarityOperator? '=>' specifyTerminalDescriptor ')'
   ;
 
-full_path_description
-  : '(' list_of_paths polarity_operator? '*>' list_of_paths ')'
+fullPathDescription
+  : '(' listOfPaths polarityOperator? '*>' listOfPaths ')'
   ;
 
-list_of_paths
-  : specify_terminal_descriptor (',' specify_terminal_descriptor)*
+listOfPaths
+  : specifyTerminalDescriptor (',' specifyTerminalDescriptor)*
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.7.3 Specify block terminals
 ////////////////////////////////////////////////////////////////////////////////
 
-specify_terminal_descriptor
-  : IDENTIFIER ('[' constant_range_expression ']')?
+specifyTerminalDescriptor
+  : IDENTIFIER ('[' constantRangeExpression ']')?
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.7.4 Specify path delays
 ////////////////////////////////////////////////////////////////////////////////
 
-path_delay_value
-  : list_of_path_delay_expressions
-  | '(' list_of_path_delay_expressions ')'
+pathDelayValue
+  : listOfPathDelayExpressions
+  | '(' listOfPathDelayExpressions ')'
   ;
 
-list_of_path_delay_expressions
-  : constant_mintypmax_expression (',' constant_mintypmax_expression)*
+listOfPathDelayExpressions
+  : constantMintypmaxExpression (',' constantMintypmaxExpression)*
   ;
 
-edge_sensitive_path_declaration
-  : parallel_edge_sensitive_path_description '=' path_delay_value
-  | full_edge_sensitive_path_description '=' path_delay_value
+edgeSensitivePathDeclaration
+  : parallelEdgeSensitivePathDescription '=' pathDelayValue
+  | fullEdgeSensitivePathDescription '=' pathDelayValue
   ;
 
-parallel_edge_sensitive_path_description
-  : '(' edge_identifier? specify_terminal_descriptor '=>'
-    '(' specify_terminal_descriptor polarity_operator? ':' expression ')' ')'
+parallelEdgeSensitivePathDescription
+  : '(' edgeIdentifier? specifyTerminalDescriptor '=>'
+    '(' specifyTerminalDescriptor polarityOperator? ':' expression ')' ')'
   ;
 
-full_edge_sensitive_path_description
-  : '(' edge_identifier? list_of_paths '*>'
-    '(' list_of_paths polarity_operator? ':' expression ')' ')'
+fullEdgeSensitivePathDescription
+  : '(' edgeIdentifier? listOfPaths '*>'
+    '(' listOfPaths polarityOperator? ':' expression ')' ')'
   ;
 
-edge_identifier
+edgeIdentifier
   : 'posedge'
   | 'negedge'
   ;
 
-state_dependent_path_declaration
-  : 'if' '(' module_path_expression ')' simple_path_declaration
-  | 'if' '(' module_path_expression ')' edge_sensitive_path_declaration
-  | 'ifnone' simple_path_declaration
+stateDependentPathDeclaration
+  : 'if' '(' modulePathExpression ')' simplePathDeclaration
+  | 'if' '(' modulePathExpression ')' edgeSensitivePathDeclaration
+  | 'ifnone' simplePathDeclaration
   ;
 
-polarity_operator
+polarityOperator
   : '+'
   | '-'
   ;
@@ -1271,143 +1271,143 @@ polarity_operator
 //// A.7.5.1 System timing check comands
 //////////////////////////////////////////////////////////////////////////////////
 //
-//system_timing_check
-//  : $setup_timing_check
-//  | $hold_timing_check
-//  | $setuphold_timing_check
-//  | $recovery_timing_check
-//  | $removal_timing_check
-//  | $recrem_timing_check
-//  | $skew_timing_check
-//  | $timeskew_timing_check
-//  | $fullskew_timing_check
-//  | $period_timing_check
-//  | $width_timing_check
-//  | $nochange_timing_check
+//systemTimingCheck
+//  : $setupTimingCheck
+//  | $holdTimingCheck
+//  | $setupholdTimingCheck
+//  | $recoveryTimingCheck
+//  | $removalTimingCheck
+//  | $recremTimingCheck
+//  | $skewTimingCheck
+//  | $timeskewTimingCheck
+//  | $fullskewTimingCheck
+//  | $periodTimingCheck
+//  | $widthTimingCheck
+//  | $nochangeTimingCheck
 //  ;
 //
-//$setup_timing_check
-//  : '$setup' '(' timing_check_event ',' timing_check_event ',' expression (',' IDENTIFIER?)? ')' ';'
+//$setupTimingCheck
+//  : '$setup' '(' timingCheckEvent ',' timingCheckEvent ',' expression (',' IDENTIFIER?)? ')' ';'
 //  ;
 //
-//$hold_timing_check
-//  : '$hold' '(' timing_check_event ',' timing_check_event ',' expression (',' IDENTIFIER?)? ')' ';'
+//$holdTimingCheck
+//  : '$hold' '(' timingCheckEvent ',' timingCheckEvent ',' expression (',' IDENTIFIER?)? ')' ';'
 //  ;
 //
-//$setuphold_timing_check
-//  : '$setuphold' '(' timing_check_event ',' timing_check_event ',' expression ',' expression
-//    (',' IDENTIFIER? (',' mintypmax_expression? (',' mintypmax_expression? (',' delayed_reference? (',' delayed_data?)?)?)?)?)? ')' ';'
+//$setupholdTimingCheck
+//  : '$setuphold' '(' timingCheckEvent ',' timingCheckEvent ',' expression ',' expression
+//    (',' IDENTIFIER? (',' mintypmaxExpression? (',' mintypmaxExpression? (',' delayedReference? (',' delayedData?)?)?)?)?)? ')' ';'
 //  ;
 //
-//$recovery_timing_check
-//  : '$recovery' '(' timing_check_event ',' timing_check_event ',' expression (',' IDENTIFIER?)? ')' ';'
+//$recoveryTimingCheck
+//  : '$recovery' '(' timingCheckEvent ',' timingCheckEvent ',' expression (',' IDENTIFIER?)? ')' ';'
 //  ;
 //
-//$removal_timing_check
-//  : '$removal' '(' timing_check_event ',' timing_check_event ',' expression (',' IDENTIFIER?)? ')' ';'
+//$removalTimingCheck
+//  : '$removal' '(' timingCheckEvent ',' timingCheckEvent ',' expression (',' IDENTIFIER?)? ')' ';'
 //  ;
 //
-//$recrem_timing_check
-//  : '$recrem' '(' timing_check_event ',' timing_check_event ',' expression ',' expression
-//    (',' IDENTIFIER? (',' mintypmax_expression? (',' mintypmax_expression? (',' delayed_reference? (',' delayed_data?)?)?)?)?)? ')' ';'
+//$recremTimingCheck
+//  : '$recrem' '(' timingCheckEvent ',' timingCheckEvent ',' expression ',' expression
+//    (',' IDENTIFIER? (',' mintypmaxExpression? (',' mintypmaxExpression? (',' delayedReference? (',' delayedData?)?)?)?)?)? ')' ';'
 //  ;
 //
-//$skew_timing_check
-//  : '$skew' '(' timing_check_event ',' timing_check_event ',' expression (',' IDENTIFIER?)? ')' ';'
+//$skewTimingCheck
+//  : '$skew' '(' timingCheckEvent ',' timingCheckEvent ',' expression (',' IDENTIFIER?)? ')' ';'
 //  ;
 //
-//$timeskew_timing_check
-//  : '$timeskew' '(' timing_check_event ',' timing_check_event ',' expression
-//    (',' IDENTIFIER? (',' constant_expression? (',' constant_expression?)?)?)? ')' ';'
+//$timeskewTimingCheck
+//  : '$timeskew' '(' timingCheckEvent ',' timingCheckEvent ',' expression
+//    (',' IDENTIFIER? (',' constantExpression? (',' constantExpression?)?)?)? ')' ';'
 //  ;
 //
-//$fullskew_timing_check
-//  : '$fullskew' '(' timing_check_event ',' timing_check_event ',' expression ',' expression
-//    (',' IDENTIFIER? (',' constant_expression? (',' constant_expression?)?)?)? ')' ';'
+//$fullskewTimingCheck
+//  : '$fullskew' '(' timingCheckEvent ',' timingCheckEvent ',' expression ',' expression
+//    (',' IDENTIFIER? (',' constantExpression? (',' constantExpression?)?)?)? ')' ';'
 //  ;
 //
-//$period_timing_check
-//  : '$period' '(' controlled_timing_check_event ',' expression (',' IDENTIFIER?)? ')' ';'
+//$periodTimingCheck
+//  : '$period' '(' controlledTimingCheckEvent ',' expression (',' IDENTIFIER?)? ')' ';'
 //  ;
 //
-//$width_timing_check
-//  : '$width' '(' controlled_timing_check_event ',' expression
-//    (',' constant_expression (',' IDENTIFIER)?)? ')' ';'
+//$widthTimingCheck
+//  : '$width' '(' controlledTimingCheckEvent ',' expression
+//    (',' constantExpression (',' IDENTIFIER)?)? ')' ';'
 //  ;
 //
-//$nochange_timing_check
-//  : '$nochange' '(' timing_check_event ',' timing_check_event ',' mintypmax_expression ','
-//    mintypmax_expression (',' IDENTIFIER?)? ')' ';'
+//$nochangeTimingCheck
+//  : '$nochange' '(' timingCheckEvent ',' timingCheckEvent ',' mintypmaxExpression ','
+//    mintypmaxExpression (',' IDENTIFIER?)? ')' ';'
 //  ;
 //
 //////////////////////////////////////////////////////////////////////////////////
 //// A.7.5.2 system timing check command arguments
 //////////////////////////////////////////////////////////////////////////////////
 //
-//delayed_data
-//  : IDENTIFIER constant_mintypmax_expression?
+//delayedData
+//  : IDENTIFIER constantMintypmaxExpression?
 //  ;
 //
-//delayed_reference
-//  : IDENTIFIER constant_mintypmax_expression?
+//delayedReference
+//  : IDENTIFIER constantMintypmaxExpression?
 //  ;
 //
 //////////////////////////////////////////////////////////////////////////////////
 //// A.7.5.3 System timing check event definitions
 //////////////////////////////////////////////////////////////////////////////////
 //
-//timing_check_event
-//  : timing_check_event_control? specify_terminal_descriptor ('&&&' timing_check_condition)?
+//timingCheckEvent
+//  : timingCheckEventControl? specifyTerminalDescriptor ('&&&' timingCheckCondition)?
 //  ;
 //
-//controlled_timing_check_event
-//  : timing_check_event_control specify_terminal_descriptor ('&&&' timing_check_condition)?
+//controlledTimingCheckEvent
+//  : timingCheckEventControl specifyTerminalDescriptor ('&&&' timingCheckCondition)?
 //  ;
 //
-//timing_check_event_control
+//timingCheckEventControl
 //  : 'posedge'
 //  | 'negedge'
-//  | edge_control_specifier
+//  | edgeControlSpecifier
 //  ;
 //
-//edge_control_specifier
-//  : 'edge' (edge_descriptor (',' edge_descriptor)*)?
+//edgeControlSpecifier
+//  : 'edge' (edgeDescriptor (',' edgeDescriptor)*)?
 //  ;
 //
-//edge_descriptor2
+//edgeDescriptor2
 //  : '01'
 //  | '10'
-//  | z_or_x zero_or_one
-//  | zero_or_one z_or_x
+//  | zOrX zeroOrOne
+//  | zeroOrOne zOrX
 //  ;
 //
-//zero_or_one
+//zeroOrOne
 //  : '0'
 //  | '1'
 //  ;
 //
-//z_or_x
+//zOrX
 //  : 'x'
 //  | 'X'
 //  | 'z'
 //  | 'Z'
 //  ;
 //
-//timing_check_condition
-//  : scalar_timing_check_condition
-//  | '(' scalar_timing_check_condition ')'
+//timingCheckCondition
+//  : scalarTimingCheckCondition
+//  | '(' scalarTimingCheckCondition ')'
 //  ;
 //
-//scalar_timing_check_condition
+//scalarTimingCheckCondition
 //  : expression
 //  | '~' expression
-//  | expression '==' scalar_constant
-//  | expression '===' scalar_constant
-//  | expression '!=' scalar_constant
-//  | expression '!==' scalar_constant
+//  | expression '==' scalarConstant
+//  | expression '===' scalarConstant
+//  | expression '!=' scalarConstant
+//  | expression '!==' scalarConstant
 //  ;
 //
-//scalar_constant
+//scalarConstant
 //  : '1\'b0'
 //  | '1\'b1'
 //  | '1\'B0'
@@ -1428,43 +1428,43 @@ concatenation
   : '{' expression (',' expression)* '}'
   ;
 
-constant_concatenation
-  : '{' constant_expression (',' constant_expression)* '}'
+constantConcatenation
+  : '{' constantExpression (',' constantExpression)* '}'
   ;
 
-constant_multiple_concatenation
-  : '{' constant_expression constant_concatenation '}'
+constantMultipleConcatenation
+  : '{' constantExpression constantConcatenation '}'
   ;
 
-module_path_concatenation
-  : '{' module_path_expression (',' module_path_expression)* '}'
+modulePathConcatenation
+  : '{' modulePathExpression (',' modulePathExpression)* '}'
   ;
 
-module_path_multiple_concatenation
-  : '{' constant_expression module_path_concatenation '}'
+modulePathMultipleConcatenation
+  : '{' constantExpression modulePathConcatenation '}'
   ;
 
-multiple_concatenation
-  : '{' constant_expression concatenation '}'
+multipleConcatenation
+  : '{' constantExpression concatenation '}'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.8.2 Function calls
 ////////////////////////////////////////////////////////////////////////////////
 
-constant_function_call
-  : IDENTIFIER attribute_instance* '(' constant_expression (',' constant_expression)* ')'
+constantFunctionCall
+  : IDENTIFIER attributeInstance* '(' constantExpression (',' constantExpression)* ')'
   ;
 
-constant_system_function_call
-  : SYSID '(' constant_expression (',' constant_expression)* ')'
+constantSystemFunctionCall
+  : SYSID '(' constantExpression (',' constantExpression)* ')'
   ;
 
-function_call
-  : hierarchical_identifier attribute_instance* '(' expression (',' expression)* ')'
+functionCall
+  : hierarchicalIdentifier attributeInstance* '(' expression (',' expression)* ')'
   ;
 
-system_function_call
+systemFunctionCall
   : SYSID ('(' expression (',' expression)* ')')?
   ;
 
@@ -1472,89 +1472,89 @@ system_function_call
 // A.8.3 Expressions
 ////////////////////////////////////////////////////////////////////////////////
 
-constant_expression
-  : constant_primary
-  | unary_operator attribute_instance* constant_primary
-  | constant_expression binary_operator attribute_instance* constant_expression
-  | constant_expression '?' attribute_instance* constant_expression ':' constant_expression
+constantExpression
+  : constantPrimary
+  | unaryOperator attributeInstance* constantPrimary
+  | constantExpression binaryOperator attributeInstance* constantExpression
+  | constantExpression '?' attributeInstance* constantExpression ':' constantExpression
   ;
 
-constant_mintypmax_expression
-  : constant_expression
-  | constant_expression ':' constant_expression ':' constant_expression
+constantMintypmaxExpression
+  : constantExpression
+  | constantExpression ':' constantExpression ':' constantExpression
   ;
 
-constant_range_expression
-  : constant_expression
-  | constant_expression ':' constant_expression
-  | constant_expression '+:' constant_expression
-  | constant_expression '-:' constant_expression
+constantRangeExpression
+  : constantExpression
+  | constantExpression ':' constantExpression
+  | constantExpression '+:' constantExpression
+  | constantExpression '-:' constantExpression
   ;
 
 expression
   : primary
-  | unary_operator attribute_instance? primary
-  | expression binary_operator attribute_instance* expression
-  | expression '?' attribute_instance* expression ':' expression
+  | unaryOperator attributeInstance? primary
+  | expression binaryOperator attributeInstance* expression
+  | expression '?' attributeInstance* expression ':' expression
   ;
 
-mintypmax_expression
+mintypmaxExpression
   : expression
   | expression ':' expression ':' expression
   ;
 
-module_path_expression
-  : module_path_primary
-  | unary_module_path_operator attribute_instance* module_path_primary
-  | module_path_expression binary_module_path_operator attribute_instance* module_path_expression
-  | module_path_expression '?' attribute_instance* module_path_expression ':' module_path_expression
+modulePathExpression
+  : modulePathPrimary
+  | unaryModulePathOperator attributeInstance* modulePathPrimary
+  | modulePathExpression binaryModulePathOperator attributeInstance* modulePathExpression
+  | modulePathExpression '?' attributeInstance* modulePathExpression ':' modulePathExpression
   ;
 
-module_path_mintypmax_expression
-  : module_path_expression
-  | module_path_expression ':' module_path_expression ':' module_path_expression
+modulePathMintypmaxExpression
+  : modulePathExpression
+  | modulePathExpression ':' modulePathExpression ':' modulePathExpression
   ;
 
-range_expression
+rangeExpression
   : expression
-  | constant_expression ':' constant_expression
-  | expression '+:' constant_expression
-  | expression '-:' constant_expression
+  | constantExpression ':' constantExpression
+  | expression '+:' constantExpression
+  | expression '-:' constantExpression
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.8.4 Primaries
 ////////////////////////////////////////////////////////////////////////////////
 
-constant_primary
+constantPrimary
   : number
-  | IDENTIFIER ('[' constant_range_expression ']')?
-  | constant_concatenation
-  | constant_multiple_concatenation
-  | constant_function_call
-  | constant_system_function_call
-  | '(' constant_mintypmax_expression ')'
+  | IDENTIFIER ('[' constantRangeExpression ']')?
+  | constantConcatenation
+  | constantMultipleConcatenation
+  | constantFunctionCall
+  | constantSystemFunctionCall
+  | '(' constantMintypmaxExpression ')'
   | STRING
   ;
 
-module_path_primary
+modulePathPrimary
   : number
   | IDENTIFIER
-  | module_path_concatenation
-  | module_path_multiple_concatenation
-  | function_call
-  | system_function_call
-  | '(' module_path_mintypmax_expression ')'
+  | modulePathConcatenation
+  | modulePathMultipleConcatenation
+  | functionCall
+  | systemFunctionCall
+  | '(' modulePathMintypmaxExpression ')'
   ;
 
 primary
   : number
-  | hierarchical_identifier (('[' expression ']')* '[' range_expression ']' )?
+  | hierarchicalIdentifier (('[' expression ']')* '[' rangeExpression ']' )?
   | concatenation
-  | multiple_concatenation
-  | function_call
-  | system_function_call
-  | '(' mintypmax_expression ')'
+  | multipleConcatenation
+  | functionCall
+  | systemFunctionCall
+  | '(' mintypmaxExpression ')'
   | STRING
   ;
 
@@ -1562,21 +1562,21 @@ primary
 // A.8.5 expression left-side values
 ////////////////////////////////////////////////////////////////////////////////
 
-net_lvalue
-  :  hierarchical_identifier (('[' constant_expression ']')* '[' constant_range_expression ']')?
-  | '{' net_lvalue (',' net_lvalue)* '}'
+netLvalue
+  :  hierarchicalIdentifier (('[' constantExpression ']')* '[' constantRangeExpression ']')?
+  | '{' netLvalue (',' netLvalue)* '}'
   ;
 
-variable_lvalue
-  :  hierarchical_identifier (('[' expression ']')* '[' range_expression ']')?
-  | '{' variable_lvalue (',' variable_lvalue)* '}'
+variableLvalue
+  :  hierarchicalIdentifier (('[' expression ']')* '[' rangeExpression ']')?
+  | '{' variableLvalue (',' variableLvalue)* '}'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.8.6 Operators
 ////////////////////////////////////////////////////////////////////////////////
 
-unary_operator
+unaryOperator
   : '+'
   | '-'
   | '!'
@@ -1590,7 +1590,7 @@ unary_operator
   | '^~'
   ;
 
-binary_operator
+binaryOperator
   : '+'
   | '-'
   | '*'
@@ -1618,7 +1618,7 @@ binary_operator
   | '<<<'
   ;
 
-unary_module_path_operator
+unaryModulePathOperator
   : '!'
   | '~'
   | '&'
@@ -1630,7 +1630,7 @@ unary_module_path_operator
   | '^~'
   ;
 
-binary_module_path_operator
+binaryModulePathOperator
   : '=='
   | '!='
   | '&&'
@@ -1647,21 +1647,21 @@ binary_module_path_operator
 ////////////////////////////////////////////////////////////////////////////////
 
 number
-  : decimal_number
+  : decimalNumber
   | OINT
   | BINT
   | HINT
-  | real_number
+  | realNumber
   ;
 
-decimal_number
+decimalNumber
   : DVALUE
   | DINT
   | DX
   | DZ
   ;
 
-real_number
+realNumber
   : REAL
   | REALEXP
   ;
@@ -1676,12 +1676,12 @@ real_number
 // A.9.1 Attributes
 ////////////////////////////////////////////////////////////////////////////////
 
-attribute_instance
-  : '(*' attr_spec (',' attr_spec)* '*)'
+attributeInstance
+  : '(*' attrSpec (',' attrSpec)* '*)'
   ;
 
-attr_spec
-  : IDENTIFIER ('=' constant_expression)?
+attrSpec
+  : IDENTIFIER ('=' constantExpression)?
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1694,11 +1694,11 @@ attr_spec
 // A.9.3 Identifiers
 ////////////////////////////////////////////////////////////////////////////////
 
-hierarchical_identifier
-  : (IDENTIFIER ('[' constant_expression ']')? '.')* IDENTIFIER
+hierarchicalIdentifier
+  : (IDENTIFIER ('[' constantExpression ']')? '.')* IDENTIFIER
   ;
 
-list_of_identifiers
+listOfIdentifiers
   : IDENTIFIER (',' IDENTIFIER)*
   ;
 
@@ -1707,29 +1707,29 @@ list_of_identifiers
 ////////////////////////////////////////////////////////////////////////////////
 
 directive
-  : default_nettype_directive
-  | include_directive
-  | timescale_directive
-  | define_directive
-  | undef_directive
+  : defaultNettypeDirective
+  | includeDirective
+  | timescaleDirective
+  | defineDirective
+  | undefDirective
   ;
 
-default_nettype_directive
-  : '`default_nettype' (net_type | IDENTIFIER)
+defaultNettypeDirective
+  : '`default_nettype' (netType | IDENTIFIER)
   ;
 
-include_directive
+includeDirective
   : '`include' STRING
   ;
 
-timescale_directive
+timescaleDirective
   : '`timescale' DVALUE IDENTIFIER '/' DVALUE IDENTIFIER
   ;
 
-define_directive
-  : '`define' IDENTIFIER constant_expression
+defineDirective
+  : '`define' IDENTIFIER constantExpression
   ;
 
-undef_directive
+undefDirective
   : '`undef' IDENTIFIER
   ;
