@@ -3,11 +3,12 @@ package com.argondesign.alint
 import org.antlr.v4.runtime.BufferedTokenStream
 import org.antlr.v4.runtime.ParserRuleContext
 
-import scala.collection.JavaConversions._
+import scala.collection.convert.WrapAsScala
 
 class VVisitor[T](default: T, aggregate: (T, T) => T)
     extends antlr4.VParserBaseVisitor[T]
-    with Antlr4Conversions {
+    with Antlr4Conversions
+    with WrapAsScala {
   override def defaultResult = default
 
   override def aggregateResult(prev: T, next: T) = aggregate(prev, next)

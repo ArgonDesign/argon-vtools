@@ -77,6 +77,27 @@ class DNTMISSINGVisitor extends WarningsVisitor[DNTMISSING] {
   }
 }
 
+import Warnings.DNTLOC
+
+class DNTLOCVisitor extends WarningsVisitor[DNTLOC] {
+  import com.argondesign.alint.antlr4.VParser._
+
+  object AnyDefaultNetType extends AnyVVisitor {
+    override def visitDefaultNettypeDirective(ctx: DefaultNettypeDirectiveContext) = true
+  }
+
+  override def visitSourceText(ctx: SourceTextContext) = {
+    var res = defaultResult()
+    //    if (AnyDefaultNetType(ctx.footerDirectives)) {
+    //      res = DNTMISSING(ctx.stop.loc, false) :: res
+    //    }
+    if (AnyDefaultNetType(ctx.headerDirectives) && !AnyDefaultNetType(ctx.headerDirectives.head)) {
+      res = DNTLOC(ctx.start.loc, true) :: res
+    }
+    res
+  }
+}
+
 object AlintMain extends App {
   import org.antlr.v4.runtime._
 
@@ -91,7 +112,8 @@ object AlintMain extends App {
       new CCREPSYSVisitor,
       new BLKSEQVisitor,
       new GENNAMEVisitor,
-      new DNTMISSINGVisitor)
+      new DNTMISSINGVisitor,
+      new DNTLOCVisitor)
 
     for (visitor <- visitors; warning <- visitor.visit(tree)) yield warning
   }

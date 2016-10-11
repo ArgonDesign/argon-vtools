@@ -26,4 +26,10 @@ object Warnings {
       else "Directive '`default_nettype wire' missing at end of file"
   }
 
+  final case class DNTLOC(loc: Loc, bne: Boolean) extends Warning {
+    val text =
+      if (bne) "Directive '`default_nettype none' not first line at beginning of file"
+      else "Directive '`default_nettype wire' not last line at end of file"
+  }
+
 }
