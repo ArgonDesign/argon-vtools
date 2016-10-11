@@ -43,6 +43,7 @@ class BLKSEQVisitor extends WarningsVisitor[BLKSEQ] {
 }
 
 import Warnings.GENNAME
+import com.argondesign.alint.Warnings.Warning
 
 class GENNAMEVisitor extends WarningsVisitor[GENNAME] {
   import com.argondesign.alint.antlr4.VParser._
@@ -59,7 +60,7 @@ class GENNAMEVisitor extends WarningsVisitor[GENNAME] {
 object AlintMain extends App {
   import org.antlr.v4.runtime._
 
-  for (inputFile <- args) {
+  val warnings = for (inputFile <- args) yield {
     val inputStream = new ANTLRFileStream(inputFile)
     val lexer = new antlr4.VLexer(inputStream)
     val tokenStream = new CommonTokenStream(lexer)
@@ -71,10 +72,10 @@ object AlintMain extends App {
       new BLKSEQVisitor,
       new GENNAMEVisitor)
 
-    for (visitor <- visitors) {
-      for (warning <- visitor.visit(tree)) {
-        println(warning)
-      }
-    }
+    for (visitor <- visitors; warning <- visitor.visit(tree)) yield warning
   }
+
+  warnings.flatten foreach println
+
+  sys exit (if (warnings.flatten.isEmpty) 0 else 1)
 }
