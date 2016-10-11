@@ -36,9 +36,9 @@ start
 ////////////////////////////////////////////////////////////////////////////////
 
 sourceText
-  : directive*
+  : (headerDirectives+=directive)*
     description*
-    directive*
+    (footerDirectives+=directive)*
   ;
 
 description

@@ -43,7 +43,6 @@ class BLKSEQVisitor extends WarningsVisitor[BLKSEQ] {
 }
 
 import Warnings.GENNAME
-import com.argondesign.alint.Warnings.Warning
 
 class GENNAMEVisitor extends WarningsVisitor[GENNAME] {
   import com.argondesign.alint.antlr4.VParser._
@@ -54,6 +53,27 @@ class GENNAMEVisitor extends WarningsVisitor[GENNAME] {
     } else {
       visitChildren(ctx)
     }
+  }
+}
+
+import Warnings.DNTMISSING
+
+class DNTMISSINGVisitor extends WarningsVisitor[DNTMISSING] {
+  import com.argondesign.alint.antlr4.VParser._
+
+  object AnyDefaultNetType extends AnyVVisitor {
+    override def visitDefaultNettypeDirective(ctx: DefaultNettypeDirectiveContext) = true
+  }
+
+  override def visitSourceText(ctx: SourceTextContext) = {
+    var res = defaultResult()
+    if (!AnyDefaultNetType(ctx.footerDirectives)) {
+      res = DNTMISSING(ctx.stop.loc, false) :: res
+    }
+    if (!AnyDefaultNetType(ctx.headerDirectives)) {
+      res = DNTMISSING(ctx.start.loc, true) :: res
+    }
+    res
   }
 }
 
@@ -70,7 +90,8 @@ object AlintMain extends App {
     val visitors = List(
       new CCREPSYSVisitor,
       new BLKSEQVisitor,
-      new GENNAMEVisitor)
+      new GENNAMEVisitor,
+      new DNTMISSINGVisitor)
 
     for (visitor <- visitors; warning <- visitor.visit(tree)) yield warning
   }

@@ -19,4 +19,11 @@ object Warnings {
   final case class GENNAME(loc: Loc) extends Warning {
     val text = s"Unnamed generate block"
   }
+
+  final case class DNTMISSING(loc: Loc, bne: Boolean) extends Warning {
+    val text =
+      if (bne) "Directive '`default_nettype none' missing at beginning of file"
+      else "Directive '`default_nettype wire' missing at end of file"
+  }
+
 }
