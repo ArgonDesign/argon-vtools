@@ -17,6 +17,7 @@ object Warning {
         Warnings[BLKSEQ](source),
         Warnings[CONSTCONCATREP](source),
         Warnings[DNETTYPE](source),
+        Warnings[GENBEGIN](source),
         Warnings[GENNAME](source)).flatten
     }
   }

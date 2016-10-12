@@ -780,7 +780,9 @@ conditionalGenerateConstruct
   ;
 
 ifGenerateConstruct
-  : 'if' '(' constantExpression ')' generateBlockOrNull ('else' generateBlockOrNull)?
+  : 'if' '(' constantExpression ')' ifBlock=generateBlockOrNull
+    ('else' 'if' '(' constantExpression ')' elseIfBlocks+=generateBlockOrNull)*
+    ('else' elseBlock+=generateBlockOrNull)?
   ;
 
 caseGenerateConstruct
