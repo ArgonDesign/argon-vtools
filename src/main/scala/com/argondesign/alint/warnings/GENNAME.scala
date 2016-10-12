@@ -10,7 +10,7 @@ object GENNAME {
   implicit object GENNAMESourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[GENNAME] {
     import com.argondesign.alint.antlr4.VParser._
 
-    override def visitGenerateBlock(ctx: GenerateBlockContext) = {
+    override def visitGenerateBlockWithBeginEnd(ctx: GenerateBlockWithBeginEndContext) = {
       if (ctx.IDENTIFIER eq null) {
         GENNAME(ctx.loc) :: visitChildren(ctx)
       } else {

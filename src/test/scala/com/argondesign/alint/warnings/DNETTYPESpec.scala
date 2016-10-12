@@ -8,7 +8,7 @@ import org.scalactic.Pass
 
 class DNETTYPESpec extends FlatSpec with Matchers {
 
-  "DNETTYPE1A" should "be detected" in {
+  "DNETTYPE" should "be detected when missing directive at beginning of the file" in {
     val text = """|// Missing `default_nettype none
                   |module foo;
                   |endmodule
@@ -21,7 +21,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
     warnings.head should be(DNETTYPE1A(Loc("test.v", 2, 0)))
   }
 
-  "DNETTYPE1B" should "be detected" in {
+  it should "be detected when missing directive at end of the file" in {
     val text = """|`default_nettype none
                   |module foo;
                   |endmodule
@@ -34,7 +34,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
     warnings.head should be(DNETTYPE1B(Loc("test.v", 3, 0)))
   }
 
-  "DNETTYPE2A" should "be detected" in {
+  it should "be detected when multiple directives at the beginning of the file" in {
     val text = """|`default_nettype none
                   |`default_nettype none // Multiple default_nettype
                   |module foo;
@@ -48,7 +48,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
     warnings.head should be(DNETTYPE2A(Loc("test.v", 1, 0)))
   }
 
-  "DNETTYPE2B" should "be detected" in {
+  it should "be detected when multiple directives at the end of the file" in {
     val text = """|`default_nettype none
                   |module foo;
                   |endmodule
@@ -62,7 +62,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
     warnings.head should be(DNETTYPE2B(Loc("test.v", 4, 0)))
   }
 
-  "DNETTYPE3A" should "be detected" in {
+  it should "be detected when directive not at the beginning of the file" in {
     val text = """|`include "none" // default_nettype not first
                   |`default_nettype none
                   |module foo;
@@ -76,7 +76,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
     warnings.head should be(DNETTYPE3A(Loc("test.v", 2, 0)))
   }
 
-  "DNETTYPE3B" should "be detected" in {
+  it should "be detected when directive not at the end of the file" in {
     val text = """|`default_nettype none
                   |module foo;
                   |endmodule
@@ -90,7 +90,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
     warnings.head should be(DNETTYPE3B(Loc("test.v", 4, 0)))
   }
 
-  "DNETTYPE4A" should "be detected" in {
+  it should "be detected when directive with wrong parameter at the beginning of the file" in {
     val text = """|`default_nettype wire
                   |module foo;
                   |endmodule
@@ -103,7 +103,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
     warnings.head should be(DNETTYPE4A(Loc("test.v", 1, 0)))
   }
 
-  "DNETTYPE4B" should "be detected" in {
+  it should "be detected when directive with wrong parameter at the end of the file" in {
     val text = """|`default_nettype none
                   |module foo;
                   |endmodule
@@ -116,7 +116,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
     warnings.head should be(DNETTYPE4B(Loc("test.v", 4, 0)))
   }
 
-  "DNETTYPE" should "not be detected" in {
+  it should "not be detected in a well formed file" in {
     val text = """|`default_nettype none
                   |module foo;
                   |endmodule

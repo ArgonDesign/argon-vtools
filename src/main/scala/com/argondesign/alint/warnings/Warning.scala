@@ -7,7 +7,7 @@ import com.argondesign.alint.Source
 abstract class Warning {
   val loc: Loc
   val text: String
-  override def toString = loc.fileLine + " Warning : " + this.getClass.getSimpleName + " - " + text
+  override def toString = loc + " Warning : " + this.getClass.getSimpleName + " - " + text
 }
 
 object Warning {

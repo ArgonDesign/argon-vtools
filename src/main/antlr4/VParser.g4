@@ -795,8 +795,8 @@ caseGenerateItem
   ;
 
 generateBlock
-  : moduleOrGenerateItem
-  | 'begin' (':' IDENTIFIER)?  moduleOrGenerateItem* 'end'
+  : moduleOrGenerateItem                                    # generateBlockWithoutBeginEnd
+  | 'begin' (':' IDENTIFIER)?  moduleOrGenerateItem* 'end'  # generateBlockWithBeginEnd
   ;
 
 generateBlockOrNull
