@@ -28,6 +28,8 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
       leading + source + trailing
     }
 
+    def text = ctx.getText
+
     def loc = ctx.start.loc
   }
 
@@ -38,7 +40,7 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
   }
 
   implicit class TerminalNodeWrapper(val node: TerminalNode) {
-    lazy val text = node.getSymbol.text
+    def text = node.getSymbol.text
   }
 
 }

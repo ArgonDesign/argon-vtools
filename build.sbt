@@ -23,3 +23,13 @@ antlr4PackageName in Antlr4 := Some("com.argondesign.alint.antlr4")
 antlr4GenListener in Antlr4 := true
 
 antlr4GenVisitor in Antlr4 := true
+
+////////////////////////////////////////////////////////////////////////////////
+// ScalaTest
+////////////////////////////////////////////////////////////////////////////////
+
+resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
+
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+
+logBuffered in Test := false

@@ -16,23 +16,6 @@ class Source(val name: String, val text: String) {
     val parser = new antlr4.VParser(tokenStream)
     parser.start()
   }
-
-  //  lazy val warnings: List[Warning] = {
-  //    List(
-  //      warnings(CCREPSYS),
-  //      warnings(BLKSEQ),
-  //      warnings(GENNAME),
-  //      warnings(DNTMISSING),
-  //      warnings(DNTLOC)).flatten
-  //  }
-  //
-  //  private def warnings[T](kind: T): List[Warning] = kind match {
-  //    case CCREPSYS   => (new CCREPSYSVisitor).visit(parseTree)
-  //    case BLKSEQ     => (new BLKSEQVisitor).visit(parseTree)
-  //    case GENNAME    => (new GENNAMEVisitor).visit(parseTree)
-  //    case DNTMISSING => (new DNTMISSINGVisitor).visit(parseTree)
-  //    case DNTLOC     => (new DNTLOCVisitor).visit(parseTree)
-  //  }
 }
 
 object Source {

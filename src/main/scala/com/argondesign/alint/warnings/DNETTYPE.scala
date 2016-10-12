@@ -32,7 +32,7 @@ final case class DNETTYPE3B(val loc: Loc) extends DNETTYPE {
 }
 
 final case class DNETTYPE4A(val loc: Loc) extends DNETTYPE {
-  val text = "`default_nettype dirctive with non 'none' type at beginning of file"
+  val text = "`default_nettype directive with non 'none' type at beginning of file"
 }
 
 final case class DNETTYPE4B(val loc: Loc) extends DNETTYPE {
@@ -43,39 +43,44 @@ object DNETTYPE {
   implicit object DNETTYPESourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[DNETTYPE] {
     import com.argondesign.alint.antlr4.VParser._
 
-    object CountDefaultNetType extends Visitor[Int](0, _ + _) {
+    object CountDNT extends Visitor[Int](0, _ + _) {
       override def visitDefaultNettypeDirective(ctx: DefaultNettypeDirectiveContext) = 1
     }
 
-    object GetDefaultNettype extends Visitor[String]("", (a, b) => b) {
-      override def visitDefaultNettypeDirective(ctx: DefaultNettypeDirectiveContext) = ctx.IDENTIFIER.text
+    object GetDNT extends Visitor[String]("", (a, b) => b) {
+      override def visitDefaultNettypeDirective(ctx: DefaultNettypeDirectiveContext) =
+        if (ctx.IDENTIFIER != null) ctx.IDENTIFIER.text else ctx.netType.text
+    }
+
+    object FirstDNTLoc extends Visitor[Loc](null, (a, b) => if (a == null) b else a) {
+      override def visitDefaultNettypeDirective(ctx: DefaultNettypeDirectiveContext) = ctx.loc
     }
 
     override def visitSourceText(ctx: SourceTextContext) = {
       var res = ListBuffer[DNETTYPE]()
 
-      val headerCount = CountDefaultNetType(ctx.headerDirectives)
+      val headerCount = CountDNT(ctx.headerDirectives)
 
       if (headerCount == 0) {
-        res += DNETTYPE1A(ctx.start.loc)
+        res += DNETTYPE1A(ctx.loc)
       } else if (headerCount > 1) {
-        res += DNETTYPE2A(ctx.start.loc)
-      } else if (CountDefaultNetType(ctx.headerDirectives.head) == 0) {
-        res += DNETTYPE3A(ctx.start.loc)
-      } else if (GetDefaultNettype(ctx.headerDirectives.head) != "none") {
-        res += DNETTYPE4A(ctx.start.loc)
+        res += DNETTYPE2A(ctx.loc)
+      } else if (CountDNT(ctx.headerDirectives.head) == 0) {
+        res += DNETTYPE3A(FirstDNTLoc(ctx.headerDirectives))
+      } else if (GetDNT(ctx.headerDirectives.head) != "none") {
+        res += DNETTYPE4A(ctx.loc)
       }
 
-      val footerCount = CountDefaultNetType(ctx.footerDirectives)
+      val footerCount = CountDNT(ctx.footerDirectives)
 
       if (footerCount == 0) {
-        res += DNETTYPE1B(ctx.start.loc)
+        res += DNETTYPE1B(ctx.stop.loc)
       } else if (footerCount > 1) {
-        res += DNETTYPE2B(ctx.start.loc)
-      } else if (CountDefaultNetType(ctx.footerDirectives.reverse.last) == 0) {
-        res += DNETTYPE3B(ctx.start.loc)
-      } else if (GetDefaultNettype(ctx.headerDirectives.reverse.last) != "wire") {
-        res += DNETTYPE4B(ctx.start.loc)
+        res += DNETTYPE2B(FirstDNTLoc(ctx.footerDirectives))
+      } else if (CountDNT(ctx.footerDirectives.last) == 0) {
+        res += DNETTYPE3B(FirstDNTLoc(ctx.footerDirectives))
+      } else if (GetDNT(ctx.footerDirectives.last) != "wire") {
+        res += DNETTYPE4B(ctx.footerDirectives.last.loc)
       }
 
       res.toList
