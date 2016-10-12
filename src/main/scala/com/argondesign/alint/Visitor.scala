@@ -5,18 +5,15 @@ import org.antlr.v4.runtime.ParserRuleContext
 
 import scala.collection.convert.WrapAsScala
 
-class VVisitor[T](default: T, aggregate: (T, T) => T)
+class Visitor[T](override val defaultResult: T, aggregate: (T, T) => T)
     extends antlr4.VParserBaseVisitor[T]
-    with Antlr4Conversions
-    with WrapAsScala {
-  override def defaultResult = default
-
+    with Antlr4Conversions {
   override def aggregateResult(prev: T, next: T) = aggregate(prev, next)
 
   def apply[U <: ParserRuleContext](ctx: U): T = visit(ctx)
 
   def apply[U <: ParserRuleContext](ctxList: List[U]): T = {
-    var result: T = defaultResult();
+    var result: T = defaultResult;
     for (ctx <- ctxList if shouldVisitNextChild(ctx, result)) {
       result = aggregateResult(result, visit(ctx));
     }
