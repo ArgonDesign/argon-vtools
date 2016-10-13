@@ -4,7 +4,7 @@ import com.argondesign.alint.Loc
 import com.argondesign.alint.Visitor
 
 final case class BLKSEQ(val loc: Loc) extends Warning {
-  val text = s"Both blocking and non-blocking assignments used in the same always block"
+  val text = "Both blocking and non-blocking assignments used in the same always block"
 }
 
 object BLKSEQ {

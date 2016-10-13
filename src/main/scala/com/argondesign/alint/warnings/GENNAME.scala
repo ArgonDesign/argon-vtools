@@ -3,7 +3,7 @@ package com.argondesign.alint.warnings
 import com.argondesign.alint.Loc
 
 final case class GENNAME(val loc: Loc) extends Warning {
-  val text = s"Unnamed generate block"
+  val text = "Unnamed generate block"
 }
 
 object GENNAME {
