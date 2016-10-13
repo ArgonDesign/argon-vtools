@@ -62,9 +62,9 @@ class DNETTYPESpec extends FlatSpec with Matchers {
     warnings.head should be(DNETTYPE(Loc("test.v", 4, 0), 3))
   }
 
-  it should "be detected when directive not at the beginning of the file" in {
-    val text = """|`include "none" // default_nettype not first
-                  |`default_nettype none
+  it should "be detected when directive not last at the beginning of the file" in {
+    val text = """|`default_nettype none
+                  |`include "none" // default_nettype not last
                   |module foo;
                   |endmodule
                   |`default_nettype wire
@@ -73,21 +73,21 @@ class DNETTYPESpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE(Loc("test.v", 2, 0), 4))
+    warnings.head should be(DNETTYPE(Loc("test.v", 1, 0), 4))
   }
 
-  it should "be detected when directive not at the end of the file" in {
+  it should "be detected when directive not first at the end of the file" in {
     val text = """|`default_nettype none
                   |module foo;
                   |endmodule
-                  |`default_nettype wire
                   |`include "none" // default_nettype not last
+                  |`default_nettype wire
                   |""".stripMargin
     val warnings = Warnings[DNETTYPE](Source("test.v", text))
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE(Loc("test.v", 4, 0), 5))
+    warnings.head should be(DNETTYPE(Loc("test.v", 5, 0), 5))
   }
 
   it should "be detected when directive with wrong parameter at the beginning of the file" in {
