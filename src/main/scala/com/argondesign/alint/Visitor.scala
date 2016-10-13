@@ -7,7 +7,8 @@ import scala.collection.convert.WrapAsScala
 
 class Visitor[T](override val defaultResult: T, aggregate: (T, T) => T)
     extends antlr4.VParserBaseVisitor[T]
-    with Antlr4Conversions {
+    with Antlr4Conversions
+    with ThenConstruct {
   override def aggregateResult(prev: T, next: T) = aggregate(prev, next)
 
   def apply[U <: ParserRuleContext](ctx: U): T = visit(ctx)
