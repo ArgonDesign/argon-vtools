@@ -5,38 +5,17 @@ import scala.collection.mutable.ListBuffer
 import com.argondesign.alint.Visitor
 import com.argondesign.alint.Loc
 
-sealed abstract class DNETTYPE extends Warning {}
-
-final case class DNETTYPE1A(val loc: Loc) extends DNETTYPE {
-  val text = "No '`default_nettype none' directive at beginning of file"
-}
-
-final case class DNETTYPE1B(val loc: Loc) extends DNETTYPE {
-  val text = "No '`default_nettype wire' directive at end of file"
-}
-
-final case class DNETTYPE2A(val loc: Loc) extends DNETTYPE {
-  val text = "More than 1 `default_nettype directive at beginning of file"
-}
-
-final case class DNETTYPE2B(val loc: Loc) extends DNETTYPE {
-  val text = "More than 1 `default_nettype directive at end of file"
-}
-
-final case class DNETTYPE3A(val loc: Loc) extends DNETTYPE {
-  val text = "`default_nettype directive is not first line at beginning of file"
-}
-
-final case class DNETTYPE3B(val loc: Loc) extends DNETTYPE {
-  val text = "`default_nettype directive is not last line at end of file"
-}
-
-final case class DNETTYPE4A(val loc: Loc) extends DNETTYPE {
-  val text = "`default_nettype directive with non 'none' type at beginning of file"
-}
-
-final case class DNETTYPE4B(val loc: Loc) extends DNETTYPE {
-  val text = "`default_nettype directive with non 'wire' type at end of file"
+final case class DNETTYPE(val loc: Loc, subtype: Int) extends Warning {
+  val text = subtype match {
+    case 0 => "No '`default_nettype none' directive at beginning of file"
+    case 1 => "No '`default_nettype wire' directive at end of file"
+    case 2 => "More than 1 `default_nettype directive at beginning of file"
+    case 3 => "More than 1 `default_nettype directive at end of file"
+    case 4 => "`default_nettype directive is not first line at beginning of file"
+    case 5 => "`default_nettype directive is not last line at end of file"
+    case 6 => "`default_nettype directive with non 'none' type at beginning of file"
+    case 7 => "`default_nettype directive with non 'wire' type at end of file"
+  }
 }
 
 object DNETTYPE {
@@ -62,25 +41,25 @@ object DNETTYPE {
       val headerCount = CountDNT(ctx.headerDirectives)
 
       if (headerCount == 0) {
-        res += DNETTYPE1A(ctx.loc)
+        res += DNETTYPE(ctx.loc, 0)
       } else if (headerCount > 1) {
-        res += DNETTYPE2A(ctx.loc)
+        res += DNETTYPE(ctx.loc, 2)
       } else if (CountDNT(ctx.headerDirectives.head) == 0) {
-        res += DNETTYPE3A(FirstDNTLoc(ctx.headerDirectives))
+        res += DNETTYPE(FirstDNTLoc(ctx.headerDirectives), 4)
       } else if (GetDNT(ctx.headerDirectives.head) != "none") {
-        res += DNETTYPE4A(ctx.loc)
+        res += DNETTYPE(ctx.loc, 6)
       }
 
       val footerCount = CountDNT(ctx.footerDirectives)
 
       if (footerCount == 0) {
-        res += DNETTYPE1B(ctx.stop.loc)
+        res += DNETTYPE(ctx.stop.loc, 1)
       } else if (footerCount > 1) {
-        res += DNETTYPE2B(FirstDNTLoc(ctx.footerDirectives))
+        res += DNETTYPE(FirstDNTLoc(ctx.footerDirectives), 3)
       } else if (CountDNT(ctx.footerDirectives.last) == 0) {
-        res += DNETTYPE3B(FirstDNTLoc(ctx.footerDirectives))
+        res += DNETTYPE(FirstDNTLoc(ctx.footerDirectives), 5)
       } else if (GetDNT(ctx.footerDirectives.last) != "wire") {
-        res += DNETTYPE4B(ctx.footerDirectives.last.loc)
+        res += DNETTYPE(ctx.footerDirectives.last.loc, 7)
       }
 
       res.toList

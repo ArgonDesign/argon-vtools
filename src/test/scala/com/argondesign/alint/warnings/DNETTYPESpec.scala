@@ -18,7 +18,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE1A(Loc("test.v", 2, 0)))
+    warnings.head should be(DNETTYPE(Loc("test.v", 2, 0), 0))
   }
 
   it should "be detected when missing directive at end of the file" in {
@@ -31,7 +31,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE1B(Loc("test.v", 3, 0)))
+    warnings.head should be(DNETTYPE(Loc("test.v", 3, 0), 1))
   }
 
   it should "be detected when multiple directives at the beginning of the file" in {
@@ -45,7 +45,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE2A(Loc("test.v", 1, 0)))
+    warnings.head should be(DNETTYPE(Loc("test.v", 1, 0), 2))
   }
 
   it should "be detected when multiple directives at the end of the file" in {
@@ -59,7 +59,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE2B(Loc("test.v", 4, 0)))
+    warnings.head should be(DNETTYPE(Loc("test.v", 4, 0), 3))
   }
 
   it should "be detected when directive not at the beginning of the file" in {
@@ -73,7 +73,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE3A(Loc("test.v", 2, 0)))
+    warnings.head should be(DNETTYPE(Loc("test.v", 2, 0), 4))
   }
 
   it should "be detected when directive not at the end of the file" in {
@@ -87,7 +87,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE3B(Loc("test.v", 4, 0)))
+    warnings.head should be(DNETTYPE(Loc("test.v", 4, 0), 5))
   }
 
   it should "be detected when directive with wrong parameter at the beginning of the file" in {
@@ -100,7 +100,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE4A(Loc("test.v", 1, 0)))
+    warnings.head should be(DNETTYPE(Loc("test.v", 1, 0), 6))
   }
 
   it should "be detected when directive with wrong parameter at the end of the file" in {
@@ -113,7 +113,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(DNETTYPE4B(Loc("test.v", 4, 0)))
+    warnings.head should be(DNETTYPE(Loc("test.v", 4, 0), 7))
   }
 
   it should "not be detected in a well formed file" in {
