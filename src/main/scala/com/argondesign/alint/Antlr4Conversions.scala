@@ -43,6 +43,7 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
     def text = node.getSymbol.text
   }
 
+  implicit def terminalNoteToString(node: TerminalNode): String = node.text
 }
 
 object Antlr4Conversions extends Antlr4Conversions {}

@@ -18,7 +18,8 @@ object Warning {
         Warnings[CONSTCONCATREP](source),
         Warnings[DNETTYPE](source),
         Warnings[GENBEGIN](source),
-        Warnings[GENNAME](source)).flatten
+        Warnings[GENNAME](source),
+        Warnings[GENUNIQ](source)).flatten
     }
   }
 }

@@ -11,7 +11,7 @@ object GENNAME {
     import com.argondesign.alint.antlr4.VParser._
 
     override def visitGenerateBlockWithBeginEnd(ctx: GenerateBlockWithBeginEndContext) = {
-      if (ctx.IDENTIFIER eq null) {
+      if (ctx.IDENTIFIER == null) {
         GENNAME(ctx.loc) :: visitChildren(ctx)
       } else {
         visitChildren(ctx)
