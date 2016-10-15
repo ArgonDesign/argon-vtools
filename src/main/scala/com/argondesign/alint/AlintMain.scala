@@ -9,10 +9,15 @@ import warnings._
 object AlintMain extends App {
   import org.antlr.v4.runtime._
 
-  val warnings = for (fileName <- args)
-    yield Warnings(Source(fileName))
+  val messages = for (fileName <- args) yield {
+    try {
+      Warnings(Source(fileName))
+    } catch {
+      case SyntaxErrorException(error) => List(error)
+    }
+  }
 
-  warnings.flatten foreach println
+  messages.flatten foreach println
 
-  //  System exit (if (warnings.flatten.isEmpty) 0 else 1)
+  //  System exit (if (messages.flatten.isEmpty) 0 else 1)
 }

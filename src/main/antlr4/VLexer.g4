@@ -136,25 +136,25 @@ KWXOR                 : 'xor'                 ;
 KWPATHPULSE           : 'PATHPULSE'           ;
 
 // Compiler directive keywords
-DKWBEGIN_KEYWORDS       : '`begin_keywords'       -> channel(DIRECTIVE)     ;
-DKWCELLDEFINE           : '`celldefine'           -> channel(DIRECTIVE)     ;
-DKWDEFAULT_NETTYPE      : '`default_nettype'                                ;
-DKWDEFINE               : '`define'                                         ;
-DKWELSE                 : '`else'                 -> channel(DIRECTIVE)     ;
-DKWELSIF                : '`elsif'                -> channel(DIRECTIVE)     ;
-DKWEND_KEYWORDS         : '`end_keywords'         -> channel(DIRECTIVE)     ;
-DKWENDCELLDEFINE        : '`endcelldefine'        -> channel(DIRECTIVE)     ;
-DKWENDIF                : '`endif'                -> channel(DIRECTIVE)     ;
-DKWIFDEF                : '`ifdef'                -> channel(DIRECTIVE)     ;
-DKWIFNDEF               : '`ifndef'               -> channel(DIRECTIVE)     ;
-DKWINCLUDE              : '`include'                                        ;
-DKWLINE                 : '`line'                 -> channel(DIRECTIVE)     ;
-DKWNOUNCONNECTED_DRIVE  : '`nounconnected_drive'  -> channel(DIRECTIVE)     ;
-DKWPRAGMA               : '`pragma'               -> channel(DIRECTIVE)     ;
-DKWRESETALL             : '`resetall'             -> channel(DIRECTIVE)     ;
-DKWTIMESCALE            : '`timescale'                                      ;
-DKWUNCONNECTED_DRIVE    : '`unconnected_drive'    -> channel(DIRECTIVE)     ;
-DKWUNDEF                : '`undef'                                          ;
+DKWBEGIN_KEYWORDS       : '`begin_keywords'       ;
+DKWCELLDEFINE           : '`celldefine'           ;
+DKWDEFAULT_NETTYPE      : '`default_nettype'      ;
+DKWDEFINE               : '`define'               ;
+DKWELSE                 : '`else'                 ;
+DKWELSIF                : '`elsif'                ;
+DKWEND_KEYWORDS         : '`end_keywords'         ;
+DKWENDCELLDEFINE        : '`endcelldefine'        ;
+DKWENDIF                : '`endif'                ;
+DKWIFDEF                : '`ifdef'                ;
+DKWIFNDEF               : '`ifndef'               ;
+DKWINCLUDE              : '`include'              ;
+DKWLINE                 : '`line'                 ;
+DKWNOUNCONNECTED_DRIVE  : '`nounconnected_drive'  ;
+DKWPRAGMA               : '`pragma'               ;
+DKWRESETALL             : '`resetall'             ;
+DKWTIMESCALE            : '`timescale'            ;
+DKWUNCONNECTED_DRIVE    : '`unconnected_drive'    ;
+DKWUNDEF                : '`undef'                ;
 
 // Operators
 BNOT:     '~'   ;

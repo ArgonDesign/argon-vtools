@@ -14,6 +14,8 @@ class Source(val name: String, val text: String) {
     val lexer = new antlr4.VLexer(inputStream)
     val tokenStream = new CommonTokenStream(lexer)
     val parser = new antlr4.VParser(tokenStream)
+    parser.removeErrorListeners()
+    parser.addErrorListener(new VParserErrorListener)
     parser.start()
   }
 }
