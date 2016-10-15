@@ -13,13 +13,13 @@ final case class CONSTCONCATREP(val loc: Loc, symbol: String) extends SourceWarn
 object CONSTCONCATREP extends SourceAnalyser[List[CONSTCONCATREP]] {
   object CONSTCONCATREPSourceAnalysisVisitor extends WarningsSourceAnalyserVisitor[CONSTCONCATREP] {
     object WarnIn extends WarningsSourceAnalyserVisitor[CONSTCONCATREP] {
-      override def visitConstantSystemFunctionCall(ctx: ConstantSystemFunctionCallContext) = {
+      override def visitConstSysFuncCall(ctx: ConstSysFuncCallContext) = {
         CONSTCONCATREP(ctx.loc, ctx.SYSID.text) :: visitChildren(ctx)
       }
     }
 
-    override def visitConstantMultipleConcatenation(ctx: ConstantMultipleConcatenationContext) = {
-      WarnIn(ctx.constantExpression) ::: visitChildren(ctx.constantConcatenation)
+    override def visitConstMultipleConcat(ctx: ConstMultipleConcatContext) = {
+      WarnIn(ctx.rep) ::: this(ctx.terms)
     }
   }
 

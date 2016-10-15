@@ -85,7 +85,9 @@ portExpression
   ;
 
 portReference
-  : IDENTIFIER ('[' constantRangeExpression ']')?
+  : IDENTIFIER
+  | IDENTIFIER '[' constantExpression ']'
+  | IDENTIFIER '[' constantRangeExpression ']'
   ;
 
 portDeclaration
@@ -133,7 +135,7 @@ moduleOrGenerateItemDeclaration
 nonPortModuleItem
   : moduleOrGenerateItem
   | generateRegion
-  | specifyBlock
+//| specifyBlock
   | attributeInstance* parameterDeclaration ';'
   | attributeInstance* specparamDeclaration
   ;
@@ -424,8 +426,8 @@ specparamAssignment
 
 pulseControlSpecparam
   : 'PATHPULSE' '$' '=' '(' constantMintypmaxExpression (',' constantMintypmaxExpression)? ')'
-  | 'PATHPULSE' '$' specifyTerminalDescriptor '$'
-    specifyTerminalDescriptor '=' '(' constantMintypmaxExpression (',' constantMintypmaxExpression)? ')'
+//| 'PATHPULSE' '$' specifyTerminalDescriptor '$'
+//  specifyTerminalDescriptor '=' '(' constantMintypmaxExpression (',' constantMintypmaxExpression)? ')'
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -749,7 +751,7 @@ genvarDeclaration
   ;
 
 loopGenerateConstruct
-  : 'for' '(' genvarInitialization ';' genvarExpression ';' genvarIteration ')'
+  : 'for' '(' genvarInitialization ';' constantExpression ';' genvarIteration ')'
     generateBlock
   ;
 
@@ -757,21 +759,11 @@ genvarInitialization
   : IDENTIFIER '=' constantExpression
   ;
 
-genvarExpression
-  : genvarPrimary
-  | unaryOperator attributeInstance* genvarPrimary
-  | genvarExpression binaryOperator attributeInstance* genvarExpression
-  | genvarExpression '?' attributeInstance* genvarExpression ':' genvarExpression
-  ;
-
 genvarIteration
-  : IDENTIFIER '=' genvarExpression
+  : IDENTIFIER '=' constantExpression
   ;
 
-genvarPrimary
-  : constantPrimary
-  | IDENTIFIER
-  ;
+// genvarExpression is equivalent to constantExpression and is hence subsumed
 
 conditionalGenerateConstruct
   : ifGenerateConstruct
@@ -1170,111 +1162,113 @@ taskEnable
   : hierarchicalIdentifier ('(' expression (',' expression)* ')')? ';'
   ;
 
-////////////////////////////////////////////////////////////////////////////////
-// A.7.1 Specify block declaration
-////////////////////////////////////////////////////////////////////////////////
-
-specifyBlock
-  : 'specify' specifyItem* 'endspecify'
-  ;
-
-specifyItem
-  : specparamDeclaration
-  | pulsestyleDeclaration
-  | showcancelledDeclaration
-  | pathDeclaration
-//| systemTimingCheck
-  ;
-
-pulsestyleDeclaration
-  : 'pulsestyle_onevent' listOfPaths ';'
-  | 'pulsestyle_ondetect' listOfPaths ';'
-  ;
-
-showcancelledDeclaration
-  : 'showcancelled' listOfPaths ';'
-  | 'noshowcancelled' listOfPaths ';'
-  ;
-
-////////////////////////////////////////////////////////////////////////////////
-// A.7.2 Specify path declarations
-////////////////////////////////////////////////////////////////////////////////
-
-pathDeclaration
-  : simplePathDeclaration ';'
-  | edgeSensitivePathDeclaration ';'
-  | stateDependentPathDeclaration ';'
-  ;
-
-simplePathDeclaration
-  : parallelPathDescription '=' pathDelayValue
-  | fullPathDescription '=' pathDelayValue
-  ;
-
-parallelPathDescription
-  : '(' specifyTerminalDescriptor polarityOperator? '=>' specifyTerminalDescriptor ')'
-  ;
-
-fullPathDescription
-  : '(' listOfPaths polarityOperator? '*>' listOfPaths ')'
-  ;
-
-listOfPaths
-  : specifyTerminalDescriptor (',' specifyTerminalDescriptor)*
-  ;
-
-////////////////////////////////////////////////////////////////////////////////
-// A.7.3 Specify block terminals
-////////////////////////////////////////////////////////////////////////////////
-
-specifyTerminalDescriptor
-  : IDENTIFIER ('[' constantRangeExpression ']')?
-  ;
-
-////////////////////////////////////////////////////////////////////////////////
-// A.7.4 Specify path delays
-////////////////////////////////////////////////////////////////////////////////
-
-pathDelayValue
-  : listOfPathDelayExpressions
-  | '(' listOfPathDelayExpressions ')'
-  ;
-
-listOfPathDelayExpressions
-  : constantMintypmaxExpression (',' constantMintypmaxExpression)*
-  ;
-
-edgeSensitivePathDeclaration
-  : parallelEdgeSensitivePathDescription '=' pathDelayValue
-  | fullEdgeSensitivePathDescription '=' pathDelayValue
-  ;
-
-parallelEdgeSensitivePathDescription
-  : '(' edgeIdentifier? specifyTerminalDescriptor '=>'
-    '(' specifyTerminalDescriptor polarityOperator? ':' expression ')' ')'
-  ;
-
-fullEdgeSensitivePathDescription
-  : '(' edgeIdentifier? listOfPaths '*>'
-    '(' listOfPaths polarityOperator? ':' expression ')' ')'
-  ;
-
-edgeIdentifier
-  : 'posedge'
-  | 'negedge'
-  ;
-
-stateDependentPathDeclaration
-  : 'if' '(' modulePathExpression ')' simplePathDeclaration
-  | 'if' '(' modulePathExpression ')' edgeSensitivePathDeclaration
-  | 'ifnone' simplePathDeclaration
-  ;
-
-polarityOperator
-  : '+'
-  | '-'
-  ;
-
+//////////////////////////////////////////////////////////////////////////////////
+//// A.7.1 Specify block declaration
+//////////////////////////////////////////////////////////////////////////////////
+//
+//specifyBlock
+//  : 'specify' specifyItem* 'endspecify'
+//  ;
+//
+//specifyItem
+//  : specparamDeclaration
+//  | pulsestyleDeclaration
+//  | showcancelledDeclaration
+//  | pathDeclaration
+//  | systemTimingCheck
+//  ;
+//
+//pulsestyleDeclaration
+//  : 'pulsestyle_onevent' listOfPaths ';'
+//  | 'pulsestyle_ondetect' listOfPaths ';'
+//  ;
+//
+//showcancelledDeclaration
+//  : 'showcancelled' listOfPaths ';'
+//  | 'noshowcancelled' listOfPaths ';'
+//  ;
+//
+//////////////////////////////////////////////////////////////////////////////////
+//// A.7.2 Specify path declarations
+//////////////////////////////////////////////////////////////////////////////////
+//
+//pathDeclaration
+//  : simplePathDeclaration ';'
+//  | edgeSensitivePathDeclaration ';'
+//  | stateDependentPathDeclaration ';'
+//  ;
+//
+//simplePathDeclaration
+//  : parallelPathDescription '=' pathDelayValue
+//  | fullPathDescription '=' pathDelayValue
+//  ;
+//
+//parallelPathDescription
+//  : '(' specifyTerminalDescriptor polarityOperator? '=>' specifyTerminalDescriptor ')'
+//  ;
+//
+//fullPathDescription
+//  : '(' listOfPaths polarityOperator? '*>' listOfPaths ')'
+//  ;
+//
+//listOfPaths
+//  : specifyTerminalDescriptor (',' specifyTerminalDescriptor)*
+//  ;
+//
+//////////////////////////////////////////////////////////////////////////////////
+//// A.7.3 Specify block terminals
+//////////////////////////////////////////////////////////////////////////////////
+//
+//specifyTerminalDescriptor
+//  : IDENTIFIER
+//  | IDENTIFIER '[' constantExpression ']'
+//  | IDENTIFIER '[' constantRangeExpression ']'
+//  ;
+//
+//////////////////////////////////////////////////////////////////////////////////
+//// A.7.4 Specify path delays
+//////////////////////////////////////////////////////////////////////////////////
+//
+//pathDelayValue
+//  : listOfPathDelayExpressions
+//  | '(' listOfPathDelayExpressions ')'
+//  ;
+//
+//listOfPathDelayExpressions
+//  : constantMintypmaxExpression (',' constantMintypmaxExpression)*
+//  ;
+//
+//edgeSensitivePathDeclaration
+//  : parallelEdgeSensitivePathDescription '=' pathDelayValue
+//  | fullEdgeSensitivePathDescription '=' pathDelayValue
+//  ;
+//
+//parallelEdgeSensitivePathDescription
+//  : '(' edgeIdentifier? specifyTerminalDescriptor '=>'
+//    '(' specifyTerminalDescriptor polarityOperator? ':' expression ')' ')'
+//  ;
+//
+//fullEdgeSensitivePathDescription
+//  : '(' edgeIdentifier? listOfPaths '*>'
+//    '(' listOfPaths polarityOperator? ':' expression ')' ')'
+//  ;
+//
+//edgeIdentifier
+//  : 'posedge'
+//  | 'negedge'
+//  ;
+//
+//stateDependentPathDeclaration
+//  : 'if' '(' modulePathExpression ')' simplePathDeclaration
+//  | 'if' '(' modulePathExpression ')' edgeSensitivePathDeclaration
+//  | 'ifnone' simplePathDeclaration
+//  ;
+//
+//polarityOperator
+//  : '+'
+//  | '-'
+//  ;
+//
 //////////////////////////////////////////////////////////////////////////////////
 //// A.7.5.1 System timing check comands
 //////////////////////////////////////////////////////////////////////////////////
@@ -1432,59 +1426,45 @@ polarityOperator
 // A.8.1 Concatenations
 ////////////////////////////////////////////////////////////////////////////////
 
-concatenation
-  : '{' expression (',' expression)* '}'
-  ;
-
-constantConcatenation
-  : '{' constantExpression (',' constantExpression)* '}'
-  ;
-
-constantMultipleConcatenation
-  : '{' constantExpression constantConcatenation '}'
-  ;
-
-modulePathConcatenation
-  : '{' modulePathExpression (',' modulePathExpression)* '}'
-  ;
-
-modulePathMultipleConcatenation
-  : '{' constantExpression modulePathConcatenation '}'
-  ;
-
-multipleConcatenation
-  : '{' constantExpression concatenation '}'
-  ;
+// Merged into expressions at A.8.3
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.8.2 Function calls
 ////////////////////////////////////////////////////////////////////////////////
 
-constantFunctionCall
-  : IDENTIFIER attributeInstance* '(' constantExpression (',' constantExpression)* ')'
-  ;
-
-constantSystemFunctionCall
-  : SYSID '(' constantExpression (',' constantExpression)* ')'
-  ;
-
-functionCall
-  : hierarchicalIdentifier attributeInstance* '(' expression (',' expression)* ')'
-  ;
-
-systemFunctionCall
-  : SYSID ('(' expression (',' expression)* ')')?
-  ;
+// Merged into expressions at A.8.3
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.8.3 Expressions
 ////////////////////////////////////////////////////////////////////////////////
 
+// Constant expressions
+
 constantExpression
-  : constantPrimary
-  | unaryOperator attributeInstance* constantPrimary
-  | constantExpression binaryOperator attributeInstance* constantExpression
-  | constantExpression '?' attributeInstance* constantExpression ':' constantExpression
+  : number                                                                  #constNumber
+  | IDENTIFIER                                                              #constIDENTIFIER
+  | IDENTIFIER '[' constantRangeExpression ']'                              #constSlice
+  | '{' terms+=constantExpression (',' terms+=constantExpression)* '}'      #constConcat
+  | '{'
+      rep=constantExpression
+      '{' terms+=constantExpression (',' terms+=constantExpression)* '}'
+    '}'                                                                     #constMultipleConcat
+  | IDENTIFIER attributeInstance*
+    '(' args+=constantExpression (',' args+=constantExpression)* ')'        #constFuncCall
+  | SYSID '(' args+=constantExpression (',' args+=constantExpression)* ')'  #constSysFuncCall
+  | '(' constantExpression ')'                                              #constExpr
+  | STRING                                                                  #constString
+  | unaryOperator attributeInstance* constantExpression                     #constUnary
+  | constantExpression
+    binaryOperator attributeInstance* constantExpression                    #constBinary
+  | constantExpression '?' attributeInstance* constantExpression
+                       ':' constantExpression                               #constTernary
+  ;
+
+constantRangeExpression
+  : constantExpression ':' constantExpression
+  | constantExpression '+:' constantExpression
+  | constantExpression '-:' constantExpression
   ;
 
 constantMintypmaxExpression
@@ -1492,18 +1472,33 @@ constantMintypmaxExpression
   | constantExpression ':' constantExpression ':' constantExpression
   ;
 
-constantRangeExpression
-  : constantExpression
-  | constantExpression ':' constantExpression
-  | constantExpression '+:' constantExpression
-  | constantExpression '-:' constantExpression
-  ;
+// Expressions
 
 expression
-  : primary
-  | unaryOperator attributeInstance? primary
-  | expression binaryOperator attributeInstance* expression
-  | expression '?' attributeInstance* expression ':' expression
+  : number                                                                          #exprNumber
+  | hierarchicalIdentifier                                                          #exprIdentifier
+  | hierarchicalIdentifier '[' rangeExpression ']'                                  #exprSlice
+  | hierarchicalIdentifier ('[' expression ']')+                                    #exprIndex
+  | hierarchicalIdentifier ('[' expression ']')+ '[' rangeExpression ']'            #exprIndexSlice
+  | '{' terms+=expression (',' terms+=expression)* '}'                              #exprConcat
+  | '{'
+      rep=constantExpression
+      '{' terms+=expression (',' terms+=expression)* '}'
+    '}'                                                                             #exprMultipleConcat
+  | hierarchicalIdentifier attributeInstance*
+   '('  args+=expression (','  args+=expression)* ')'                               #exprFuncCall
+  | SYSID ('('  args+=expression (','  args+=expression)* ')')?                     #exprSysFuncCall
+  | '(' expression ')'                                                              #exprExpr
+  | STRING                                                                          #exprString
+  | unaryOperator attributeInstance? expression                                     #exprUnary
+  | expression binaryOperator attributeInstance* expression                         #exprBinary
+  | expression '?' attributeInstance* expression ':' expression                     #exprTernary
+  ;
+
+rangeExpression
+  : constantExpression ':' constantExpression
+  | expression '+:' constantExpression
+  | expression '-:' constantExpression
   ;
 
 mintypmaxExpression
@@ -1511,72 +1506,53 @@ mintypmaxExpression
   | expression ':' expression ':' expression
   ;
 
-modulePathExpression
-  : modulePathPrimary
-  | unaryModulePathOperator attributeInstance* modulePathPrimary
-  | modulePathExpression binaryModulePathOperator attributeInstance* modulePathExpression
-  | modulePathExpression '?' attributeInstance* modulePathExpression ':' modulePathExpression
-  ;
-
-modulePathMintypmaxExpression
-  : modulePathExpression
-  | modulePathExpression ':' modulePathExpression ':' modulePathExpression
-  ;
-
-rangeExpression
-  : expression
-  | constantExpression ':' constantExpression
-  | expression '+:' constantExpression
-  | expression '-:' constantExpression
-  ;
+// Module path expressions
+//
+//modulePathPrimary
+//  : number
+//  | IDENTIFIER
+//  | '{' modulePathExpression (',' modulePathExpression)* '}'
+//  | '{' constantExpression '{' modulePathExpression (',' modulePathExpression)* '}' '}'
+//  | hierarchicalIdentifier attributeInstance* '(' expression (',' expression)* ')'
+//  | SYSID ('(' expression (',' expression)* ')')?
+//  | '(' modulePathMintypmaxExpression ')'
+//  ;
+//
+//modulePathExpression
+//  : modulePathPrimary
+//  | unaryModulePathOperator attributeInstance* modulePathPrimary
+//  | modulePathExpression binaryModulePathOperator attributeInstance* modulePathExpression
+//  | modulePathExpression '?' attributeInstance* modulePathExpression ':' modulePathExpression
+//  ;
+//
+//modulePathMintypmaxExpression
+//  : modulePathExpression
+//  | modulePathExpression ':' modulePathExpression ':' modulePathExpression
+//  ;
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.8.4 Primaries
 ////////////////////////////////////////////////////////////////////////////////
 
-constantPrimary
-  : number
-  | IDENTIFIER ('[' constantRangeExpression ']')?
-  | constantConcatenation
-  | constantMultipleConcatenation
-  | constantFunctionCall
-  | constantSystemFunctionCall
-  | '(' constantMintypmaxExpression ')'
-  | STRING
-  ;
-
-modulePathPrimary
-  : number
-  | IDENTIFIER
-  | modulePathConcatenation
-  | modulePathMultipleConcatenation
-  | functionCall
-  | systemFunctionCall
-  | '(' modulePathMintypmaxExpression ')'
-  ;
-
-primary
-  : number
-  | hierarchicalIdentifier (('[' expression ']')* '[' rangeExpression ']' )?
-  | concatenation
-  | multipleConcatenation
-  | functionCall
-  | systemFunctionCall
-  | '(' mintypmaxExpression ')'
-  | STRING
-  ;
+// Merged into expressions at A.8.3
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.8.5 expression left-side values
 ////////////////////////////////////////////////////////////////////////////////
 
 netLvalue
-  :  hierarchicalIdentifier (('[' constantExpression ']')* '[' constantRangeExpression ']')?
+  :  hierarchicalIdentifier
+  |  hierarchicalIdentifier '[' constantRangeExpression ']'
+  |  hierarchicalIdentifier ('[' constantExpression ']')+
+  |  hierarchicalIdentifier ('[' constantExpression ']')+ '[' constantRangeExpression ']'
   | '{' netLvalue (',' netLvalue)* '}'
   ;
 
 variableLvalue
-  :  hierarchicalIdentifier (('[' expression ']')* '[' rangeExpression ']')?
+  :  hierarchicalIdentifier
+  |  hierarchicalIdentifier '[' rangeExpression ']'
+  |  hierarchicalIdentifier ('[' expression ']')+
+  |  hierarchicalIdentifier ('[' expression ']')+ '[' rangeExpression ']'
   | '{' variableLvalue (',' variableLvalue)* '}'
   ;
 
