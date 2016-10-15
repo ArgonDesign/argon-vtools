@@ -4,20 +4,21 @@
 
 package com.argondesign.alint
 
-import warnings._
+import warnings.Warnings
 
 object AlintMain extends App {
-  import org.antlr.v4.runtime._
 
-  val messages = for (fileName <- args) yield {
-    try {
-      Warnings(Source(fileName))
-    } catch {
-      case SyntaxErrorException(error) => List(error)
+  val messages = {
+    for (fileName <- args.toList; source = Source(fileName)) yield {
+      try {
+        Warnings(source)
+      } catch {
+        case SyntaxErrorException(error) => List(error)
+      }
     }
-  }
+  }.flatten
 
-  messages.flatten foreach println
+  messages foreach println
 
-  //  System exit (if (messages.flatten.isEmpty) 0 else 1)
+  sys exit (if (messages.isEmpty) 0 else 1)
 }
