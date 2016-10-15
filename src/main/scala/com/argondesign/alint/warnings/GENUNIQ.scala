@@ -16,8 +16,6 @@ object GENUNIQ {
 
     override def apply(source: Source) = {
       object CollectGenNames extends Visitor[Map[ParserRuleContext, String]](Map(), _ ++ _) {
-        import com.argondesign.alint.antlr4.VParser._
-
         val nameStack = Stack[String]()
         val countStack = Stack[Int]()
         var count = 0
@@ -41,8 +39,6 @@ object GENUNIQ {
       val countMap = nameMap.values.groupBy(identity) map (p => (p._1, p._2.size))
 
       object Warn extends Visitor[List[GENUNIQ]](Nil, _ ::: _) {
-        import com.argondesign.alint.antlr4.VParser._
-
         override def visitGenerateBlockWithBeginEnd(ctx: GenerateBlockWithBeginEndContext) = {
           val name = nameMap(ctx)
           if (countMap(name) > 1) {

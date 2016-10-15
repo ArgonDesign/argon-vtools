@@ -8,8 +8,6 @@ final case class GENBEGIN(val loc: Loc) extends Warning {
 
 object GENBEGIN {
   implicit object GENBEGINSourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[GENBEGIN] {
-    import com.argondesign.alint.antlr4.VParser._
-
     override def visitGenerateBlockWithoutBeginEnd(ctx: GenerateBlockWithoutBeginEndContext) = {
       GENBEGIN(ctx.loc) :: visitChildren(ctx)
     }

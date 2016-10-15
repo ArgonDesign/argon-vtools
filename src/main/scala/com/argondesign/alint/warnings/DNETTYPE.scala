@@ -20,8 +20,6 @@ final case class DNETTYPE(val loc: Loc, subtype: Int) extends Warning {
 
 object DNETTYPE {
   implicit object DNETTYPESourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[DNETTYPE] {
-    import com.argondesign.alint.antlr4.VParser._
-
     object CountDNT extends Visitor[Int](0, _ + _) {
       override def visitDefaultNettypeDirective(ctx: DefaultNettypeDirectiveContext) = 1
     }

@@ -9,8 +9,6 @@ final case class CONSTCONCATREP(val loc: Loc, symbol: String) extends Warning {
 
 object CONSTCONCATREP {
   implicit object CONSTCONCATREPSourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[CONSTCONCATREP] {
-    import com.argondesign.alint.antlr4.VParser._
-
     object WarnIn extends WarningsSourceAnalysisVisitor[CONSTCONCATREP] {
       override def visitConstantSystemFunctionCall(ctx: ConstantSystemFunctionCallContext) = {
         CONSTCONCATREP(ctx.loc, ctx.SYSID.text) :: visitChildren(ctx)

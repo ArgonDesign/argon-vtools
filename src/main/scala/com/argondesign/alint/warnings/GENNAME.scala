@@ -8,8 +8,6 @@ final case class GENNAME(val loc: Loc) extends Warning {
 
 object GENNAME {
   implicit object GENNAMESourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[GENNAME] {
-    import com.argondesign.alint.antlr4.VParser._
-
     override def visitGenerateBlockWithBeginEnd(ctx: GenerateBlockWithBeginEndContext) = {
       if (ctx.IDENTIFIER == null) {
         GENNAME(ctx.loc) :: visitChildren(ctx)

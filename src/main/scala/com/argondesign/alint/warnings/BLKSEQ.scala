@@ -9,8 +9,6 @@ final case class BLKSEQ(val loc: Loc) extends Warning {
 
 object BLKSEQ {
   implicit object BLKSEQSourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[BLKSEQ] {
-    import com.argondesign.alint.antlr4.VParser._
-
     object AnyBlockingAssignments extends Visitor[Boolean](false, _ || _) {
       override def visitBlockingAssignment(ctx: BlockingAssignmentContext) = true
     }
