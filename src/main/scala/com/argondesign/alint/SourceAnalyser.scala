@@ -1,5 +1,5 @@
 package com.argondesign.alint
 
-trait SourceAnalysis[T] {
+trait SourceAnalyser[+T] {
   def apply(source: Source): T
 }

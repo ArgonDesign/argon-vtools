@@ -2,9 +2,11 @@ package com.argondesign.alint.warnings
 
 import scala.collection.mutable.ListBuffer
 
-import com.argondesign.alint.Visitor
 import com.argondesign.alint.Loc
+import com.argondesign.alint.Source
+import com.argondesign.alint.SourceAnalyser
 import com.argondesign.alint.SourceWarning
+import com.argondesign.alint.Visitor
 
 final case class DNETTYPE(val loc: Loc, subtype: Int) extends SourceWarning {
   val message = subtype match {
@@ -19,7 +21,7 @@ final case class DNETTYPE(val loc: Loc, subtype: Int) extends SourceWarning {
   }
 }
 
-object DNETTYPE {
+object DNETTYPE extends SourceAnalyser[List[DNETTYPE]] {
   implicit object DNETTYPESourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[DNETTYPE] {
     object CountDNT extends Visitor[Int](0, _ + _) {
       override def visitDefaultNettypeDirective(ctx: DefaultNettypeDirectiveContext) = 1
@@ -64,4 +66,6 @@ object DNETTYPE {
       res.toList
     }
   }
+
+  def apply(source: Source) = DNETTYPESourceAnalysisVisitor(source)
 }

@@ -19,7 +19,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[BLKSEQ](Source("test.v", text))
+    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
 
     warnings should have length 1
 
@@ -37,7 +37,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[BLKSEQ](Source("test.v", text))
+    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
 
     warnings should have length 1
 
@@ -52,7 +52,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[BLKSEQ](Source("test.v", text))
+    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -65,7 +65,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[BLKSEQ](Source("test.v", text))
+    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -82,7 +82,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[BLKSEQ](Source("test.v", text))
+    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
 
     warnings should have length 0
   }

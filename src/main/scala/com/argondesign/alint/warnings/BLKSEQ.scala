@@ -1,8 +1,10 @@
 package com.argondesign.alint.warnings
 
 import com.argondesign.alint.Loc
-import com.argondesign.alint.Visitor
+import com.argondesign.alint.Source
+import com.argondesign.alint.SourceAnalyser
 import com.argondesign.alint.SourceWarning
+import com.argondesign.alint.Visitor
 
 final case class BLKSEQ(val loc: Loc, subtype: Int) extends SourceWarning {
   val message = subtype match {
@@ -11,8 +13,8 @@ final case class BLKSEQ(val loc: Loc, subtype: Int) extends SourceWarning {
   }
 }
 
-object BLKSEQ {
-  implicit object BLKSEQSourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[BLKSEQ] {
+object BLKSEQ extends SourceAnalyser[List[BLKSEQ]] {
+  object BLKSEQSourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[BLKSEQ] {
     object AnyBlockingAssignments extends Visitor[Boolean](false, _ || _) {
       override def visitBlockingAssignment(ctx: BlockingAssignmentContext) = true
     }
@@ -37,4 +39,6 @@ object BLKSEQ {
       }
     }
   }
+
+  def apply(source: Source) = BLKSEQSourceAnalysisVisitor(source)
 }

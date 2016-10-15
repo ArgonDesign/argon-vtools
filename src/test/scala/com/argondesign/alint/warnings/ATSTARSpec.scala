@@ -11,7 +11,7 @@ class ATSTARSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[ATSTAR](Source("test.v", text))
+    val warnings = Warnings(ATSTAR)(Source("test.v", text))
 
     warnings should have length 1
 
@@ -24,7 +24,7 @@ class ATSTARSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[ATSTAR](Source("test.v", text))
+    val warnings = Warnings(ATSTAR)(Source("test.v", text))
 
     warnings should have length 1
 
@@ -37,7 +37,7 @@ class ATSTARSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[ATSTAR](Source("test.v", text))
+    val warnings = Warnings(ATSTAR)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -48,7 +48,7 @@ class ATSTARSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[ATSTAR](Source("test.v", text))
+    val warnings = Warnings(ATSTAR)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -59,7 +59,7 @@ class ATSTARSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[ATSTAR](Source("test.v", text))
+    val warnings = Warnings(ATSTAR)(Source("test.v", text))
 
     warnings should have length 0
   }

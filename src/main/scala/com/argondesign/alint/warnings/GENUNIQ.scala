@@ -1,19 +1,21 @@
 package com.argondesign.alint.warnings
 
-import com.argondesign.alint.Loc
-import com.argondesign.alint.SourceAnalysis
-import com.argondesign.alint.Source
-import com.argondesign.alint.Visitor
 import scala.collection.mutable.Stack
+
 import org.antlr.v4.runtime.ParserRuleContext
+
+import com.argondesign.alint.Loc
+import com.argondesign.alint.Source
+import com.argondesign.alint.SourceAnalyser
 import com.argondesign.alint.SourceWarning
+import com.argondesign.alint.Visitor
 
 final case class GENUNIQ(val loc: Loc, name: String) extends SourceWarning {
   val message = s"Generate block names should be unique: $name"
 }
 
-object GENUNIQ {
-  implicit object GENUNIQSourceAnalysis extends SourceAnalysis[List[GENUNIQ]] {
+object GENUNIQ extends SourceAnalyser[List[GENUNIQ]] {
+  object GENUNIQSourceAnalysis extends SourceAnalyser[List[GENUNIQ]] {
 
     override def apply(source: Source) = {
       object CollectGenNames extends Visitor[Map[ParserRuleContext, String]](Map(), _ ++ _) {
@@ -53,4 +55,6 @@ object GENUNIQ {
       Warn(source.parseTree)
     }
   }
+
+  def apply(source: Source) = GENUNIQSourceAnalysis(source)
 }

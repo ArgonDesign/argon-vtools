@@ -17,7 +17,7 @@ class GENUNIQSpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[GENUNIQ](Source("test.v", text))
+    val warnings = Warnings(GENUNIQ)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -32,7 +32,7 @@ class GENUNIQSpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[GENUNIQ](Source("test.v", text))
+    val warnings = Warnings(GENUNIQ)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -47,7 +47,7 @@ class GENUNIQSpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[GENUNIQ](Source("test.v", text))
+    val warnings = Warnings(GENUNIQ)(Source("test.v", text))
 
     warnings should have length 3
     warnings(0) should be(GENUNIQ(Loc("test.v", 2, 35), "name"))
@@ -65,7 +65,7 @@ class GENUNIQSpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[GENUNIQ](Source("test.v", text))
+    val warnings = Warnings(GENUNIQ)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -86,7 +86,7 @@ class GENUNIQSpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings.collect[GENUNIQ](Source("test.v", text))
+    val warnings = Warnings(GENUNIQ)(Source("test.v", text))
 
     warnings should have length 0
   }
