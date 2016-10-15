@@ -20,7 +20,6 @@ start
 //  : libraryDeclaration
 //  | includeStatement
 //  | configDeclaration
-//  ;
 //
 //libraryDeclaration
 //  : 'library' IDENTIFIER filePathSpec (',' filePathSpec)*
@@ -446,11 +445,11 @@ vrange
 ////////////////////////////////////////////////////////////////////////////////
 
 functionDeclaration
-  : 'function' 'automatic'? functionRangeOrType? IDENTIFIER ';'
+  : 'function' (AUTO='automatic')? functionRangeOrType? IDENTIFIER ';'
       functionItemDeclaration+
       statement
     'endfunction'
-  | 'function' 'automatic'? functionRangeOrType? IDENTIFIER '(' functionPortList ')' ';'
+  | 'function' (AUTO='automatic')? functionRangeOrType? IDENTIFIER '(' functionPortList ')' ';'
       blockItemDeclaration*
       statement
     'endfunction'

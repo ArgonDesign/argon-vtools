@@ -12,7 +12,8 @@ object Warnings {
     DNETTYPE,
     GENBEGIN,
     GENNAME,
-    GENUNIQ)
+    GENUNIQ,
+    NONAUTOFUNC)
 
   def apply(source: Source): List[SourceWarning] =
     for (extractor <- listOfWarnigns; warning <- this(extractor)(source))
