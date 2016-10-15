@@ -29,7 +29,7 @@ object GENUNIQ {
           countStack push count; count = 0
 
           visitChildren(ctx) + (ctx -> nameStack.reverse.mkString("."))
-        } then {
+        } restoring {
           count = countStack.pop()
           nameStack.pop()
         }

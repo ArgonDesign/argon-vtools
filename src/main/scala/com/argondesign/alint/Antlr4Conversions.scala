@@ -1,5 +1,6 @@
 package com.argondesign.alint
 
+import scala.language.implicitConversions
 import scala.collection.convert.{ WrapAsScala, WrapAsJava }
 import org.antlr.v4.runtime.Token
 import org.antlr.v4.runtime.ParserRuleContext
