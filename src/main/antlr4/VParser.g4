@@ -988,7 +988,8 @@ initialConstruct
   ;
 
 alwaysConstruct
-  : 'always' statement
+  : 'always' attributeInstance* eventControl statement
+  | 'always' attributeInstance* delayControl statement
   ;
 
 blockingAssignment
@@ -1055,7 +1056,7 @@ statementOrNull
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
-// A.6.5 Timing control statemetns
+// A.6.5 Timing control statements
 ////////////////////////////////////////////////////////////////////////////////
 
 delayControl
@@ -1679,7 +1680,7 @@ realNumber
 ////////////////////////////////////////////////////////////////////////////////
 
 attributeInstance
-  : '(*' attrSpec (',' attrSpec)* '*)'
+  : '(' '*' attrSpec (',' attrSpec)* '*' ')'
   ;
 
 attrSpec

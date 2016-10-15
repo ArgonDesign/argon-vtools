@@ -204,8 +204,6 @@ LBRACKET: '['   ;
 RBRACKET: ']'   ;
 LBRACE:   '{'   ;
 RBRACE:   '}'   ;
-LPS:      '(*'  ;
-SRP:      '*)'  ;
 DOT:      '.'   ;
 COMA:     ','   ;
 SEMI:     ';'   ;
