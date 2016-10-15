@@ -7,7 +7,7 @@ sealed abstract class SourceMessage {
   val category: String
   val message: String
 
-  override def toString = loc + " " + category + ": " + message
+  override def toString = loc + " " + category + ": " + this.getClass.getSimpleName + " - " + message
 }
 
 abstract class SourceWarning extends SourceMessage {

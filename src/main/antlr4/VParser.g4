@@ -988,8 +988,14 @@ initialConstruct
   ;
 
 alwaysConstruct
-  : 'always' attributeInstance* eventControl statement
-  | 'always' attributeInstance* delayControl statement
+  : 'always' attributeInstance* '@' '(' eventExpression ')' statement   # alwaysEvent
+  | 'always' attributeInstance* atStar                      statement   # alwaysAtStar
+  | 'always' attributeInstance* '#' delayValue              statement   # alwaysDelay
+  ;
+
+atStar
+  : '@' '*'
+  | '@' '(' '*' ')'
   ;
 
 blockingAssignment

@@ -4,8 +4,11 @@ import com.argondesign.alint.Loc
 import com.argondesign.alint.Visitor
 import com.argondesign.alint.SourceWarning
 
-final case class BLKSEQ(val loc: Loc) extends SourceWarning {
-  val message = "Both blocking and non-blocking assignments used in the same always block"
+final case class BLKSEQ(val loc: Loc, subtype: Int) extends SourceWarning {
+  val message = subtype match {
+    case 0 => "Blocking assignment used in sequential always block"
+    case 1 => "Non blocking assignment used in combinatorial always block"
+  }
 }
 
 object BLKSEQ {
@@ -18,9 +21,17 @@ object BLKSEQ {
       override def visitNonblockingAssignment(ctx: NonblockingAssignmentContext) = true
     }
 
-    override def visitAlwaysConstruct(ctx: AlwaysConstructContext) = {
-      if (AnyBlockingAssignments(ctx) && AnyNonBlockingAssignments(ctx)) {
-        BLKSEQ(ctx.loc) :: visitChildren(ctx)
+    override def visitAlwaysEvent(ctx: AlwaysEventContext) = {
+      if (AnyBlockingAssignments(ctx)) {
+        BLKSEQ(ctx.loc, 0) :: visitChildren(ctx)
+      } else {
+        visitChildren(ctx)
+      }
+    }
+
+    override def visitAlwaysAtStar(ctx: AlwaysAtStarContext) = {
+      if (AnyNonBlockingAssignments(ctx)) {
+        BLKSEQ(ctx.loc, 1) :: visitChildren(ctx)
       } else {
         visitChildren(ctx)
       }

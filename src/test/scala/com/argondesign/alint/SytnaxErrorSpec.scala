@@ -24,13 +24,4 @@ class SytnaxErrorSpec extends FlatSpec with Matchers {
 
     exception.error.loc should be(Loc("test.v", 4, 0))
   }
-
-  it should "have a message starting with 'Syntax error - '" in {
-    val exception = the[SyntaxErrorException] thrownBy {
-      Source("test.v", incorrectInput).parseTree
-    }
-
-    exception.error.message should startWith("Syntax error - ")
-  }
-
 }

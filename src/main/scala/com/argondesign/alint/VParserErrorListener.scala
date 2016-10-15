@@ -12,6 +12,6 @@ class VParserErrorListener extends BaseErrorListener {
                            msg: String,
                            e: RecognitionException) = {
     val loc = Loc(recognizer.getInputStream.getSourceName, line, charPositionInLine)
-    throw new SyntaxErrorException(loc, "Syntax error - " + msg)
+    throw new SyntaxErrorException(loc, msg)
   }
 }

@@ -23,7 +23,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(BLKSEQ(Loc("test.v", 2, 2)))
+    warnings.head should be(BLKSEQ(Loc("test.v", 2, 2), 1))
   }
 
   it should "be detected in a malformed sequential always block" in {
@@ -41,7 +41,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
 
     warnings should have length 1
 
-    warnings.head should be(BLKSEQ(Loc("test.v", 2, 2)))
+    warnings.head should be(BLKSEQ(Loc("test.v", 2, 2), 0))
   }
 
   it should "not be detected in a well formed combinatorial always block" in {
