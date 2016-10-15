@@ -6,9 +6,10 @@ import com.argondesign.alint.Source
 import com.argondesign.alint.Visitor
 import scala.collection.mutable.Stack
 import org.antlr.v4.runtime.ParserRuleContext
+import com.argondesign.alint.SourceWarning
 
-final case class GENUNIQ(val loc: Loc, name: String) extends Warning {
-  val text = s"Generate block names should be unique: $name"
+final case class GENUNIQ(val loc: Loc, name: String) extends SourceWarning {
+  val message = s"Generate block names should be unique: $name"
 }
 
 object GENUNIQ {

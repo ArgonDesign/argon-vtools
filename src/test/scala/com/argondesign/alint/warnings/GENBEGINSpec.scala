@@ -14,7 +14,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -25,7 +25,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |    assign b = 0;
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 1
 
@@ -39,7 +39,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -50,7 +50,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |    assign b = 0;
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 1
 
@@ -66,7 +66,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -79,7 +79,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |    assign b = 1;
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 1
 
@@ -95,7 +95,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -108,7 +108,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |    assign b = 1;
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 1
 
@@ -125,7 +125,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 1
 
@@ -141,7 +141,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |  endcase
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -153,7 +153,7 @@ class GENBEGINESpec extends FlatSpec with Matchers {
                   |  endcase
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENBEGIN](Source("test.v", text))
+    val warnings = Warnings.collect[GENBEGIN](Source("test.v", text))
 
     warnings should have length 1
 

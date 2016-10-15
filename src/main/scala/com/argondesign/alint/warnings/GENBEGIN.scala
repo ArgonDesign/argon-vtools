@@ -1,9 +1,10 @@
 package com.argondesign.alint.warnings
 
 import com.argondesign.alint.Loc
+import com.argondesign.alint.SourceWarning
 
-final case class GENBEGIN(val loc: Loc) extends Warning {
-  val text = "Generate block without begin end"
+final case class GENBEGIN(val loc: Loc) extends SourceWarning {
+  val message = "Generate block without begin end"
 }
 
 object GENBEGIN {

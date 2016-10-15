@@ -14,7 +14,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
                   |endmodule
                   |`default_nettype wire
                   |""".stripMargin
-    val warnings = Warnings[DNETTYPE](Source("test.v", text))
+    val warnings = Warnings.collect[DNETTYPE](Source("test.v", text))
 
     warnings should have length 1
 
@@ -27,7 +27,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
                   |endmodule
                   |// Missing `default_nettype wire
                   |""".stripMargin
-    val warnings = Warnings[DNETTYPE](Source("test.v", text))
+    val warnings = Warnings.collect[DNETTYPE](Source("test.v", text))
 
     warnings should have length 1
 
@@ -41,7 +41,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
                   |endmodule
                   |`default_nettype wire
                   |""".stripMargin
-    val warnings = Warnings[DNETTYPE](Source("test.v", text))
+    val warnings = Warnings.collect[DNETTYPE](Source("test.v", text))
 
     warnings should have length 1
 
@@ -55,7 +55,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
                   |`default_nettype none // Multiple default_nettype
                   |`default_nettype wire
                   |""".stripMargin
-    val warnings = Warnings[DNETTYPE](Source("test.v", text))
+    val warnings = Warnings.collect[DNETTYPE](Source("test.v", text))
 
     warnings should have length 1
 
@@ -69,7 +69,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
                   |endmodule
                   |`default_nettype wire
                   |""".stripMargin
-    val warnings = Warnings[DNETTYPE](Source("test.v", text))
+    val warnings = Warnings.collect[DNETTYPE](Source("test.v", text))
 
     warnings should have length 1
 
@@ -83,7 +83,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
                   |`include "none" // default_nettype not last
                   |`default_nettype wire
                   |""".stripMargin
-    val warnings = Warnings[DNETTYPE](Source("test.v", text))
+    val warnings = Warnings.collect[DNETTYPE](Source("test.v", text))
 
     warnings should have length 1
 
@@ -96,7 +96,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
                   |endmodule
                   |`default_nettype wire
                   |""".stripMargin
-    val warnings = Warnings[DNETTYPE](Source("test.v", text))
+    val warnings = Warnings.collect[DNETTYPE](Source("test.v", text))
 
     warnings should have length 1
 
@@ -109,7 +109,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
                   |endmodule
                   |`default_nettype none
                   |""".stripMargin
-    val warnings = Warnings[DNETTYPE](Source("test.v", text))
+    val warnings = Warnings.collect[DNETTYPE](Source("test.v", text))
 
     warnings should have length 1
 
@@ -122,7 +122,7 @@ class DNETTYPESpec extends FlatSpec with Matchers {
                   |endmodule
                   |`default_nettype wire
                   |""".stripMargin
-    val warnings = Warnings[DNETTYPE](Source("test.v", text))
+    val warnings = Warnings.collect[DNETTYPE](Source("test.v", text))
 
     warnings should have length 0
   }

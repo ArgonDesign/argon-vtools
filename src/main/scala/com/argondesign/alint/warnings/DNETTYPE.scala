@@ -4,9 +4,10 @@ import scala.collection.mutable.ListBuffer
 
 import com.argondesign.alint.Visitor
 import com.argondesign.alint.Loc
+import com.argondesign.alint.SourceWarning
 
-final case class DNETTYPE(val loc: Loc, subtype: Int) extends Warning {
-  val text = subtype match {
+final case class DNETTYPE(val loc: Loc, subtype: Int) extends SourceWarning {
+  val message = subtype match {
     case 0 => "No '`default_nettype none' directive at beginning of file"
     case 1 => "No '`default_nettype wire' directive at end of file"
     case 2 => "More than 1 `default_nettype directive at beginning of file"

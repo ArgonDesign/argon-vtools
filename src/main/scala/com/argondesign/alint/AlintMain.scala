@@ -10,7 +10,7 @@ object AlintMain extends App {
   import org.antlr.v4.runtime._
 
   val warnings = for (fileName <- args)
-    yield Warnings[Warning](Source(fileName))
+    yield Warnings(Source(fileName))
 
   warnings.flatten foreach println
 

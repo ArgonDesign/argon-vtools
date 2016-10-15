@@ -2,9 +2,10 @@ package com.argondesign.alint.warnings
 
 import com.argondesign.alint.Loc
 import com.argondesign.alint.Visitor
+import com.argondesign.alint.SourceWarning
 
-final case class BLKSEQ(val loc: Loc) extends Warning {
-  val text = "Both blocking and non-blocking assignments used in the same always block"
+final case class BLKSEQ(val loc: Loc) extends SourceWarning {
+  val message = "Both blocking and non-blocking assignments used in the same always block"
 }
 
 object BLKSEQ {

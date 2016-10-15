@@ -13,7 +13,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -24,7 +24,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -35,7 +35,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 
@@ -48,7 +48,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 
@@ -61,7 +61,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -72,7 +72,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -83,7 +83,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 
@@ -96,7 +96,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 
@@ -110,7 +110,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -122,7 +122,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -134,7 +134,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 
@@ -148,7 +148,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 
@@ -162,7 +162,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -174,7 +174,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -186,7 +186,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 
@@ -200,7 +200,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 
@@ -217,7 +217,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -230,7 +230,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  endcase
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 0
   }
@@ -245,7 +245,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  endgenerate
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 
@@ -260,7 +260,7 @@ class GENNAMESpec extends FlatSpec with Matchers {
                   |  endcase
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings[GENNAME](Source("test.v", text))
+    val warnings = Warnings.collect[GENNAME](Source("test.v", text))
 
     warnings should have length 1
 

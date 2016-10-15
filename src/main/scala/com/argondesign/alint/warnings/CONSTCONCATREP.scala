@@ -1,10 +1,11 @@
 package com.argondesign.alint.warnings
 
 import com.argondesign.alint.Loc
+import com.argondesign.alint.SourceWarning
 
-final case class CONSTCONCATREP(val loc: Loc, symbol: String) extends Warning {
+final case class CONSTCONCATREP(val loc: Loc, symbol: String) extends SourceWarning {
   // DC doesn't like it
-  val text = s"System function '$symbol' called in repetition multiplier of constant concatenation"
+  val message = s"System function '$symbol' called in repetition multiplier of constant concatenation"
 }
 
 object CONSTCONCATREP {
