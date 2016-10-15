@@ -6,15 +6,15 @@ import com.argondesign.alint.SourceAnalyser
 import com.argondesign.alint.SourceWarning
 import com.argondesign.alint.Visitor
 
-final case class BLKSEQ(val loc: Loc, subtype: Int) extends SourceWarning {
+final case class ALWAYSASSIGNMENTS(val loc: Loc, subtype: Int) extends SourceWarning {
   val message = subtype match {
     case 0 => "Blocking assignment used in sequential always block"
     case 1 => "Non blocking assignment used in combinatorial always block"
   }
 }
 
-object BLKSEQ extends SourceAnalyser[List[BLKSEQ]] {
-  object BLKSEQSourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[BLKSEQ] {
+object ALWAYSASSIGNMENTS extends SourceAnalyser[List[ALWAYSASSIGNMENTS]] {
+  object BLKSEQSourceAnalysisVisitor extends WarningsSourceAnalyserVisitor[ALWAYSASSIGNMENTS] {
     object AnyBlockingAssignments extends Visitor[Boolean](false, _ || _) {
       override def visitBlockingAssignment(ctx: BlockingAssignmentContext) = true
     }
@@ -24,19 +24,11 @@ object BLKSEQ extends SourceAnalyser[List[BLKSEQ]] {
     }
 
     override def visitAlwaysEvent(ctx: AlwaysEventContext) = {
-      if (AnyBlockingAssignments(ctx)) {
-        BLKSEQ(ctx.loc, 0) :: visitChildren(ctx)
-      } else {
-        visitChildren(ctx)
-      }
+      if (AnyBlockingAssignments(ctx)) List(ALWAYSASSIGNMENTS(ctx.loc, 0)) else Nil
     }
 
     override def visitAlwaysAtStar(ctx: AlwaysAtStarContext) = {
-      if (AnyNonBlockingAssignments(ctx)) {
-        BLKSEQ(ctx.loc, 1) :: visitChildren(ctx)
-      } else {
-        visitChildren(ctx)
-      }
+      if (AnyNonBlockingAssignments(ctx)) List(ALWAYSASSIGNMENTS(ctx.loc, 1)) else Nil
     }
   }
 

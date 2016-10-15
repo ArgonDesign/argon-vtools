@@ -22,7 +22,7 @@ final case class DNETTYPE(val loc: Loc, subtype: Int) extends SourceWarning {
 }
 
 object DNETTYPE extends SourceAnalyser[List[DNETTYPE]] {
-  implicit object DNETTYPESourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[DNETTYPE] {
+  implicit object DNETTYPESourceAnalysisVisitor extends WarningsSourceAnalyserVisitor[DNETTYPE] {
     object CountDNT extends Visitor[Int](0, _ + _) {
       override def visitDefaultNettypeDirective(ctx: DefaultNettypeDirectiveContext) = 1
     }

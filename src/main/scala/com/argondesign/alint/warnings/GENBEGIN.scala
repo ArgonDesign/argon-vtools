@@ -10,7 +10,7 @@ final case class GENBEGIN(val loc: Loc) extends SourceWarning {
 }
 
 object GENBEGIN extends SourceAnalyser[List[GENBEGIN]] {
-  object GENBEGINSourceAnalysisVisitor extends WarningsSourceAnalysisVisitor[GENBEGIN] {
+  object GENBEGINSourceAnalysisVisitor extends WarningsSourceAnalyserVisitor[GENBEGIN] {
     override def visitGenerateBlockWithoutBeginEnd(ctx: GenerateBlockWithoutBeginEndContext) = {
       GENBEGIN(ctx.loc) :: visitChildren(ctx)
     }

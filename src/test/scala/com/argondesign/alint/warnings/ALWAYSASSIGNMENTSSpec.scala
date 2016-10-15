@@ -6,9 +6,9 @@ import com.argondesign.alint.Source
 import com.argondesign.alint.Loc
 import com.argondesign.alint.warnings._
 
-class BLKSEQSpec extends FlatSpec with Matchers {
+class ALWAYSASSIGNMENTSSpec extends FlatSpec with Matchers {
 
-  "BLKSEQ" should "be detected in a malformed combinatorial always block" in {
+  "ALWAYSASSIGNMENTS" should "be detected in a malformed combinatorial always block" in {
     val text = """|module foo;
                   |  always @* begin
                   |    if (a) begin
@@ -19,11 +19,11 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
+    val warnings = Warnings(ALWAYSASSIGNMENTS)(Source("test.v", text))
 
     warnings should have length 1
 
-    warnings.head should be(BLKSEQ(Loc("test.v", 2, 2), 1))
+    warnings.head should be(ALWAYSASSIGNMENTS(Loc("test.v", 2, 2), 1))
   }
 
   it should "be detected in a malformed sequential always block" in {
@@ -37,11 +37,11 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
+    val warnings = Warnings(ALWAYSASSIGNMENTS)(Source("test.v", text))
 
     warnings should have length 1
 
-    warnings.head should be(BLKSEQ(Loc("test.v", 2, 2), 0))
+    warnings.head should be(ALWAYSASSIGNMENTS(Loc("test.v", 2, 2), 0))
   }
 
   it should "not be detected in a well formed combinatorial always block" in {
@@ -52,7 +52,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
+    val warnings = Warnings(ALWAYSASSIGNMENTS)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -65,7 +65,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
+    val warnings = Warnings(ALWAYSASSIGNMENTS)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -82,7 +82,7 @@ class BLKSEQSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(BLKSEQ)(Source("test.v", text))
+    val warnings = Warnings(ALWAYSASSIGNMENTS)(Source("test.v", text))
 
     warnings should have length 0
   }
