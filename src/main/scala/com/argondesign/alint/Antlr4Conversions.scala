@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.Token
 import org.antlr.v4.runtime.misc.Interval
 import org.antlr.v4.runtime.tree.ParseTree
 import org.antlr.v4.runtime.tree.TerminalNode
+import org.antlr.v4.runtime.tree.Tree
 
 trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
   implicit class ParserRuleContextWrapper(val ctx: ParserRuleContext) {
@@ -48,6 +49,22 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
         yield node.getChild(n)
     }.toList
 
+  }
+
+  implicit class TreeWrapper(val node: Tree) {
+    private[this] def descendantOf(self: Tree, that: Tree): Boolean = {
+      var parent = self.getParent
+      while (parent != null) {
+        if (parent == that) return true
+        parent = parent.getParent
+      }
+      false
+    }
+
+    def -<-(that: Tree): Boolean = descendantOf(node, that)
+    def !<-(that: Tree): Boolean = !descendantOf(node, that)
+    def ->-(that: Tree): Boolean = descendantOf(that, node)
+    def !>-(that: Tree): Boolean = !descendantOf(that, node)
   }
 
   implicit def terminalNoteToString(node: TerminalNode): String = node.text

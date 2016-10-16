@@ -219,5 +219,4 @@ class RESETSTYLESpec extends FlatSpec with Matchers {
 
     warnings.head should be(RESETSTYLE(Loc("test.v", 4, 8)))
   }
-
 }
