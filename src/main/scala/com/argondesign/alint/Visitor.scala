@@ -1,9 +1,7 @@
 package com.argondesign.alint
 
-import org.antlr.v4.runtime.BufferedTokenStream
-import org.antlr.v4.runtime.ParserRuleContext
-
-import scala.collection.convert.WrapAsScala
+import org.antlr.v4.runtime.tree.RuleNode
+import org.antlr.v4.runtime.tree.ParseTree
 
 class Visitor[T](override val defaultResult: T, aggregate: (T, T) => T)
     extends antlr4.VParserBaseVisitor[T]
@@ -12,9 +10,11 @@ class Visitor[T](override val defaultResult: T, aggregate: (T, T) => T)
     with RestoringConstruct {
   override def aggregateResult(prev: T, next: T) = aggregate(prev, next)
 
-  def apply[U <: ParserRuleContext](ctx: U): T = visit(ctx)
+  def apply[U <: RuleNode](ctx: U): T = {
+    if (ctx == null) defaultResult else visit(ctx)
+  }
 
-  def apply[U <: ParserRuleContext](ctxList: List[U]): T = {
+  def apply[U <: RuleNode](ctxList: List[U]): T = {
     var result: T = defaultResult;
     for (ctx <- ctxList if shouldVisitNextChild(ctx, result)) {
       result = aggregateResult(result, visit(ctx));
@@ -22,5 +22,7 @@ class Visitor[T](override val defaultResult: T, aggregate: (T, T) => T)
     result
   }
 
-  def apply[U <: ParserRuleContext](ctxList: java.util.List[U]): T = apply(ctxList.toList)
+  def apply[U <: RuleNode](ctxList: java.util.List[U]): T = {
+    apply(ctxList.toList)
+  }
 }

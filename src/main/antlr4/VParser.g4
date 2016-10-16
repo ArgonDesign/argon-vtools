@@ -1031,20 +1031,20 @@ seqBlock
 ////////////////////////////////////////////////////////////////////////////////
 
 statement
-  : attributeInstance* blockingAssignment ';'                 #stmtBlockAssign
+  : attributeInstance* seqBlock                               #stmtSeqBlock
+//| attributeInstance* parBlock                               #stmtParBlock
+  | attributeInstance* blockingAssignment ';'                 #stmtBlockAssign
+  | attributeInstance* nonblockingAssignment ';'              #stmtNonBlockAssign
+  | attributeInstance* proceduralContinuousAssignments ';'    #stmtContAssign
   | attributeInstance* caseStatement                          #stmtCase
   | attributeInstance* ifStatement                            #stmtIf
-  | attributeInstance* disableStatement                       #stmtDisable
-  | attributeInstance* eventTrigger                           #stmtEventTrigger
   | attributeInstance* loopStatement                          #stmtLoop
-  | attributeInstance* nonblockingAssignment ';'              #stmtNonBlockAssign
-  | attributeInstance* parBlock                               #stmtParBlock
-  | attributeInstance* seqBlock                               #stmtSeqBlock
-  | attributeInstance* proceduralContinuousAssignments ';'    #stmtContAssign
-  | attributeInstance* proceduralTimingControlStatement       #stmtTimingControl
   | attributeInstance* systemTaskEnable                       #stmtSystemTaskCall
   | attributeInstance* taskEnable                             #stmtTaskCall
-  | attributeInstance* waitStatement                          #stmtWait
+//| attributeInstance* proceduralTimingControlStatement       #stmtTimingControl
+//| attributeInstance* waitStatement                          #stmtWait
+//| attributeInstance* disableStatement                       #stmtDisable
+//| attributeInstance* eventTrigger                           #stmtEventTrigger
   ;
 
 statementOrNull

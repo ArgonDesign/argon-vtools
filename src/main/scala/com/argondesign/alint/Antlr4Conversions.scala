@@ -42,6 +42,12 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
 
   implicit class ParseTreeWrapper(val node: ParseTree) {
     def text = node.getText
+
+    def children: List[ParseTree] = {
+      for (n <- 0 to node.getChildCount - 1)
+        yield node.getChild(n)
+    }.toList
+
   }
 
   implicit def terminalNoteToString(node: TerminalNode): String = node.text
