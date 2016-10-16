@@ -200,4 +200,24 @@ class RESETSTYLESpec extends FlatSpec with Matchers {
 
     warnings.head should be(RESETSTYLE(Loc("test.v", 3, 16)))
   }
+
+  it should "be detected in example 1" in {
+    val text = """|module foo;
+                  |  always @(posedge clk or negedge rst_n) begin
+                  |    a <= 288'b0;
+                  |    if (!rst_n) begin
+                  |      a <= 288'b0;
+                  |    end else begin
+                  |      a <= cr_rot_mat;
+                  |    end
+                  |  end
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(RESETSTYLE)(Source("test.v", text))
+
+    warnings should have length 1
+
+    warnings.head should be(RESETSTYLE(Loc("test.v", 4, 8)))
+  }
+
 }

@@ -13,7 +13,8 @@ object Warnings {
     GENBEGIN,
     GENNAME,
     GENUNIQ,
-    NONAUTOFUNC)
+    NONAUTOFUNC,
+    RESETSTYLE)
 
   def apply(source: Source): List[SourceWarning] =
     for (extractor <- listOfWarnigns; warning <- this(extractor)(source))
