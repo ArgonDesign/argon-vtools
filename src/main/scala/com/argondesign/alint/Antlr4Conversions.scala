@@ -1,31 +1,31 @@
 package com.argondesign.alint
 
+import scala.collection.convert.WrapAsJava
+import scala.collection.convert.WrapAsScala
 import scala.language.implicitConversions
-import scala.collection.convert.{ WrapAsScala, WrapAsJava }
-import org.antlr.v4.runtime.Token
+
 import org.antlr.v4.runtime.ParserRuleContext
-import org.antlr.v4.runtime.BufferedTokenStream
+import org.antlr.v4.runtime.Token
 import org.antlr.v4.runtime.misc.Interval
-import org.antlr.v4.runtime.CommonTokenStream
-import org.antlr.v4.runtime.ANTLRFileStream
-import com.argondesign.alint.antlr4.VLexer
+import org.antlr.v4.runtime.tree.ParseTree
 import org.antlr.v4.runtime.tree.TerminalNode
 
 trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
   implicit class ParserRuleContextWrapper(val ctx: ParserRuleContext) {
-    lazy val tokenStream = {
-      val ts = new CommonTokenStream(new VLexer(new ANTLRFileStream(loc.file)))
-      ts.fill()
-      ts
-    }
-
     def sourceText: String = {
+      val inputStream = ctx.start.getInputStream
+      val startIdx = ctx.start.getStartIndex
+      val stopIdx = ctx.stop.getStopIndex
+
+      val leadingLen = ctx.start.getCharPositionInLine
+      val trailingLen = inputStream.getText(Interval.of(stopIdx + 1, stopIdx + 200)).takeWhile(_ != '\n').length
+
       val filler = "\u2591"
-      val leading = filler * ctx.start.loc.col
-      val source = tokenStream.getText(ctx)
-      val stopIndex = ctx.stop.getTokenIndex
-      val trailingLen = tokenStream.getText(Interval.of(stopIndex + 1, stopIndex + 20)).takeWhile(_ != '\n').length
+
+      val leading = filler * leadingLen
+      val source = inputStream.getText(Interval.of(startIdx, stopIdx))
       val trailing = filler * trailingLen
+
       leading + source + trailing
     }
 
@@ -40,8 +40,8 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
     def text = token.getText
   }
 
-  implicit class TerminalNodeWrapper(val node: TerminalNode) {
-    def text = node.getSymbol.text
+  implicit class ParseTreeWrapper(val node: ParseTree) {
+    def text = node.getText
   }
 
   implicit def terminalNoteToString(node: TerminalNode): String = node.text
