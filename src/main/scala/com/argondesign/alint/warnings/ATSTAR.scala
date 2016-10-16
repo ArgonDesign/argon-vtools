@@ -10,11 +10,11 @@ final case class ATSTAR(val loc: Loc) extends SourceWarning {
 }
 
 object ATSTAR extends SourceAnalyser[List[ATSTAR]] {
-  object ATSTARSourceAnalysisVisitor extends WarningsSourceAnalyserVisitor[ATSTAR] {
+  object ATSTARSourceAnalyserVisitor extends WarningsSourceAnalyserVisitor[ATSTAR] {
     override def visitAlwaysAtStar(ctx: AlwaysAtStarContext) = {
       if (ctx.atStar.text == "@(*)") List(ATSTAR(ctx.loc)) else Nil
     }
   }
 
-  def apply(source: Source) = ATSTARSourceAnalysisVisitor(source)
+  def apply(source: Source) = ATSTARSourceAnalyserVisitor(source)
 }

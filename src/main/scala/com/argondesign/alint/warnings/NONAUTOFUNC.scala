@@ -10,11 +10,11 @@ final case class NONAUTOFUNC(val loc: Loc, name: String) extends SourceWarning {
 }
 
 object NONAUTOFUNC extends SourceAnalyser[List[NONAUTOFUNC]] {
-  object NONAUTOFUNCSourceAnalysisVisitor extends WarningsSourceAnalyserVisitor[NONAUTOFUNC] {
+  object NONAUTOFUNCSourceAnalyserVisitor extends WarningsSourceAnalyserVisitor[NONAUTOFUNC] {
     override def visitFunctionDeclaration(ctx: FunctionDeclarationContext) = {
       if (ctx.AUTO == null) List(NONAUTOFUNC(ctx.loc, ctx.IDENTIFIER)) else Nil
     }
   }
 
-  def apply(source: Source) = NONAUTOFUNCSourceAnalysisVisitor(source)
+  def apply(source: Source) = NONAUTOFUNCSourceAnalyserVisitor(source)
 }

@@ -11,7 +11,7 @@ final case class CONSTCONCATREP(val loc: Loc, symbol: String) extends SourceWarn
 }
 
 object CONSTCONCATREP extends SourceAnalyser[List[CONSTCONCATREP]] {
-  object CONSTCONCATREPSourceAnalysisVisitor extends WarningsSourceAnalyserVisitor[CONSTCONCATREP] {
+  object CONSTCONCATREPSourceAnalyserVisitor extends WarningsSourceAnalyserVisitor[CONSTCONCATREP] {
     object WarnIn extends WarningsSourceAnalyserVisitor[CONSTCONCATREP] {
       override def visitConstSysFuncCall(ctx: ConstSysFuncCallContext) = {
         CONSTCONCATREP(ctx.loc, ctx.SYSID.text) :: visitChildren(ctx)
@@ -23,5 +23,5 @@ object CONSTCONCATREP extends SourceAnalyser[List[CONSTCONCATREP]] {
     }
   }
 
-  def apply(source: Source) = CONSTCONCATREPSourceAnalysisVisitor(source)
+  def apply(source: Source) = CONSTCONCATREPSourceAnalyserVisitor(source)
 }

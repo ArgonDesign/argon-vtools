@@ -14,7 +14,7 @@ final case class ALWAYSASSIGNMENTS(val loc: Loc, subtype: Int) extends SourceWar
 }
 
 object ALWAYSASSIGNMENTS extends SourceAnalyser[List[ALWAYSASSIGNMENTS]] {
-  object BLKSEQSourceAnalysisVisitor extends WarningsSourceAnalyserVisitor[ALWAYSASSIGNMENTS] {
+  object BLKSEQSourceAnalyserVisitor extends WarningsSourceAnalyserVisitor[ALWAYSASSIGNMENTS] {
     object AnyBlockingAssignments extends Visitor[Boolean](false, _ || _) {
       override def visitBlockingAssignment(ctx: BlockingAssignmentContext) = true
     }
@@ -32,5 +32,5 @@ object ALWAYSASSIGNMENTS extends SourceAnalyser[List[ALWAYSASSIGNMENTS]] {
     }
   }
 
-  def apply(source: Source) = BLKSEQSourceAnalysisVisitor(source)
+  def apply(source: Source) = BLKSEQSourceAnalyserVisitor(source)
 }

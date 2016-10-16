@@ -10,7 +10,7 @@ final case class GENNAME(val loc: Loc) extends SourceWarning {
 }
 
 object GENNAME extends SourceAnalyser[List[GENNAME]] {
-  object GENNAMESourceAnalysisVisitor extends WarningsSourceAnalyserVisitor[GENNAME] {
+  object GENNAMESourceAnalyserVisitor extends WarningsSourceAnalyserVisitor[GENNAME] {
     override def visitGenerateBlockWithBeginEnd(ctx: GenerateBlockWithBeginEndContext) = {
       if (ctx.IDENTIFIER == null) {
         GENNAME(ctx.loc) :: visitChildren(ctx)
@@ -20,5 +20,5 @@ object GENNAME extends SourceAnalyser[List[GENNAME]] {
     }
   }
 
-  def apply(source: Source) = GENNAMESourceAnalysisVisitor(source)
+  def apply(source: Source) = GENNAMESourceAnalyserVisitor(source)
 }
