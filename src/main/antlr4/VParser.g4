@@ -771,9 +771,9 @@ conditionalGenerateConstruct
   ;
 
 ifGenerateConstruct
-  : 'if' '(' constantExpression ')' ifBlock=generateBlockOrNull
-    ('else' 'if' '(' constantExpression ')' elseIfBlocks+=generateBlockOrNull)*
-    ('else' elseBlock+=generateBlockOrNull)?
+  : 'if'         '('     ifCond=constantExpression ')'     ifBlock=generateBlockOrNull
+    ('else' 'if' '(' elifConds+=constantExpression ')' elifBlocks+=generateBlockOrNull)*
+    ('else'                                             elseBlock+=generateBlockOrNull)?
   ;
 
 caseGenerateConstruct
@@ -1031,20 +1031,20 @@ seqBlock
 ////////////////////////////////////////////////////////////////////////////////
 
 statement
-  : attributeInstance* blockingAssignment ';'
-  | attributeInstance* caseStatement
-  | attributeInstance* conditionalStatement
-  | attributeInstance* disableStatement
-  | attributeInstance* eventTrigger
-  | attributeInstance* loopStatement
-  | attributeInstance* nonblockingAssignment ';'
-  | attributeInstance* parBlock
-  | attributeInstance* proceduralContinuousAssignments ';'
-  | attributeInstance* proceduralTimingControlStatement
-  | attributeInstance* seqBlock
-  | attributeInstance* systemTaskEnable
-  | attributeInstance* taskEnable
-  | attributeInstance* waitStatement
+  : attributeInstance* blockingAssignment ';'                 #stmtBlockAssign
+  | attributeInstance* caseStatement                          #stmtCase
+  | attributeInstance* ifStatement                            #stmtIf
+  | attributeInstance* disableStatement                       #stmtDisable
+  | attributeInstance* eventTrigger                           #stmtEventTrigger
+  | attributeInstance* loopStatement                          #stmtLoop
+  | attributeInstance* nonblockingAssignment ';'              #stmtNonBlockAssign
+  | attributeInstance* parBlock                               #stmtParBlock
+  | attributeInstance* seqBlock                               #stmtSeqBlock
+  | attributeInstance* proceduralContinuousAssignments ';'    #stmtContAssign
+  | attributeInstance* proceduralTimingControlStatement       #stmtTimingControl
+  | attributeInstance* systemTaskEnable                       #stmtSystemTaskCall
+  | attributeInstance* taskEnable                             #stmtTaskCall
+  | attributeInstance* waitStatement                          #stmtWait
   ;
 
 statementOrNull
@@ -1107,15 +1107,10 @@ waitStatement
 // A.6.6 Conditional statements
 ////////////////////////////////////////////////////////////////////////////////
 
-conditionalStatement
-  : 'if' '(' expression ')' statementOrNull ('else' statementOrNull)?
-  | ifElseIfStatement
-  ;
-
-ifElseIfStatement
-  : 'if' '(' expression ')' statementOrNull
-    ('else' 'if' '(' expression ')' statementOrNull )*
-    ('else' statementOrNull)?
+ifStatement
+  : 'if'         '('     ifCond=expression ')'     ifBlock=statementOrNull
+    ('else' 'if' '(' elifConds+=expression ')' elifBlocks+=statementOrNull)*
+    ('else'                                      elseBlock=statementOrNull)?
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
