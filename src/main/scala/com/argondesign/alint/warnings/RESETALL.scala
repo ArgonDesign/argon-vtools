@@ -8,11 +8,14 @@ import com.argondesign.alint.Visitor
 import org.antlr.v4.runtime.ParserRuleContext
 import com.argondesign.alint.SignalNames
 
-final case class NORESET(val loc: Loc, name: String) extends SourceWarning {
-  val message = s"Signal '$name' not assigned in reset clasue"
+final case class RESETALL(val loc: Loc, name: String, subtype: Int) extends SourceWarning {
+  val message = subtype match {
+    case 0 => s"Signal '$name' not assigned in reset clasue"
+    case 1 => s"Signal '$name' only assigned in reset clasue"
+  }
 }
 
-object NORESET extends SourceAnalyser[List[NORESET]] {
+object RESETALL extends SourceAnalyser[List[RESETALL]] {
   object GetResetClause extends Visitor[ParserRuleContext](null, (a, b) => if (a == null) b else a) {
     override def visitIfStatement(ctx: IfStatementContext) = {
       object HasReset extends Visitor[Boolean](false, _ || _) {
@@ -29,7 +32,7 @@ object NORESET extends SourceAnalyser[List[NORESET]] {
     }
   }
 
-  object NORESETSourceAnalyserVisitor extends WarningsSourceAnalyserVisitor[NORESET] {
+  object NORESETSourceAnalyserVisitor extends WarningsSourceAnalyserVisitor[RESETALL] {
     override def visitAlwaysEvent(ctx: AlwaysEventContext) = {
       val resetClauseCtx = GetResetClause(ctx.statement)
       if (resetClauseCtx != null) {
@@ -46,11 +49,20 @@ object NORESET extends SourceAnalyser[List[NORESET]] {
         }
 
         val allTargets = GetNBATargets(ctx.statement)
-        val resetNames = allTargets filter (_ -<- resetClauseCtx) map (_.text)
+        val resetTargets = allTargets filter (_ -<- resetClauseCtx)
         val otherTargets = allTargets filter (_ !<- resetClauseCtx)
+        val resetNames = resetTargets map (_.text)
+        val otherNames = otherTargets map (_.text)
 
-        for (target <- otherTargets; if !resetNames.contains(target.text))
-          yield NORESET(target.loc, target.text)
+        val nonResetWarnigns =
+          for (target <- otherTargets; if !resetNames.contains(target.text))
+            yield RESETALL(target.loc, target.text, 0)
+
+        val onlyResetWarnigns =
+          for (target <- resetTargets; if !otherNames.contains(target.text))
+            yield RESETALL(target.loc, target.text, 1)
+
+        nonResetWarnigns ::: onlyResetWarnigns
       } else {
         Nil
       }

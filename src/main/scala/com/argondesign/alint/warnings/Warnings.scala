@@ -14,7 +14,7 @@ object Warnings {
     GENNAME,
     GENUNIQ,
     NONAUTOFUNC,
-    NORESET,
+    RESETALL,
     RESETSTYLE)
 
   def apply(source: Source): List[SourceWarning] =

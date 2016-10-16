@@ -6,9 +6,9 @@ import com.argondesign.alint.Source
 import com.argondesign.alint.Loc
 import com.argondesign.alint.SyntaxErrorException
 
-class NORESETSpec extends FlatSpec with Matchers {
+class RESETALLSpec extends FlatSpec with Matchers {
 
-  "NORESET" should "not be detected for signals assigned in the reset clause" in {
+  "RESETALL" should "not be detected for signals assigned in the reset clause" in {
     val text = """|module foo;
                   |  always @(posedge clk) begin
                   |    if (rst) begin
@@ -19,7 +19,7 @@ class NORESETSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -35,7 +35,7 @@ class NORESETSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -47,7 +47,7 @@ class NORESETSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -63,7 +63,7 @@ class NORESETSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -79,7 +79,7 @@ class NORESETSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 0
   }
@@ -89,34 +89,33 @@ class NORESETSpec extends FlatSpec with Matchers {
                   |  always @(posedge clk) begin
                   |    if (!rst_n) begin
                   |    end else begin
-                  |      a <= 0;
+                  |      b <= 0;
                   |    end
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 1
 
-    warnings.head should be(NORESET(Loc("test.v", 5, 6), "a"))
+    warnings.head should be(RESETALL(Loc("test.v", 5, 6), "b", 0))
   }
 
   it should "be detected for signals not assigned in the reset clause - partial assignment" in {
     val text = """|module foo;
                   |  always @(posedge clk) begin
                   |    if (!rst_n) begin
-                  |      a <= 0;
                   |    end else begin
                   |      b[0] <= 0;
                   |    end
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 1
 
-    warnings.head should be(NORESET(Loc("test.v", 6, 6), "b"))
+    warnings.head should be(RESETALL(Loc("test.v", 5, 6), "b", 0))
   }
 
   it should "be detected for signals not assigned in the reset clause - unpacking assignment" in {
@@ -130,29 +129,28 @@ class NORESETSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 1
 
-    warnings.head should be(NORESET(Loc("test.v", 6, 10), "b"))
+    warnings.head should be(RESETALL(Loc("test.v", 6, 10), "b", 0))
   }
 
   it should "be detected for signals not assigned in the reset clause - nested assignment" in {
     val text = """|module foo;
                   |  always @(posedge clk) begin
                   |    if (!rst_n) begin
-                  |      a <= 0;
                   |    end else begin
                   |      if (c) b <= 1;
                   |    end
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 1
 
-    warnings.head should be(NORESET(Loc("test.v", 6, 13), "b"))
+    warnings.head should be(RESETALL(Loc("test.v", 5, 13), "b", 0))
   }
 
   it should "be detected for signals not assigned in non-standard reset clause" in {
@@ -166,11 +164,11 @@ class NORESETSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 1
 
-    warnings.head should be(NORESET(Loc("test.v", 4, 4), "b"))
+    warnings.head should be(RESETALL(Loc("test.v", 4, 4), "b", 0))
   }
 
   it should "be detected for signals not assigned in non-standard 'else if' reset clause" in {
@@ -185,10 +183,27 @@ class NORESETSpec extends FlatSpec with Matchers {
                   |  end
                   |endmodule
                   |""".stripMargin
-    val warnings = Warnings(NORESET)(Source("test.v", text))
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
 
     warnings should have length 1
 
-    warnings.head should be(NORESET(Loc("test.v", 4, 4), "b"))
+    warnings.head should be(RESETALL(Loc("test.v", 4, 4), "b", 0))
+  }
+
+  it should "be detected for signals only assigned in the reset clause" in {
+    val text = """|module foo;
+                  |  always @(posedge clk) begin
+                  |    if (!rst_n) begin
+                  |      a <= 0;
+                  |    end else begin
+                  |    end
+                  |  end
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(RESETALL)(Source("test.v", text))
+
+    warnings should have length 1
+
+    warnings.head should be(RESETALL(Loc("test.v", 4, 6), "a", 1))
   }
 }
