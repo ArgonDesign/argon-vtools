@@ -34,11 +34,14 @@ object NORESET extends SourceAnalyser[List[NORESET]] {
       val resetClauseCtx = GetResetClause(ctx.statement)
       if (resetClauseCtx != null) {
         object GetNBATargets extends Visitor[List[ParserRuleContext]](Nil, _ ::: _) {
+          object GetTargetIdentifier extends Visitor[List[ParserRuleContext]](Nil, _ ::: _) {
+            override def visitVarLValueSimple(ctx: VarLValueSimpleContext) = List(ctx.hierId)
+            override def visitVarLValueSlice(ctx: VarLValueSliceContext) = List(ctx.hierId)
+            override def visitVarLValueIndex(ctx: VarLValueIndexContext) = List(ctx.hierId)
+            override def visitVarLValueIndexSlice(ctx: VarLValueIndexSliceContext) = List(ctx.hierId)
+          }
           override def visitNonblockingAssignment(ctx: NonblockingAssignmentContext) = {
-            object GetIdentifiers extends Visitor[List[ParserRuleContext]](Nil, _ ::: _) {
-              override def visitHierarchicalIdentifier(ctx: HierarchicalIdentifierContext) = List(ctx)
-            }
-            GetIdentifiers(ctx.variableLvalue)
+            GetTargetIdentifier(ctx.variableLvalue)
           }
         }
 

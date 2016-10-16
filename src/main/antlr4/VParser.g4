@@ -217,15 +217,15 @@ parameterType
 ////////////////////////////////////////////////////////////////////////////////
 
 inoutDeclaration
-  : 'inout' netType? 'signed'? vrange? listOfIdentifiers
+  : 'inout' netType? 'signed'? vrange? listOfIds
   ;
 
 inputDeclaration
-  : 'input' netType? 'signed'? vrange? listOfIdentifiers
+  : 'input' netType? 'signed'? vrange? listOfIds
   ;
 
 outputDeclaration
-  : 'output' netType? 'signed'? vrange? listOfIdentifiers
+  : 'output' netType? 'signed'? vrange? listOfIds
   | 'output' 'reg' 'signed'? vrange? listOfVariablePortIdentifiers
   | 'output' outputVariableType listOfVariablePortIdentifiers
   ;
@@ -408,7 +408,7 @@ listOfVariablePortIdentifiers
 ////////////////////////////////////////////////////////////////////////////////
 
 defparamAssignment
-  : hierarchicalIdentifier '=' constantMintypmaxExpression
+  : hierId '=' constantMintypmaxExpression
   ;
 
 netDeclAssignment
@@ -507,18 +507,18 @@ taskPortItem
   ;
 
 tfInputDeclaration
-  : 'input' 'reg'? 'signed'? vrange? listOfIdentifiers
-  | 'input' taskPortType listOfIdentifiers
+  : 'input' 'reg'? 'signed'? vrange? listOfIds
+  | 'input' taskPortType listOfIds
   ;
 
 tfOutputDeclaration
-  : 'output' 'reg'? 'signed'? vrange? listOfIdentifiers
-  | 'output' taskPortType listOfIdentifiers
+  : 'output' 'reg'? 'signed'? vrange? listOfIds
+  | 'output' taskPortType listOfIds
   ;
 
 tfInoutDeclaration
-  : 'inout' 'reg'? 'signed'? vrange? listOfIdentifiers
-  | 'inout' taskPortType listOfIdentifiers
+  : 'inout' 'reg'? 'signed'? vrange? listOfIds
+  | 'inout' taskPortType listOfIds
   ;
 
 taskPortType
@@ -747,7 +747,7 @@ generateRegion
   ;
 
 genvarDeclaration
-  : 'genvar' listOfIdentifiers ';'
+  : 'genvar' listOfIds ';'
   ;
 
 loopGenerateConstruct
@@ -837,7 +837,7 @@ generateBlockOrNull
 //  ;
 //
 //udpInputDeclaration
-//  : attributeInstance* input listOfIdentifiers
+//  : attributeInstance* input listOfIds
 //  ;
 //
 //udpRegDeclaration
@@ -1068,18 +1068,18 @@ delayOrEventControl
   ;
 
 disableStatement
-  : 'disable' hierarchicalIdentifier ';'
+  : 'disable' hierId ';'
   ;
 
 eventControl
-  : '@' hierarchicalIdentifier
+  : '@' hierId
   | '@' '(' eventExpression ')'
   | '@' '*'
   | '@' '(' '*' ')'
   ;
 
 eventTrigger
-  : '->' hierarchicalIdentifier ('[' expression ']')* ';'
+  : '->' hierId ('[' expression ']')* ';'
   ;
 
 eventExpression
@@ -1154,7 +1154,7 @@ systemTaskEnable
   ;
 
 taskEnable
-  : hierarchicalIdentifier ('(' expression (',' expression)* ')')? ';'
+  : hierId ('(' expression (',' expression)* ')')? ';'
   ;
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -1470,24 +1470,24 @@ constantMintypmaxExpression
 // Expressions
 
 expression
-  : number                                                                          #exprNumber
-  | hierarchicalIdentifier                                                          #exprIdentifier
-  | hierarchicalIdentifier '[' rangeExpression ']'                                  #exprSlice
-  | hierarchicalIdentifier ('[' expression ']')+                                    #exprIndex
-  | hierarchicalIdentifier ('[' expression ']')+ '[' rangeExpression ']'            #exprIndexSlice
-  | '{' terms+=expression (',' terms+=expression)* '}'                              #exprConcat
+  : number                                                          #exprNumber
+  | hierId                                                          #exprIdentifier
+  | hierId '[' rangeExpression ']'                                  #exprSlice
+  | hierId ('[' expression ']')+                                    #exprIndex
+  | hierId ('[' expression ']')+ '[' rangeExpression ']'            #exprIndexSlice
+  | '{' terms+=expression (',' terms+=expression)* '}'              #exprConcat
   | '{'
       rep=constantExpression
       '{' terms+=expression (',' terms+=expression)* '}'
-    '}'                                                                             #exprMultipleConcat
-  | hierarchicalIdentifier attributeInstance*
-   '('  args+=expression (','  args+=expression)* ')'                               #exprFuncCall
-  | SYSID ('('  args+=expression (','  args+=expression)* ')')?                     #exprSysFuncCall
-  | '(' expression ')'                                                              #exprExpr
-  | STRING                                                                          #exprString
-  | unaryOperator attributeInstance? expression                                     #exprUnary
-  | expression binaryOperator attributeInstance* expression                         #exprBinary
-  | expression '?' attributeInstance* expression ':' expression                     #exprTernary
+    '}'                                                             #exprMultipleConcat
+  | hierId attributeInstance*
+   '('  args+=expression (','  args+=expression)* ')'               #exprFuncCall
+  | SYSID ('('  args+=expression (','  args+=expression)* ')')?     #exprSysFuncCall
+  | '(' expression ')'                                              #exprExpr
+  | STRING                                                          #exprString
+  | unaryOperator attributeInstance? expression                     #exprUnary
+  | expression binaryOperator attributeInstance* expression         #exprBinary
+  | expression '?' attributeInstance* expression ':' expression     #exprTernary
   ;
 
 rangeExpression
@@ -1508,7 +1508,7 @@ mintypmaxExpression
 //  | IDENTIFIER
 //  | '{' modulePathExpression (',' modulePathExpression)* '}'
 //  | '{' constantExpression '{' modulePathExpression (',' modulePathExpression)* '}' '}'
-//  | hierarchicalIdentifier attributeInstance* '(' expression (',' expression)* ')'
+//  | hierId attributeInstance* '(' expression (',' expression)* ')'
 //  | SYSID ('(' expression (',' expression)* ')')?
 //  | '(' modulePathMintypmaxExpression ')'
 //  ;
@@ -1536,19 +1536,19 @@ mintypmaxExpression
 ////////////////////////////////////////////////////////////////////////////////
 
 netLvalue
-  :  hierarchicalIdentifier
-  |  hierarchicalIdentifier '[' constantRangeExpression ']'
-  |  hierarchicalIdentifier ('[' constantExpression ']')+
-  |  hierarchicalIdentifier ('[' constantExpression ']')+ '[' constantRangeExpression ']'
+  :  hierId
+  |  hierId '[' constantRangeExpression ']'
+  |  hierId ('[' constantExpression ']')+
+  |  hierId ('[' constantExpression ']')+ '[' constantRangeExpression ']'
   | '{' netLvalue (',' netLvalue)* '}'
   ;
 
 variableLvalue
-  :  hierarchicalIdentifier
-  |  hierarchicalIdentifier '[' rangeExpression ']'
-  |  hierarchicalIdentifier ('[' expression ']')+
-  |  hierarchicalIdentifier ('[' expression ']')+ '[' rangeExpression ']'
-  | '{' variableLvalue (',' variableLvalue)* '}'
+  :  hierId                                                     #varLValueSimple
+  |  hierId '[' rangeExpression ']'                             #varLValueSlice
+  |  hierId ('[' expression ']')+                               #varLValueIndex
+  |  hierId ('[' expression ']')+ '[' rangeExpression ']'       #varLValueIndexSlice
+  | '{' variableLvalue (',' variableLvalue)* '}'                #varLValueUnpack
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1673,11 +1673,11 @@ attrSpec
 // A.9.3 Identifiers
 ////////////////////////////////////////////////////////////////////////////////
 
-hierarchicalIdentifier
+hierId
   : (IDENTIFIER ('[' constantExpression ']')? '.')* IDENTIFIER
   ;
 
-listOfIdentifiers
+listOfIds
   : IDENTIFIER (',' IDENTIFIER)*
   ;
 

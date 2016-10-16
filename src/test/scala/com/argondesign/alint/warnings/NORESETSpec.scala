@@ -4,6 +4,7 @@ import org.scalatest.Matchers
 import org.scalatest.FlatSpec
 import com.argondesign.alint.Source
 import com.argondesign.alint.Loc
+import com.argondesign.alint.SyntaxErrorException
 
 class NORESETSpec extends FlatSpec with Matchers {
 
@@ -43,6 +44,38 @@ class NORESETSpec extends FlatSpec with Matchers {
     val text = """|module foo;
                   |  always @(posedge clk) begin
                   |    a <= 0;
+                  |  end
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(NORESET)(Source("test.v", text))
+
+    warnings should have length 0
+  }
+
+  it should "not be detected for indexed assignment" in {
+    val text = """|module foo;
+                  |  always @(posedge clk) begin
+                  |    if (!rst) begin
+                  |      a <= 0;
+                  |    end else begin
+                  |      a[index] <= 0;
+                  |    end
+                  |  end
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(NORESET)(Source("test.v", text))
+
+    warnings should have length 0
+  }
+
+  it should "not be detected for indexed and sliced assignment" in {
+    val text = """|module foo;
+                  |  always @(posedge clk) begin
+                  |    if (!rst) begin
+                  |      a <= 0;
+                  |    end else begin
+                  |      a[p][q][r][s:t] <= 0;
+                  |    end
                   |  end
                   |endmodule
                   |""".stripMargin
