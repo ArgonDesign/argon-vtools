@@ -51,6 +51,22 @@ class RESETSTYLESpec extends FlatSpec with Matchers {
     warnings.head should be(RESETSTYLE(Loc("test.v", 4, 8)))
   }
 
+  it should "be detected for trailing statements" in {
+    val text = """|module foo;
+                  |  always @(posedge clk) begin
+                  |    if (rst) begin
+                  |    end
+                  |    a <= 0;
+                  |  end
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(RESETSTYLE)(Source("test.v", text))
+
+    warnings should have length 1
+
+    warnings.head should be(RESETSTYLE(Loc("test.v", 5, 4)))
+  }
+
   it should "be detected for 'else if (rst)' statements" in {
     val text = """|module foo;
                   |  always @(posedge clk) begin

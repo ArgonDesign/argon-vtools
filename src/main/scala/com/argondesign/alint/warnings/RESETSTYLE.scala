@@ -33,9 +33,15 @@ object RESETSTYLE extends SourceAnalyser[List[RESETSTYLE]] {
   }
 
   object AlwaysStatementVisitor extends WarningsSourceAnalyserVisitor[RESETSTYLE] {
+    def warnTrailing(ctx: SeqBlockContext): List[RESETSTYLE] = {
+      val statements = ctx.statement.toList
+      for ((a, b) <- statements zip statements.tail; if !a.resetClause.isEmpty)
+        yield RESETSTYLE(b.loc)
+    }
+
     override def visitSeqBlock(ctx: SeqBlockContext) = {
       if (!ctx.statement.isEmpty) {
-        visit(ctx.statement.head) ::: ctx.statement.toList.tail.flatMap(WarnIn(_))
+        visit(ctx.statement.head) ::: ctx.statement.toList.tail.flatMap(WarnIn(_)) ::: warnTrailing(ctx)
       } else {
         Nil
       }

@@ -7,6 +7,7 @@ class Visitor[T](override val defaultResult: T, aggregate: (T, T) => T)
     extends antlr4.VParserBaseVisitor[T]
     with antlr4.VParserRuleContexts
     with Antlr4Conversions
+    with VExtractors
     with RestoringConstruct {
   override def aggregateResult(prev: T, next: T) = aggregate(prev, next)
 
