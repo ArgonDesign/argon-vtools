@@ -6,7 +6,7 @@ import com.argondesign.alint.SourceAnalyser
 import com.argondesign.alint.SourceWarning
 
 final case class ATSTAR(val loc: Loc) extends SourceWarning {
-  val message = "Both blocking and non-blocking assignments used in the same always block"
+  val message = "Use '@*' instead of '@(*)'"
 }
 
 object ATSTAR extends SourceAnalyser[List[ATSTAR]] {
