@@ -306,8 +306,8 @@ realType
   ;
 
 variableType
-  : IDENTIFIER dimension*
-  | IDENTIFIER '=' constantExpression
+  : IDENTIFIER dimension*               # variableTypeUnpacked
+  | IDENTIFIER '=' constantExpression   # variableTypeInitialised
   ;
 
 ////////////////////////////////////////////////////////////////////////////////

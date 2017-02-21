@@ -15,7 +15,8 @@ object Warnings {
     GENUNIQ,
     NONAUTOFUNC,
     RESETALL,
-    RESETSTYLE)
+    RESETSTYLE,
+    VARINIT)
 
   def apply(source: Source): List[SourceWarning] =
     for (extractor <- listOfWarnigns; warning <- this(extractor)(source))
