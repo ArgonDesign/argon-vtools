@@ -49,10 +49,12 @@ description
 moduleDeclaration
   : attributeInstance*
     'module' IDENTIFIER moduleParameterPortList? listOfPorts ';'
+      moduleItemDirective*
       moduleItem*
     'endmodule'
   | attributeInstance*
     'module' IDENTIFIER moduleParameterPortList? listOfPortDeclarations? ';'
+      moduleItemDirective*
       nonPortModuleItem*
     'endmodule'
   ;
@@ -1691,6 +1693,11 @@ directive
   | timescaleDirective
   | defineDirective
   | undefDirective
+  ;
+
+moduleItemDirective
+  : defineDirective
+  | includeDirective
   ;
 
 defaultNettypeDirective
