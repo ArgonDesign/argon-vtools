@@ -1141,10 +1141,12 @@ caseItem
 ////////////////////////////////////////////////////////////////////////////////
 
 loopStatement
-  : 'forever' statement
-  | 'repeat' '(' expression ')' statement
-  | 'while' '(' expression ')' statement
-  | 'for' '(' variableAssignment ';' expression ';' variableAssignment ')' statement
+  : 'forever' statement                            #loopForeverStatement
+  | 'repeat' '(' expression ')' statement          #loopRepeatStatemet
+  | 'while' '(' expression ')' statement           #loopWhileStatement
+  | 'for' '(' variableAssignment ';'
+              expression ';'
+              variableAssignment ')' statement     #loopForStatement
   ;
 
 ////////////////////////////////////////////////////////////////////////////////

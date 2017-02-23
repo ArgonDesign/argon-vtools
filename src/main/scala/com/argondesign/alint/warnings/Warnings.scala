@@ -8,6 +8,7 @@ object Warnings {
   private val listOfWarnigns: List[SourceAnalyser[List[SourceWarning]]] = List(
     ALWAYSASSIGNMENTS,
     ATSTAR,
+    BEGINEND,
     CONSTCONCATREP,
     DNETTYPE,
     GENBEGIN,
