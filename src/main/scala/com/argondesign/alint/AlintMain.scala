@@ -4,15 +4,29 @@
 
 package com.argondesign.alint
 
-import scalax.file.Path
-
-import warnings.Warnings
 import mangle.Mangle
+import scalax.file.Path
+import com.argondesign.alint.warnings.Warnings
 
 object AlintMain extends App {
 
   // TODO: Proper argument parsing
-  val filePaths = if (args.head == "--mangle") args.tail.toList else args.toList
+  val filePaths = {
+    if (args.head == "--mangle") args.tail.toList else args.toList
+  } map { Path.fromString(_) }
+
+  case class FILEMISSING(name: String) extends Error {
+    val message = s"Input file '$name' does not exist"
+  }
+
+  val messages = for (filePath <- filePaths if filePath.nonExistent) yield {
+    FILEMISSING(filePath.path)
+  }
+
+  if (!messages.isEmpty) {
+    messages foreach println
+    sys exit 1
+  }
 
   val sources = filePaths map { Source(_) }
 

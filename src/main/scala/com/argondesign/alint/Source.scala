@@ -74,6 +74,8 @@ class Source(val path: Path, val text: String) {
 }
 
 object Source {
-  def apply(name: String, text: String) = new Source(name, text)
-  def apply(name: String) = new Source(name)
+  def apply(path: Path, text: String) = new Source(path, text)
+  def apply(path: Path) = new Source(path)
+  def apply(path: String, text: String) = new Source(path, text)
+  def apply(path: String) = new Source(path)
 }
