@@ -6,12 +6,23 @@ import org.antlr.v4.runtime.ParserRuleContext
 import scala.collection.mutable.Stack
 
 import com.argondesign.alint.Antlr4Conversions._
+import scalax.file.Path
 
-class Source(val name: String, val text: String) {
+class Source(val path: Path, val text: String) {
 
-  def this(name: String) = {
-    this(name, scala.io.Source.fromFile(name).mkString)
+  def this(path: Path) = {
+    this(path, path.lines(includeTerminator = true).mkString)
   }
+
+  def this(path: String, text: String) = {
+    this(Path.fromString(path), text)
+  }
+
+  def this(path: String) = {
+    this(Path.fromString(path))
+  }
+
+  val name = path.name
 
   lazy val tokenStream = {
     val inputStream = new ANTLRInputStream(text)

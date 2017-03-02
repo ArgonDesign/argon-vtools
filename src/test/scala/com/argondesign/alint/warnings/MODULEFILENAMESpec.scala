@@ -44,4 +44,13 @@ class MODULEFILENAMESpec extends FlatSpec with Matchers {
 
     warnings should have length 0
   }
+
+  it should "not be detected for ANSI module declarations matching file name wiht path" in {
+    val text = """|module foo(input a, output b);
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(MODULEFILENAME)(Source("bar/foo.v", text))
+
+    warnings should have length 0
+  }
 }

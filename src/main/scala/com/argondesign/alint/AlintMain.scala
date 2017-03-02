@@ -12,9 +12,9 @@ import mangle.Mangle
 object AlintMain extends App {
 
   // TODO: Proper argument parsing
-  val fileNames = if (args.head == "--mangle") args.tail.toList else args.toList
+  val filePaths = if (args.head == "--mangle") args.tail.toList else args.toList
 
-  val sources = fileNames map { Source(_) }
+  val sources = filePaths map { Source(_) }
 
   val lintMessages = {
     for (source <- sources) yield {
