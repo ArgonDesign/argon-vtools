@@ -44,9 +44,12 @@ object Mangle {
   }
 
   def hash(s: String): String = {
-    val md5Buf = java.security.MessageDigest.getInstance("MD5").digest(s.getBytes)
-    val md5Str = md5Buf map { "%02x" format _ } mkString ""
-    (md5Str + "x" + md5Str) dropWhile { '0' to '9' contains _ } take 16
+    val md5Buf = java.security.MessageDigest.getInstance("MD5").digest(("77b42939d1bf176fbedcd38b46740abf" + s).getBytes)
+    val md5Str = md5Buf map { "%02x" format _ } mkString "" take 16
+    for (c <- md5Str) yield c match {
+      case c if '0' to '9' contains c => ('g' - '0' + c).toChar
+      case c                          => c
+    }
   }
 
   def apply(sources: List[Source]): List[Source] = {
