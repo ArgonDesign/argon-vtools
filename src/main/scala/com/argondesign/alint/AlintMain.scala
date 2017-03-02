@@ -11,40 +11,31 @@ import mangle.Mangle
 
 object AlintMain extends App {
 
-  def lint(fileNames: List[String]) = {
-    val messages = {
-      for (fileName <- fileNames; source = Source(fileName)) yield {
-        try {
-          Warnings(source)
-        } catch {
-          case SyntaxErrorException(error) => List(error)
-        }
-      }
-    }.flatten
+  // TODO: Proper argument parsing
+  val fileNames = if (args.head == "--mangle") args.tail.toList else args.toList
 
-    messages foreach println
+  val sources = fileNames map { Source(_) }
 
-    sys exit (if (messages.isEmpty) 0 else 1)
-  }
-
-  def mangle(fileNames: List[String]) = {
-    try {
-      val sources = fileNames map { Source(_) }
-      val mangledSources = Mangle(sources)
-      for (mangledSource <- mangledSources) {
-        Path("out", mangledSource.name).write(mangledSource.text)
-      }
-    } catch {
-      case SyntaxErrorException(error) => {
-        println(error)
-        sys exit 1
+  val lintMessages = {
+    for (source <- sources) yield {
+      try {
+        Warnings(source)
+      } catch {
+        case SyntaxErrorException(error) => List(error)
       }
     }
+  }.flatten
+
+  if (!lintMessages.isEmpty) {
+    lintMessages foreach println
+    sys exit 1
   }
 
   if (args(0) == "--mangle") {
-    mangle(args.toList.tail)
-  } else {
-    lint(args.toList)
+    for (mangledSource <- Mangle(sources)) {
+      Path("out", mangledSource.name).write(mangledSource.text)
+    }
   }
+
+  sys exit 0
 }
