@@ -13,6 +13,9 @@ scalaVersion := "2.11.8"
 scalacOptions ++= Seq("-deprecation", "-feature")
 
 libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
+libraryDependencies += "org.scala-graph" %% "graph-core" % "1.11.4"
+libraryDependencies += "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3"
+libraryDependencies += "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.3"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Antlr4 plugin
@@ -75,7 +78,7 @@ sourceGenerators in Compile <+= antlr4Postprocess
 // ScalaTest
 ////////////////////////////////////////////////////////////////////////////////
 
-resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
+//resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 

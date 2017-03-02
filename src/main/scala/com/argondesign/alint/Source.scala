@@ -1,10 +1,11 @@
 package com.argondesign.alint
 
-import scala.collection.JavaConversions._
 import org.antlr.v4.runtime.{ ANTLRInputStream, CommonTokenStream }
 import org.antlr.v4.runtime.Token
 import org.antlr.v4.runtime.ParserRuleContext
 import scala.collection.mutable.Stack
+
+import com.argondesign.alint.Antlr4Conversions._
 
 class Source(val name: String, val text: String) {
 
@@ -21,7 +22,12 @@ class Source(val name: String, val text: String) {
     tokenStream
   }
 
-  lazy val tokens = tokenStream.getTokens.toList
+  lazy val tokens: List[Token] = tokenStream.getTokens.toList
+
+  def hiddenTokensToRight(token: Token): List[Token] = {
+    val hiddenTokens = tokenStream.getHiddenTokensToRight(token.index)
+    if (hiddenTokens == null) Nil else hiddenTokens.toList
+  }
 
   lazy val parseTree = {
     val parser = new antlr4.VParser(tokenStream)

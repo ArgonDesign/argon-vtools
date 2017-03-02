@@ -26,4 +26,6 @@ class Visitor[T](override val defaultResult: T, aggregate: (T, T) => T)
   def apply[U <: RuleNode](ctxList: java.util.List[U]): T = {
     apply(ctxList.toList)
   }
+
+  def apply(source: Source) = visit(source.parseTree)
 }

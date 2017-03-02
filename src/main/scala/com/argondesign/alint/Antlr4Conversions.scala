@@ -39,6 +39,10 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
     def loc = Loc(token.getTokenSource.getSourceName, token.getLine, token.getCharPositionInLine)
 
     def text = token.getText
+
+    def index = token.getTokenIndex
+
+    def isHidden = token.getChannel != Token.DEFAULT_CHANNEL
   }
 
   implicit class ParseTreeWrapper(val node: ParseTree) {
@@ -67,7 +71,8 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
     def !>-(that: Tree): Boolean = !descendantOf(that, node)
   }
 
-  implicit def terminalNoteToString(node: TerminalNode): String = node.text
+  implicit def terminalNodeToString(node: TerminalNode): String = node.text
+  implicit def terminalNodeToTolken(node: TerminalNode): Token = node.getSymbol
 }
 
 object Antlr4Conversions extends Antlr4Conversions {}

@@ -51,12 +51,12 @@ moduleDeclaration
     'module' IDENTIFIER moduleParameterPortList? listOfPorts ';'
       moduleItemDirective*
       moduleItem*
-    'endmodule'
+    'endmodule'                     # moduleDeclarationNonAnsi
   | attributeInstance*
     'module' IDENTIFIER moduleParameterPortList? listOfPortDeclarations? ';'
       moduleItemDirective*
       nonPortModuleItem*
-    'endmodule'
+    'endmodule'                     # moduleDeclarationAnsi
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,9 +93,11 @@ portReference
   ;
 
 portDeclaration
-  : attributeInstance* inoutDeclaration
-  | attributeInstance* inputDeclaration
-  | attributeInstance* outputDeclaration
+  : attributeInstance* 'inout' netType? 'signed'? vrange? listOfIds
+  | attributeInstance* 'input' netType? 'signed'? vrange? listOfIds
+  | attributeInstance* 'output' netType? 'signed'? vrange? listOfIds
+  | attributeInstance* 'output' 'reg' 'signed'? vrange? listOfVariablePortIdentifiers
+  | attributeInstance* 'output' outputVariableType listOfVariablePortIdentifiers
   ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -218,19 +220,7 @@ parameterType
 // A.2.1.1 Port declarations
 ////////////////////////////////////////////////////////////////////////////////
 
-inoutDeclaration
-  : 'inout' netType? 'signed'? vrange? listOfIds
-  ;
-
-inputDeclaration
-  : 'input' netType? 'signed'? vrange? listOfIds
-  ;
-
-outputDeclaration
-  : 'output' netType? 'signed'? vrange? listOfIds
-  | 'output' 'reg' 'signed'? vrange? listOfVariablePortIdentifiers
-  | 'output' outputVariableType listOfVariablePortIdentifiers
-  ;
+// Merged into portDeclaration at A.1.3
 
 ////////////////////////////////////////////////////////////////////////////////
 // A.2.1.3 Type declarations
