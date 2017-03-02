@@ -10,20 +10,21 @@ import org.antlr.v4.runtime.Token
 import com.argondesign.alint.antlr4.VParser
 
 object Mangle {
-  object ParameterNames extends Visitor[Set[String]](Set(), (_ union _)) {
-    override def visitParamAssignment(ctx: ParamAssignmentContext) = Set(ctx.IDENTIFIER.text)
-  }
-
-  object PortNames extends Visitor[Set[String]](Set(), (_ union _)) {
-    override def visitListOfIds(ctx: ListOfIdsContext) = {
-      (ctx.IDENTIFIER map { _.text }).toSet
-    }
-    override def visitListOfVariablePortIdentifiers(ctx: ListOfVariablePortIdentifiersContext) = {
-      (ctx.IDENTIFIER map { _.text }).toSet
-    }
-  }
 
   object InterfaceNames extends Visitor[Set[String]](Set(), (_ union _)) {
+    object ParameterNames extends Visitor[Set[String]](Set(), (_ union _)) {
+      override def visitParamAssignment(ctx: ParamAssignmentContext) = Set(ctx.IDENTIFIER.text)
+    }
+
+    object PortNames extends Visitor[Set[String]](Set(), (_ union _)) {
+      override def visitListOfIds(ctx: ListOfIdsContext) = {
+        (ctx.IDENTIFIER map { _.text }).toSet
+      }
+      override def visitListOfVariablePortIdentifiers(ctx: ListOfVariablePortIdentifiersContext) = {
+        (ctx.IDENTIFIER map { _.text }).toSet
+      }
+    }
+
     override def visitParameterDeclaration(ctx: ParameterDeclarationContext) = ParameterNames(ctx.listOfParamAssignments)
     override def visitPortDeclaration(ctx: PortDeclarationContext) = PortNames(ctx)
     override def visitModuleDeclarationAnsi(ctx: ModuleDeclarationAnsiContext) = {
@@ -50,7 +51,9 @@ object Mangle {
 
   def apply(sources: List[Source]): List[Source] = {
     val hierarchy = Hierarchy(sources)
-    val topLevelModules = hierarchy.nodes filter { _.inDegree == 0 } map { _.toOuter }
+    val topLevelModules = hierarchy.nodes collect {
+      case node if node.inDegree == 0 => node.toOuter
+    }
 
     for (source <- sources) yield {
       val baseName = source.name.split("/").reverse.head
