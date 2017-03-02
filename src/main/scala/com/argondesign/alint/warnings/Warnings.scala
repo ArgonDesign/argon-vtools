@@ -7,6 +7,7 @@ import com.argondesign.alint.SourceWarning
 object Warnings {
   private val listOfWarnigns: List[SourceAnalyser[List[SourceWarning]]] = List(
     ALWAYSASSIGNMENTS,
+    ANSIMODULE,
     ATSTAR,
     BEGINEND,
     CONSTCONCATREP,
@@ -14,6 +15,8 @@ object Warnings {
     GENBEGIN,
     GENNAME,
     GENUNIQ,
+    MODULEFILENAME,
+    MULTIPLEMODULES,
     NONAUTOFUNC,
     RESETALL,
     RESETSTYLE,

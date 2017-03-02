@@ -52,7 +52,6 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
       for (n <- 0 to node.getChildCount - 1)
         yield node.getChild(n)
     }.toList
-
   }
 
   implicit class TreeWrapper(val node: Tree) {
@@ -72,7 +71,8 @@ trait Antlr4Conversions extends WrapAsScala with WrapAsJava {
   }
 
   implicit def terminalNodeToString(node: TerminalNode): String = node.text
-  implicit def terminalNodeToTolken(node: TerminalNode): Token = node.getSymbol
+  implicit def terminalNodeToToken(node: TerminalNode): Token = node.getSymbol
+  implicit def terminalNodeToTokenWrapper(node: TerminalNode): TokenWrapper = new TokenWrapper(node.getSymbol)
 }
 
 object Antlr4Conversions extends Antlr4Conversions {}
