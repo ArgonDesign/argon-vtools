@@ -8,6 +8,8 @@ import com.argondesign.alint.Hierarchy
 import com.argondesign.alint.Visitor
 import org.antlr.v4.runtime.Token
 import com.argondesign.alint.antlr4.VParser
+import com.argondesign.alint.CLIConf
+import com.argondesign.alint.Lint
 
 object Mangle {
 
@@ -43,16 +45,16 @@ object Mangle {
     override def visitNamedPortConnection(ctx: NamedPortConnectionContext) = Set(ctx.IDENTIFIER)
   }
 
-  def hash(s: String): String = {
-    val md5Buf = java.security.MessageDigest.getInstance("MD5").digest(("77b42939d1bf176fbedcd38b46740abf" + s).getBytes)
-    val md5Str = md5Buf map { "%02x" format _ } mkString "" take 16
-    for (c <- md5Str) yield c match {
-      case c if '0' to '9' contains c => ('g' - '0' + c).toChar
-      case c                          => c
+  def apply(sources: List[Source], salt: String): List[Source] = {
+    def hash(s: String): String = {
+      val md5Buf = java.security.MessageDigest.getInstance("MD5").digest((salt + s).getBytes)
+      val md5Str = md5Buf map { "%02x" format _ } mkString "" take 16
+      for (c <- md5Str) yield c match {
+        case c if '0' to '9' contains c => ('g' - '0' + c).toChar
+        case c                          => c
+      }
     }
-  }
 
-  def apply(sources: List[Source]): List[Source] = {
     val hierarchy = Hierarchy(sources)
     val topLevelModules = hierarchy.nodes collect {
       case node if node.inDegree == 0 => node.toOuter
@@ -96,5 +98,19 @@ object Mangle {
 
       Source(newName, newText)
     }
+  }
+
+  def apply(conf: CLIConf): Nothing = {
+    val lintPass = Lint(conf.mangle.sources())
+
+    if (!lintPass) {
+      sys exit 1
+    }
+
+    for (mangledSource <- Mangle(conf.mangle.sources(), conf.mangle.salt())) {
+      conf.mangle.odir() / mangledSource.name write mangledSource.text
+    }
+
+    sys exit 0
   }
 }

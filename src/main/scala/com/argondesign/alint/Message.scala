@@ -4,7 +4,7 @@ sealed abstract trait Message {
   val category: String
   val message: String
 
-  override def toString = category + ": " + this.getClass.getSimpleName + " - " + message
+  override def toString = category + ": " + this.getClass.getSimpleName.takeWhile(_ != '$') + " - " + message
 }
 
 abstract trait Warning extends Message {

@@ -8,7 +8,9 @@ import scala.collection.mutable.Stack
 import com.argondesign.alint.Antlr4Conversions._
 import scalax.file.Path
 
-class Source(val path: Path, val text: String) {
+class Source(val path: Path, _text: => String) {
+
+  lazy val text = _text
 
   def this(path: Path) = {
     this(path, path.lines(includeTerminator = true).mkString)

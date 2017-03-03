@@ -16,6 +16,7 @@ libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
 libraryDependencies += "org.scala-graph" %% "graph-core" % "1.11.4"
 libraryDependencies += "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3"
 libraryDependencies += "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.3"
+libraryDependencies += "org.rogach" %% "scallop" % "2.1.1"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Antlr4 plugin
