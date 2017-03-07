@@ -14,6 +14,10 @@ object Hierarchy {
       val module = ctx.IDENTIFIER.text
       for (instance <- InstanceExtractor(ctx)) yield module ~> instance
     }
+    override def visitModuleDeclarationNonAnsi(ctx: ModuleDeclarationNonAnsiContext) = {
+      val module = ctx.IDENTIFIER.text
+      for (instance <- InstanceExtractor(ctx)) yield module ~> instance
+    }
   }
 
   def apply(sources: List[Source]): Graph[String, DiEdge] = {
