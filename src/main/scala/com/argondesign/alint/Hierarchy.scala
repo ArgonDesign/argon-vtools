@@ -5,6 +5,15 @@ import scalax.collection.GraphPredef._
 import scalax.collection.GraphEdge._
 
 object Hierarchy {
+  object NodeExtractor extends Visitor[Set[String]](Set(), (_ union _)) {
+    override def visitModuleDeclarationAnsi(ctx: ModuleDeclarationAnsiContext) = {
+      Set(ctx.IDENTIFIER.text)
+    }
+    override def visitModuleDeclarationNonAnsi(ctx: ModuleDeclarationNonAnsiContext) = {
+      Set(ctx.IDENTIFIER.text)
+    }
+  }
+
   object InstanceExtractor extends Visitor[Set[String]](Set(), (_ union _)) {
     override def visitModuleInstantiation(ctx: ModuleInstantiationContext) = Set(ctx.IDENTIFIER)
   }
@@ -21,7 +30,8 @@ object Hierarchy {
   }
 
   def apply(sources: List[Source]): Graph[String, DiEdge] = {
+    val nodes = for (source <- sources; node <- NodeExtractor(source)) yield node
     val edges = for (source <- sources; edge <- EdgeExtractor(source)) yield edge
-    Graph.from(Nil, edges)
+    Graph.from(nodes, edges)
   }
 }
