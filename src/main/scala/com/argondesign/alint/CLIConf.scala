@@ -45,6 +45,10 @@ class CLIConf(args: Seq[String]) extends ScallopConf(args) {
       default = Some(System.nanoTime.toString), noshort = true,
       descr = "Salt to add to mangling")
 
+    val map = opt[Path](
+      noshort = true, required = false,
+      descr = "Name of inverse name map file.")
+
     val sources = trailArg[List[Source]](descr = "Input files")
     validate(sources)(sourceListValidator)
   }

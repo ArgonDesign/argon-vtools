@@ -45,14 +45,24 @@ object Mangle {
     override def visitNamedPortConnection(ctx: NamedPortConnectionContext) = Set(ctx.IDENTIFIER)
   }
 
-  def apply(sources: List[Source], salt: String): List[Source] = {
-    def hash(s: String): String = {
-      val md5Buf = java.security.MessageDigest.getInstance("MD5").digest((salt + s).getBytes)
-      val md5Str = md5Buf map { "%02x" format _ } mkString "" take 16
-      for (c <- md5Str) yield c match {
-        case c if '0' to '9' contains c => ('g' - '0' + c).toChar
-        case c                          => c
+  def apply(sources: List[Source], salt: String): (List[Source], Map[String, String]) = {
+    object Hash {
+      private val lut = scala.collection.mutable.Map[String, String]()
+
+      def apply(s: String) = {
+        lut.getOrElseUpdate(s, {
+          val md5Buf = java.security.MessageDigest.getInstance("MD5").digest((salt + s).getBytes)
+          val md5Str = md5Buf map { "%02x" format _ } mkString "" take 16
+          for (c <- md5Str) yield c match {
+            case c if '0' to '9' contains c => ('g' - '0' + c).toChar
+            case c                          => c
+          }
+        })
       }
+
+      def forward: Map[String, String] = lut.toMap
+
+      def inverse: Map[String, String] = { forward map { _.swap } }
     }
 
     val hierarchy = Hierarchy(sources)
@@ -60,13 +70,13 @@ object Mangle {
       case node if node.inDegree == 0 => node.toOuter
     }
 
-    for (source <- sources) yield {
+    val mangledSources = for (source <- sources) yield {
       val baseName = source.name.split("/").reverse.head
       val (pre, suf) = baseName span { _ != '.' }
 
       val isTopLevel = topLevelModules contains pre
 
-      val newName = if (isTopLevel) pre + suf else hash(pre) + suf
+      val newName = if (isTopLevel) pre + suf else Hash(pre) + suf
 
       val newText = {
         val identifierTokens = source.tokens.toSet filter { _.getType == VParser.IDENTIFIER }
@@ -81,7 +91,7 @@ object Mangle {
 
         val parts = for (token <- source.tokens if token.getType != Token.EOF) yield {
           if (mangledTokens contains token) {
-            hash(token.text)
+            Hash(token.text)
           } else if (!token.isHidden) {
             token.text
           } else {
@@ -98,6 +108,12 @@ object Mangle {
 
       Source(newName, newText)
     }
+
+    if (Hash.forward.size != Hash.inverse.size) {
+      throw new RuntimeException("Hash collision")
+    }
+
+    (mangledSources, Hash.inverse)
   }
 
   def apply(conf: CLIConf): Nothing = {
@@ -107,8 +123,14 @@ object Mangle {
       sys exit 1
     }
 
-    for (mangledSource <- Mangle(conf.mangle.sources(), conf.mangle.salt())) {
+    val (mandgledSources, inverseHash) = Mangle(conf.mangle.sources(), conf.mangle.salt())
+
+    for (mangledSource <- mandgledSources) {
       conf.mangle.odir() / mangledSource.name write mangledSource.text
+    }
+
+    for (mapPath <- conf.mangle.map) {
+      mapPath write (inverseHash mkString ("", "\n", "\n"))
     }
 
     sys exit 0
