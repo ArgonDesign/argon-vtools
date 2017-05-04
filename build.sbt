@@ -10,7 +10,7 @@ version := "1"
 
 scalaVersion := "2.11.8"
 
-scalacOptions ++= Seq("-deprecation", "-feature")
+scalacOptions ++= Seq("-deprecation", "-feature", "-Xlint:_")
 
 libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
 libraryDependencies += "org.scala-graph" %% "graph-core" % "1.11.4"
