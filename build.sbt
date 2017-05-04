@@ -6,7 +6,15 @@ name := "alint"
 
 organization := "com.argondesign"
 
-version := "1"
+version := "1.0"
+
+maintainer := "Geza Lore <gezalore@gmail.com>"
+
+packageSummary := "Alint, a Verilog tool"
+
+packageDescription := """Description of alint
+  to go in here"""
+
 
 scalaVersion := "2.11.8"
 
@@ -82,3 +90,9 @@ sourceGenerators in Compile <+= antlr4Postprocess
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 
 logBuffered in Test := false
+
+////////////////////////////////////////////////////////////////////////////////
+// SBT Native packager
+////////////////////////////////////////////////////////////////////////////////
+
+enablePlugins(JavaAppPackaging)
