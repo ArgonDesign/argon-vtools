@@ -1,12 +1,6 @@
-/*
- * Copyright 2016.
- */
-
 package com.argondesign.alint
 
-import mangle.Mangle
-import scalax.file.Path
-import com.argondesign.alint.warnings.Warnings
+import com.argondesign.alint.mangle.Mangle
 
 object AlintMain extends App {
 

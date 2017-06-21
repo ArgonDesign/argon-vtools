@@ -1,15 +1,14 @@
 package com.argondesign.alint.mangle
 
-import scala.collection.convert.WrapAsJava
-import scala.collection.convert.WrapAsScala
-import com.argondesign.alint.Antlr4Conversions._
-import com.argondesign.alint.Source
-import com.argondesign.alint.Hierarchy
-import com.argondesign.alint.Visitor
 import org.antlr.v4.runtime.Token
-import com.argondesign.alint.antlr4.VParser
+
+import com.argondesign.alint.Antlr4Conversions._
 import com.argondesign.alint.CLIConf
+import com.argondesign.alint.Hierarchy
 import com.argondesign.alint.Lint
+import com.argondesign.alint.Source
+import com.argondesign.alint.Visitor
+import com.argondesign.alint.antlr4.VParser
 
 object Mangle {
 
