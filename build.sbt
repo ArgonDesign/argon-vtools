@@ -19,17 +19,9 @@
 
 name := "alint"
 
-organization := "com.argondesign"
+organization := "Argon Design"
 
 version := "1.0"
-
-maintainer := "Geza Lore <gezalore@gmail.com>"
-
-packageSummary := "Alint, a Verilog tool"
-
-packageDescription := """Description of alint
-  to go in here"""
-
 
 scalaVersion := "2.11.8"
 
@@ -107,7 +99,14 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 logBuffered in Test := false
 
 ////////////////////////////////////////////////////////////////////////////////
-// SBT Native packager
+// SBT native packager
 ////////////////////////////////////////////////////////////////////////////////
 
 enablePlugins(JavaAppPackaging)
+
+stage := (stage dependsOn (test in Test)).value
+
+// Prepend '--' to the command line arguments in the wrapper script.
+// This in fact causes the wrapper script to not consume any arguments,
+// in particular -D options
+bashScriptExtraDefines += """set -- -- "$@""""
