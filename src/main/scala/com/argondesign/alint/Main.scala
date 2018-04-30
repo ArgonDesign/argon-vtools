@@ -16,7 +16,7 @@ package com.argondesign.vtools
 
 import com.argondesign.vtools.mangle.Mangle
 
-object AlintMain extends App {
+object Main extends App {
 
   val conf = new CLIConf(args)
 
