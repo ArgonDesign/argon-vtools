@@ -1,6 +1,6 @@
 # Argon Verilog Tools
 
-`argon-vtools` provides set of tools for processing Verilog files.
+`argon-vtools` provides a set of tools for processing Verilog files.
 Currently it implements 2 operations, linting and obfuscation.
 
 ## Building
@@ -32,6 +32,7 @@ be used to obfuscate those source files:
   argon-vtools mangle --odir out foo.v bar.v
 ```
 
-This will mangle the source code, except for the interface signals of the
-top level module, and place the result in the `out` directory. See the `--help`
-option for further parameters.
+This will mangle the source files, except for the interface signals of
+top level modules (those that are not instantiated by any other module),
+and place the result in the `out` directory. See the `--help` option for
+further parameters.
