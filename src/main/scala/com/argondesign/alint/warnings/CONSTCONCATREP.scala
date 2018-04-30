@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Argon Design Ltd.
+// Argon Design Ltd. Project P9000 Argon
 // Copyright (c) 2016-2018 Argon Design Ltd. All rights reserved.
 //
 // This file is covered by the BSD (with attribution) license.
