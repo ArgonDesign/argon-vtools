@@ -19,7 +19,7 @@ import com.argondesign.vtools.Source
 import com.argondesign.vtools.Loc
 
 class ATSTARSpec extends FlatSpec with Matchers {
-  "ATSTAR" should "be detected for 'alwas @(*)'" in {
+  "ATSTAR" should "be detected for 'always @(*)'" in {
     val text = """|module foo;
                   |  always @(*) begin
                   |  end
@@ -32,7 +32,7 @@ class ATSTARSpec extends FlatSpec with Matchers {
     warnings.head should be(ATSTAR(Loc("test.v", 2, 2)))
   }
 
-  it should "be detected for 'alwas @ ( * )'" in {
+  it should "be detected for 'always @ ( * )'" in {
     val text = """|module foo;
                   |  always @ ( * ) begin
                   |  end
@@ -45,7 +45,7 @@ class ATSTARSpec extends FlatSpec with Matchers {
     warnings.head should be(ATSTAR(Loc("test.v", 2, 2)))
   }
 
-  it should "not be detected for 'alwas @*'" in {
+  it should "not be detected for 'always @*'" in {
     val text = """|module foo;
                   |  always @* begin
                   |  end
@@ -56,7 +56,7 @@ class ATSTARSpec extends FlatSpec with Matchers {
     warnings should have length 0
   }
 
-  it should "not be detected for 'alwas @(posedge clk)'" in {
+  it should "not be detected for 'always @(posedge clk)'" in {
     val text = """|module foo;
                   |  always @(posedge clk) begin
                   |  end
@@ -67,7 +67,7 @@ class ATSTARSpec extends FlatSpec with Matchers {
     warnings should have length 0
   }
 
-  it should "not be detected for 'alwas #10'" in {
+  it should "not be detected for 'always #10'" in {
     val text = """|module foo;
                   |  always #10 begin
                   |  end
