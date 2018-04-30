@@ -5,7 +5,7 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
@@ -17,7 +17,7 @@
 // General
 ////////////////////////////////////////////////////////////////////////////////
 
-name := "alint"
+name := "argon-vtools"
 
 organization := "Argon Design"
 
@@ -39,7 +39,7 @@ libraryDependencies += "org.rogach" %% "scallop" % "2.1.1"
 
 antlr4Settings
 
-antlr4PackageName in Antlr4 := Some("com.argondesign.alint.antlr4")
+antlr4PackageName in Antlr4 := Some("com.argondesign.vtools.antlr4")
 
 antlr4GenListener in Antlr4 := true
 

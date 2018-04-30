@@ -5,19 +5,19 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.argondesign.alint.warnings
+package com.argondesign.vtools.warnings
 
 import org.scalatest._
-import com.argondesign.alint.Source
-import com.argondesign.alint.warnings._
-import com.argondesign.alint.Loc
+import com.argondesign.vtools.Source
+import com.argondesign.vtools.warnings._
+import com.argondesign.vtools.Loc
 import org.scalactic.Pass
 
 class DNETTYPESpec extends FlatSpec with Matchers {

@@ -5,16 +5,16 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.argondesign.alint
+package com.argondesign.vtools
 
-import com.argondesign.alint.mangle.Mangle
+import com.argondesign.vtools.mangle.Mangle
 
 object AlintMain extends App {
 

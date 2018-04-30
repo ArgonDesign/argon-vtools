@@ -5,21 +5,21 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.argondesign.alint.warnings
+package com.argondesign.vtools.warnings
 
-import com.argondesign.alint.Loc
-import com.argondesign.alint.Source
-import com.argondesign.alint.SourceAnalyser
-import com.argondesign.alint.SourceWarning
-import com.argondesign.alint.Visitor
-import com.argondesign.alint.antlr4.VParser.ExprIdentifierContext
+import com.argondesign.vtools.Loc
+import com.argondesign.vtools.Source
+import com.argondesign.vtools.SourceAnalyser
+import com.argondesign.vtools.SourceWarning
+import com.argondesign.vtools.Visitor
+import com.argondesign.vtools.antlr4.VParser.ExprIdentifierContext
 import org.antlr.v4.runtime.tree.RuleNode
 
 final case class BEGINEND(val loc: Loc, name: String) extends SourceWarning {

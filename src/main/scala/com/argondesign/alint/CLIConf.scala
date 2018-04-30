@@ -5,14 +5,14 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.argondesign.alint
+package com.argondesign.vtools
 
 import org.rogach.scallop.singleArgConverter
 import org.rogach.scallop.listArgConverter
@@ -25,7 +25,7 @@ class CLIConf(args: Seq[String]) extends ScallopConf(args) {
   implicit val pathCovnert = singleArgConverter[Path](Path.fromString(_))
   implicit val sourceListConverter = listArgConverter[Source](Source(_))
 
-  printedName = "alint"
+  printedName = "argon-vtools"
 
   banner("Process Verilog files")
 

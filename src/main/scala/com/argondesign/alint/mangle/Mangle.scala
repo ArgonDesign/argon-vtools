@@ -5,24 +5,24 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.argondesign.alint.mangle
+package com.argondesign.vtools.mangle
 
 import org.antlr.v4.runtime.Token
 
-import com.argondesign.alint.Antlr4Conversions._
-import com.argondesign.alint.CLIConf
-import com.argondesign.alint.Hierarchy
-import com.argondesign.alint.Lint
-import com.argondesign.alint.Source
-import com.argondesign.alint.Visitor
-import com.argondesign.alint.antlr4.VParser
+import com.argondesign.vtools.Antlr4Conversions._
+import com.argondesign.vtools.CLIConf
+import com.argondesign.vtools.Hierarchy
+import com.argondesign.vtools.Lint
+import com.argondesign.vtools.Source
+import com.argondesign.vtools.Visitor
+import com.argondesign.vtools.antlr4.VParser
 
 object Mangle {
 

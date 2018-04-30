@@ -5,21 +5,21 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.argondesign.alint.warnings
+package com.argondesign.vtools.warnings
 
-import com.argondesign.alint.Loc
-import com.argondesign.alint.Source
-import com.argondesign.alint.SourceAnalyser
-import com.argondesign.alint.SourceWarning
+import com.argondesign.vtools.Loc
+import com.argondesign.vtools.Source
+import com.argondesign.vtools.SourceAnalyser
+import com.argondesign.vtools.SourceWarning
 import org.antlr.v4.runtime.ParserRuleContext
-import com.argondesign.alint.antlr4.VLexer
+import com.argondesign.vtools.antlr4.VLexer
 
 import scala.collection.JavaConverters._
 import org.antlr.v4.runtime.tree.TerminalNode

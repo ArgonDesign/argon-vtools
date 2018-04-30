@@ -5,14 +5,14 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.argondesign.alint
+package com.argondesign.vtools
 
 import org.antlr.v4.runtime.tree.RuleNode
 import org.antlr.v4.runtime.tree.ParseTree

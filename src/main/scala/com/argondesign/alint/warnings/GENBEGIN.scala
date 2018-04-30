@@ -5,19 +5,19 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.argondesign.alint.warnings
+package com.argondesign.vtools.warnings
 
-import com.argondesign.alint.Loc
-import com.argondesign.alint.Source
-import com.argondesign.alint.SourceAnalyser
-import com.argondesign.alint.SourceWarning
+import com.argondesign.vtools.Loc
+import com.argondesign.vtools.Source
+import com.argondesign.vtools.SourceAnalyser
+import com.argondesign.vtools.SourceWarning
 
 final case class GENBEGIN(val loc: Loc) extends SourceWarning {
   val message = "Generate block without begin end"

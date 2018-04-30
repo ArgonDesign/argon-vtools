@@ -5,21 +5,21 @@
 // This file is covered by the BSD (with attribution) license.
 // See the LICENSE file for the precise wording of the license.
 //
-// Module : Alint
+// Module : Argon Verilog Tools
 // Author : Geza Lore
 //
 // DESCRIPTION:
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.argondesign.alint
+package com.argondesign.vtools
 
 import org.antlr.v4.runtime.{ ANTLRInputStream, CommonTokenStream }
 import org.antlr.v4.runtime.Token
 import org.antlr.v4.runtime.ParserRuleContext
 import scala.collection.mutable.Stack
 
-import com.argondesign.alint.Antlr4Conversions._
+import com.argondesign.vtools.Antlr4Conversions._
 import scalax.file.Path
 
 class Source(val path: Path, _text: => String) {
