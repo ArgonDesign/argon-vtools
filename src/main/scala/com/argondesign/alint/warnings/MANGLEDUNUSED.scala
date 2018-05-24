@@ -43,7 +43,9 @@ object MANGLEDUNUSED extends SourceAnalyser[List[MANGLEDUNUSED]] {
           }
           val signoff = precedingComments.reverse map (_.text) collectFirst {
             case s if s matches "/\\*.*verilator.*lint_on.*UNUSED.*\\*/"  => false
+            case s if s matches "//.*verilator.*lint_on.*UNUSED\\s*"      => false
             case s if s matches "/\\*.*verilator.*lint_off.*UNUSED.*\\*/" => true
+            case s if s matches "//.*verilator.*lint_off.*UNUSED\\s*"     => true
           }
           signoff match {
             case Some(true) => Nil

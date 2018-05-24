@@ -53,9 +53,20 @@ class MANGLEDUNUSEDSpec extends FlatSpec with Matchers {
     warnings should have length 0
   }
 
-  it should "not be detected for variable definition containing 'unused' with a lint_off directive" in {
+  it should "not be detected for variable definition containing 'unused' with a C-style lint_off directive" in {
     val text = """|module foo;
                   |  /* verilator lint_off UNUSED */
+                  |  reg unused;
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(MANGLEDUNUSED)(Source("test.v", text))
+
+    warnings should have length 0
+  }
+
+  it should "not be detected for variable definition containing 'unused' with a C++-style lint_off directive" in {
+    val text = """|module foo;
+                  |  // verilator lint_off UNUSED
                   |  reg unused;
                   |endmodule
                   |""".stripMargin
@@ -110,7 +121,7 @@ class MANGLEDUNUSEDSpec extends FlatSpec with Matchers {
     warnings should have length 0
   }
 
-  it should "not be detected for net definition containing 'unused' with a lint_off directive" in {
+  it should "not be detected for net definition containing 'unused' with a C-style lint_off directive" in {
     val text = """|module foo;
                   |  /* verilator lint_off UNUSED */
                   |  wire unused;
@@ -121,10 +132,63 @@ class MANGLEDUNUSEDSpec extends FlatSpec with Matchers {
     warnings should have length 0
   }
 
-  it should "be detected for net definition containing 'unused' with a lint_on directive" in {
+  it should "not be detected for net definition containing 'unused' with a C++-style lint_off directive" in {
+    val text = """|module foo;
+                  |  // verilator lint_off UNUSED
+                  |  wire unused;
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(MANGLEDUNUSED)(Source("test.v", text))
+
+    warnings should have length 0
+  }
+
+  it should "be detected for net definition containing 'unused' with a lint_on directive (C, cancelled by C)" in {
     val text = """|module foo;
                   |  /* verilator lint_off UNUSED */
                   |  /* verilator lint_on UNUSED */
+                  |  wire unused;
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(MANGLEDUNUSED)(Source("test.v", text))
+
+    warnings should have length 1
+
+    warnings.head should be(MANGLEDUNUSED(Loc("test.v", 4, 7), "unused"))
+  }
+
+  it should "be detected for net definition containing 'unused' with a lint_on directive (C, cancelled by C++)" in {
+    val text = """|module foo;
+                  |  /* verilator lint_off UNUSED */
+                  |  // verilator lint_on UNUSED
+                  |  wire unused;
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(MANGLEDUNUSED)(Source("test.v", text))
+
+    warnings should have length 1
+
+    warnings.head should be(MANGLEDUNUSED(Loc("test.v", 4, 7), "unused"))
+  }
+
+  it should "be detected for net definition containing 'unused' with a lint_on directive (C++, cancelled by C)" in {
+    val text = """|module foo;
+                  |  // verilator lint_off UNUSED
+                  |  /* verilator lint_on UNUSED */
+                  |  wire unused;
+                  |endmodule
+                  |""".stripMargin
+    val warnings = Warnings(MANGLEDUNUSED)(Source("test.v", text))
+
+    warnings should have length 1
+
+    warnings.head should be(MANGLEDUNUSED(Loc("test.v", 4, 7), "unused"))
+  }
+
+  it should "be detected for net definition containing 'unused' with a lint_on directive (C++, cancelled by C++)" in {
+    val text = """|module foo;
+                  |  // verilator lint_off UNUSED
+                  |  // verilator lint_on UNUSED
                   |  wire unused;
                   |endmodule
                   |""".stripMargin
